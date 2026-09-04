@@ -1,0 +1,2 @@
+# Ticketing-System-Helpdesk-Ticketing-System--SISTEMA-DE-MANEJO-DE-TICKETS
+Issue tracking platform with smart automated and manual technician assignment, live map tracking, real-time KPI dashboards, and Google Workspace feedback integration. Plataforma de gestión de tickets con asignación técnica automática y manual, rastreo en mapa en tiempo real, dashboards de KPIs e integración con Google Workspace.
