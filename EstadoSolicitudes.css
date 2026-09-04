@@ -1,0 +1,231 @@
+
+*{
+  font-family: Inter, sans-serif;
+}
+/* Estilos para el contenedor principal */
+.main-adm {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Contenedor de búsqueda */
+.search-container {
+    margin-left: auto; /* Esto lo manda a la derecha */
+    margin-bottom: 20px;
+}
+
+/* Contenedor del input y el icono */
+.input-container {
+    position: relative;
+    width: 250px; /* Ajusta el ancho según sea necesario */
+}
+
+/* Estilos del input */
+.search-input {
+    width: 100%;
+    padding: 10px 35px 10px 15px; /* Espacio para el icono */
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    font-size: 14px;
+}
+
+/* Estilos del icono */
+.search-icon {
+    position: absolute;
+    right: 10px; /* Espacio desde la derecha */
+    top: 50%;
+    transform: translateY(-50%); /* Centra verticalmente el icono */
+    color: #666; /* Color del icono */
+    font-size: 14px; /* Tamaño del icono */
+    pointer-events: none; /* Evita que el icono interfiera con el input */
+}
+
+/* Grid de tarjetas */
+.estado-solicitudes-grid { 
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Ajusta el tamaño mínimo de las tarjetas */
+    gap: 15px; /* Espacio entre las tarjetas */
+    padding: 10px; /* Espacio interno del contenedor */
+    border: 1px solid #e5e7eb; /* Borde del contenedor */
+    border-radius: 8px; /* Bordes redondeados */
+    background: #f9f9f9; /* Color de fondo del contenedor */
+}
+
+/* Tarjetas individuales */
+.estado-solicitudes-card {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    padding: 15px;
+    transition: transform 0.2s;
+}
+
+.estado-solicitudes-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+/* Títulos y texto */
+.estado-solicitudes-card h3 {
+    margin-top: 0;
+    color: #333;
+    font-size: 16px;
+}
+
+.estado-solicitudes-card p {
+    margin: 8px 0;
+    font-size: 14px;
+    color: #555;
+}
+
+.estado-solicitudes-card a {
+    color: #0066cc;
+    text-decoration: none;
+}
+
+.estado-solicitudes-card a:hover {
+    text-decoration: underline;
+}
+
+
+
+.filtros-avanzados-container {
+  position: absolute;
+  top: 110%; /* justo debajo del botón que activa los filtros */
+  right: 0;
+  z-index: 1000;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.15);
+  padding: 1rem;
+  border-radius: 0.5rem;
+  width: 320px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  transition: opacity 0.3s ease;
+}
+
+/* Inputs y selects */
+.input-filtro {
+  width: 100%;
+  padding: 0.5rem;
+  font-size: 0.95rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+/* Contenedor relativo */
+.contenedor-filtros-avanzados {
+  position: relative;
+  display: inline-block;
+  margin-top: 0.5rem;
+}
+
+/* Contenedor de fechas */
+.filtro-fechas {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+/* Etiquetas */
+.label-fecha {
+  font-weight: 500;
+  font-size: 0.85rem;
+  margin-top: 0.25rem;
+}
+
+/* Botón limpiar */
+.btn-limpiar-filtros {
+  margin-top: 0.5rem;
+  padding: 0.5rem;
+  font-size: 0.9rem;
+  background-color: #f44336;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-limpiar-filtros:hover {
+  background-color: #d32f2f;
+}
+/* Botón de toggle */
+.btn-toggle-filtros {
+  background-color: #1976d2;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 0.5rem;
+}
+.btn-toggle-filtros:hover {
+  background-color: #1565c0;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+  .filtros-avanzados-container {
+    width: 95vw;
+    left: 2.5vw;
+    right: auto;
+    top: 100%;
+  }
+
+  .encabezado-titulo{
+    gap: 0% !important;
+  }
+}
+
+/* Animación opcional */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-0.25rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+.btn-previsualizar-pdf,
+.btn-descargar-pdf {
+  
+
+  padding: 8px 14px;
+  border-radius: 4px;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-previsualizar-pdf{
+    color: #c62828;
+background-color: white;
+border: 1px solid;
+border-color: #c62828;
+}
+
+.btn-descargar-pdf{
+    color: white;
+background-color: #c62828;
+text-decoration: none;
+justify-items: center;
+justify-content: center;
+align-items: center;
+align-content: center;
+}
+
+
+.btn-descargar-pdf:hover {
+  background-color: #881a1a;
+}
+
+.btn-previsualizar-pdf:hover{
+  background-color: rgb(223, 214, 214);
+}

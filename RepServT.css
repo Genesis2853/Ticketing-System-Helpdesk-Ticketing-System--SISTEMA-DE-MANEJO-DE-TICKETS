@@ -1,0 +1,57 @@
+
+*{
+  font-family: Inter, sans-serif;
+}
+
+.div-contenedor-tituloybuscar {
+    display: flex;
+    justify-content: space-between; /* Espacio entre el título y el campo de búsqueda */
+    align-items: center; /* Centra verticalmente los elementos */
+    margin-bottom: 20px; /* Espacio inferior */
+}
+
+.titulo-reportes {
+    font-size: 1.8em; /* Tamaño del texto del título */
+    flex: 1; /* Permite que el título ocupe el espacio disponible */
+    text-align: left; /* Alinea el texto a la izquierda */
+    width: 300px;
+}
+
+.search-input {
+    width: 200px; /* Ancho del campo de búsqueda */
+    padding: 8px; /* Espaciado interno */
+    border: 1px solid #ccc; /* Borde gris claro */
+    border-radius: 4px; /* Bordes redondeados */
+    font-size: 1em; /* Tamaño de la fuente */
+}
+
+.estado-reporteSolicitudTec-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Crea un grid responsivo */
+    gap: 20px; /* Espacio entre las tarjetas */
+}
+
+.estado-reporteSolicitudTec-card {
+    background: #fff; /* Fondo blanco para las tarjetas */
+    border: 1px solid #ddd; /* Borde gris claro */
+    border-radius: 8px; /* Bordes redondeados */
+    padding: 15px; /* Espaciado interno */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra sutil */
+    text-decoration: none; /* Sin subrayado en el enlace */
+    color: #333; /* Color del texto */
+    transition: transform 0.2s; /* Transición suave para el hover */
+}
+
+.estado-reporteSolicitudTec-card:hover {
+    transform: translateY(-5px); /* Efecto de elevación al pasar el mouse */
+}
+
+.card-content {
+    display: flex;
+    flex-direction: column; /* Coloca los elementos en columna */
+}
+
+.div-contenedor-tituloybuscar{
+    display: flex;
+    gap: 300px;
+}

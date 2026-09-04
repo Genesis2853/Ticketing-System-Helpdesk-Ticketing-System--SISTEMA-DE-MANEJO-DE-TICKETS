@@ -1,0 +1,77 @@
+// Dashboard.js
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { Bar } from 'react-chartjs-2';
+
+const DatosEstadisticos = ({user}) => {
+    const [data, setData] = useState({});
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    console.log("tipo_usuario:", user?.tipo_usuario);
+    console.log("Token almacenado en localStorage:", localStorage.getItem("token"));
+
+
+
+    useEffect(() => {
+        const fetchData = async () => {
+    const token = localStorage.getItem("token");
+           console.log("Token almacenado:", token);
+    try {
+        const response = await axios.get(`${process.env.REACT_APP_API_URL_DATOSESTADISTICOS}/api/solicitudes/cerradas/completadas`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        setData(response.data);
+        setLoading(false);
+    } catch (err) {
+        console.error("Error en la solicitud:", err);
+        setError(err.response ? err.response.data : "Error desconocido");
+        setLoading(false);
+    }
+};
+        fetchData();
+        const interval = setInterval(fetchData, 60000); // Actualiza cada minuto
+        return () => clearInterval(interval); // Limpia el intervalo al desmontar
+    }, []);
+
+    if (loading) return <div>Cargando...</div>;
+    if (error) return <div>Error: {error.message}</div>;
+
+    // Configuración del gráfico
+    const chartData = {
+        labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo'], // Cambia según tus datos
+        datasets: [
+            {
+                label: 'Solicitudes Completadas',
+                data: [12, 19, 3, 5, 2], // Cambia según tus datos
+                backgroundColor: 'rgba(75, 192, 192, 0.6)',
+            },
+        ],
+    };
+
+    return (
+        <div className="dashboard">
+            <h1>Dashboard de Solicitudes</h1>
+            <p>Tipo Usuario: {user?.tipo_usuario}</p>
+            <div className="info-cards">
+                <div className="info-card">
+                    <h2>Total Solicitudes Completadas</h2>
+                    <p>{data.total_solicitudes_completadas}</p>
+                </div>
+                <div className="info-card">
+                    <h2>Solicitudes Completadas en Mayo</h2>
+                    <p>{data.solicitudes_mayo}</p>
+                </div>
+                <div className="info-card">
+                    <h2>Tickets Sin Asignar</h2>
+                    <p>{data.tickets_sin_asignar}</p>
+                </div>
+            </div>
+            <Bar data={chartData} />
+        </div>
+    );
+};
+
+export default DatosEstadisticos;

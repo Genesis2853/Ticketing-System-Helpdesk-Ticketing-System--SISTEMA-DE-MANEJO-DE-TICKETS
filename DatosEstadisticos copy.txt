@@ -1,0 +1,238 @@
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import {
+  Layout,
+  Card,
+  DatePicker,
+  Button,
+  Typography,
+  Row,
+  Col,
+  message,
+} from 'antd';
+import { Bar } from 'react-chartjs-2';
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Tooltip,
+  Legend,
+  Title,
+} from 'chart.js';
+
+ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend, Title);
+
+const { RangePicker } = DatePicker;
+const { Title: TitleText, Text } = Typography;
+const { Content } = Layout;
+
+const DatosEstadisticos = () => {
+  const [totalClientes, setTotalClientes] = useState(0);
+  const [reportesCerrados, setReportesCerrados] = useState(0);
+  const [promedioReportes, setPromedioReportes] = useState(0);
+  const [porcentajeReportes, setPorcentajeReportes] = useState(0);
+  const [datosGrafica, setDatosGrafica] = useState([]);
+  const [fechaFiltro, setFechaFiltro] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    cargarDatos();
+  }, []);
+
+  const cargarDatos = async () => {
+    setLoading(true);
+    try {
+      const [clientesRes, reportesRes, analisisRes] = await Promise.all([
+        axios.get('/clientes/total'),
+        axios.get('/reportes/cerrados'),
+        axios.get('/analisis'),
+      ]);
+      const clientesTotal = clientesRes.data.total_clientes || 0;
+      const reportesTotal = reportesRes.data.total_reportes || 0;
+      let analisisDatos = analisisRes.data.resultados || [];
+
+      setTotalClientes(clientesTotal);
+      setReportesCerrados(reportesTotal);
+      setDatosGrafica(analisisDatos);
+
+      // Cálculo de promedio y porcentaje
+      if (analisisDatos.length) {
+        const suma = analisisDatos.reduce((acc, v) => acc + v.count, 0);
+        setPromedioReportes((suma / analisisDatos.length).toFixed(2));
+        setPorcentajeReportes(((reportesTotal / clientesTotal) * 100).toFixed(2));
+      } else {
+        setPromedioReportes(0);
+        setPorcentajeReportes(0);
+      }
+    } catch (error) {
+      message.error('Error al cargar los datos.');
+      console.error(error);
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const filtrarDatos = async () => {
+    if (fechaFiltro.length !== 2) {
+      message.warning('Por favor selecciona un rango de fechas para filtrar.');
+      return;
+    }
+    const start = fechaFiltro[0].format('YYYY-MM-DD');
+    const end = fechaFiltro[1].format('YYYY-MM-DD');
+    try {
+      const [reportesRes, analisisRes] = await Promise.all([
+        axios.get(`/reportes/cerrados?start=${start}&end=${end}`),
+        axios.get(`/analisis?start=${start}&end=${end}`),
+      ]);
+      const reportesFiltrados = reportesRes.data.total_reportes || 0;
+      const analisisFiltrado = analisisRes.data.resultados || [];
+      setReportesCerrados(reportesFiltrados);
+      setDatosGrafica(analisisFiltrado);
+
+      if (analisisFiltrado.length) {
+        const suma = analisisFiltrado.reduce((acc, v) => acc + v.count, 0);
+        setPromedioReportes((suma / analisisFiltrado.length).toFixed(2));
+        setPorcentajeReportes(((reportesFiltrados / totalClientes) * 100).toFixed(2));
+      } else {
+        setPromedioReportes(0);
+        setPorcentajeReportes(0);
+      }
+    } catch (error) {
+      message.error('Error al filtrar los datos.');
+      console.error(error);
+    }
+  };
+
+  // Configuración de la gráfica
+  const chartData = {
+    labels: datosGrafica.map((item) => item.date),
+    datasets: [
+      {
+
+                label: 'Reportes Cerrados',
+        data: datosGrafica.map((item) => item.count),
+        backgroundColor: 'rgba(24, 144, 255, 0.7)',
+        borderColor: 'rgba(24, 144, 255, 1)',
+        borderWidth: 1,
+        borderRadius: 4,
+      },
+    ],
+  };
+
+  const chartOptions = {
+    responsive: true,
+    plugins: {
+      legend: { position: 'top' },
+      title: { display: true, text: 'Reportes Cerrados por Fecha' },
+      tooltip: { mode: 'index', intersect: false },
+    },
+    scales: {
+      y: { beginAtZero: true, stepSize: 1 },
+    },
+  };
+
+  // Componente indicador creativo
+  const AlertIndicator = ({ promedio }) => {
+    let color = '#52c41a'; // verde
+    let text = 'Bajo';
+
+    const p = parseFloat(promedio);
+    if (p >= 10) {
+      color = '#f5222d'; // rojo
+      text = 'Alto';
+    } else if (p >= 5) {
+      color = '#faad14'; // amarillo
+      text = 'Medio';
+    }
+
+    return (
+      <Card
+        style={{ backgroundColor: color, color: 'white', fontWeight: 'bold', textAlign: 'center' }}
+      >
+        Índice de Alerta: {text} ({promedio})
+      </Card>
+    );
+  };
+
+  if (loading) {
+    return <div>Cargando datos estadísticos...</div>;
+  }
+
+  if (error) {
+    return <div>Error al cargar los datos: {error}</div>;
+  }
+
+  return (
+    <Layout style={{ padding: '24px', maxWidth: 960, margin: 'auto', background: '#fff' }}>
+      <Content>
+        <TitleText level={2} style={{ textAlign: 'center', marginBottom: 24 }}>
+          Datos Estadísticos
+        </TitleText>
+
+        <Row gutter={[16, 16]} justify="center" style={{ marginBottom: 32 }}>
+          <Col xs={24} sm={12} md={6}>
+            <Card hoverable>
+              <Text strong>Total de Clientes</Text>
+              <Title level={3} style={{ color: '#1890ff' }}>
+                {totalClientes}
+              </Title>
+            </Card>
+          </Col>
+          <Col xs={24} sm={12} md={6}>
+            <Card hoverable>
+              <Text strong>Reportes Cerrados</Text>
+              <Title level={3} style={{ color: '#1890ff' }}>
+                {reportesCerrados}
+              </Title>
+            </Card>
+          </Col>
+          <Col xs={24} sm={12} md={6}>
+            <Card hoverable>
+              <Text strong>Promedio Reportes</Text>
+              <Title level={3} style={{ color: '#1890ff' }}>
+                {promedioReportes}
+              </Title>
+            </Card>
+          </Col>
+          <Col xs={24} sm={12} md={6}>
+            <Card hoverable>
+              <Text strong>Porcentaje de Reportes</Text>
+              <Title level={3} style={{ color: '#1890ff' }}>
+                {porcentajeReportes} %
+              </Title>
+            </Card>
+          </Col>
+        </Row>
+
+        <Card
+          title="Filtrar información por rango de fechas"
+          style={{ marginBottom: 32 }}
+          bodyStyle={{ display: 'flex', gap: 16, flexWrap: 'wrap', alignItems: 'center' }}
+        >
+          <RangePicker
+            onChange={(dates) => setFechaFiltro(dates || [])}
+            allowClear
+            style={{ minWidth: 250 }}
+          />
+          <Button type="primary" onClick={filtrarDatos}>
+            Filtrar
+          </Button>
+          <Button onClick={cargarDatos}>Limpiar Filtro</Button>
+        </Card>
+
+        <Card>
+          <Bar data={chartData} options={chartOptions} />
+        </Card>
+
+        <div style={{ marginTop: 32 }}>
+          <AlertIndicator promedio={promedioReportes} />
+        </div>
+      </Content>
+    </Layout>
+  );
+};
+
+export default DatosEstadisticos;

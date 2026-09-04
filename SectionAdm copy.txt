@@ -1,0 +1,196 @@
+import React, { useState } from "react";
+import { Link } from 'react-router-dom';
+import './App.css';
+import GestionUsuarios from "./Seccion_gestionUsuarios";
+import UsuariosAdminModificacion from "./Modulo_usuario_registrar/Modificar_Usuario";
+import RegistroUsuario from "./Modulo_usuario_registrar/RegistroUsuario";
+
+
+const MostrarContenidoSectionAdm = ({tipo_usuario}) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [currentView, setCurrentView] = useState('');
+  const [showGestionUsuarios, setShowGestionUsuarios] = useState(false);
+ 
+  
+  const gestionusuarioSidebar = () => {
+    setIsOpen(!isOpen);
+    };
+
+
+  const handleViewChange = (view) => {
+    setCurrentView(view);
+    setIsOpen(true); // Abre el sidebar al cambiar la vista
+    setShowGestionUsuarios(false);
+  };
+
+  const handleBackToGestion = () => {
+    setShowGestionUsuarios(true); // Muestra la gestión de usuarios
+    setCurrentView(''); // Resetea la vista actual
+  };
+
+
+    return <section className="section-contenedor-adm">
+    <p>Tipo Usuario: {tipo_usuario}</p>
+      <section className="section-adm-title">
+      <p>Inicio</p>
+      <Link to="/InicioT">
+        <button>Ir al Módulo del Técnico</button>
+      </Link>
+
+      {tipo_usuario === 'Admin' && (
+      <button onClick={gestionusuarioSidebar} style={styles.openButton}>Gestionar Usuarios</button>
+      )}
+      
+      </section>
+    <section className="section-adm-A">
+    <article className="art-adm-title-A">
+     
+     <p>Visualizacion de Datos</p>
+     
+    </article>
+  
+    <div className="div-adm-boxCalculo-A">
+      <MostrarContenidoSectionAdmA />
+      <MostrarContenidoSectionAdmA />
+      <MostrarContenidoSectionAdmA />
+    </div>
+    </section>
+  
+    <div className="div-contenedor-secBC">
+    <section className="section-adm-B">
+    <article className="art-adm-title-B">
+     
+        <p>Estado de Solicitudes Asignadas</p>
+  
+    </article>
+  
+    <div>
+    <MostrarContenidoSectionAdmB />
+    <MostrarContenidoSectionAdmB />
+    </div>
+  
+    </section>
+    
+  
+    <section className="section-adm-C">
+    <article className="art-adm-title-C">
+    
+        <p>Actividades Recientes</p>
+    </article>
+  
+    <MostrarContenidoSectionAdmC />
+    <MostrarContenidoSectionAdmC />
+    <MostrarContenidoSectionAdmC />
+  
+    </section>
+    </div>
+  
+    <div style={{ ...styles.panel, right: isOpen ? 0 : '-500px', }} aria-hidden={!isOpen} open={isOpen}>
+
+    <button onClick={gestionusuarioSidebar} style={styles.closeButton} aria-label="Cerrar panel">
+      Cerrar
+    </button>
+    <section>
+    {showGestionUsuarios ? (
+            <>
+<button onClick={() => handleViewChange('registrar')}>Registrar Nuevo Usuario</button>
+              <button onClick={() => handleViewChange('modificar')}>Modificar Usuario</button>
+              <GestionUsuarios />
+
+             
+            </>
+          ) : (
+            <>
+               <button onClick={handleBackToGestion}>Volver a Gestión de Usuarios</button>
+              {currentView === 'registrar' && <RegistroUsuario />}
+              {currentView === 'modificar' && <UsuariosAdminModificacion />}
+            </>
+          )}
+    </section>
+    </div>
+
+    </section>
+    
+  }
+
+  const MostrarContenidoSectionAdmA = () => {
+    return <div className="div-contenedor-adm-A-boxCalculo inline">
+    <article className="adm-A-nombreCalculo">
+    <h4>Nombre Calculo</h4>
+    </article>
+
+    <article className="adm-A-numeroCalculo">
+    <h3>Numero</h3>
+    </article>
+</div>
+  }
+  const MostrarContenidoSectionAdmB = () => {
+    return <article className="art-adm-B">
+    <article className="art-adm-B-2-1">
+    <p>ID solicitud</p>
+    <p>Cliente</p>
+    <p>Responsable</p>
+    <p>Prioridad</p>
+    <p>Estado</p>
+    </article>
+
+    <article className="art-adm-B-2-2">
+    <p>Tiempo Restante</p>
+    <div className="div-cont-barra-tiempo">
+    <div className="barra-tiempo">
+        <div className="barra-tiempo-2"></div>
+    </div>
+    
+    </div>
+    </article>
+</article>
+  }
+  const MostrarContenidoSectionAdmC = () => {
+    return <div>
+    <article className="art-adm-C">
+        <article className="art-adm-C-2-1">
+        <p>Se completò una solicitud</p>
+        </article>
+  
+        <article className="art-adm-C-2-2">
+        <p>ID Servicio</p>
+        </article>
+        
+    
+    </article>
+    </div>
+  }
+
+  const styles = {
+    openButton: {
+      padding: '10px 20px',
+      fontSize: 16,
+      cursor: 'pointer',
+    },
+    panel: {
+      position: 'fixed',
+      top: 0,
+      right: '-300px',
+      width: 300,
+      height: '100vh',
+      backgroundColor: 'white',
+      boxShadow: '-2px 0 5px rgba(0,0,0,0.2)',
+      padding: 20,
+      transition: 'right 0.3s ease',
+      zIndex: 1000,
+      overflowY: 'auto',
+    },
+    closeButton: {
+      marginBottom: 20,
+      padding: '6px 12px',
+      cursor: 'pointer',
+      backgroundColor: '#e74c3c',
+      border: 'none',
+      color: 'white',
+      fontSize: 14,
+      borderRadius: 4,
+    },
+  };      
+
+
+  export default MostrarContenidoSectionAdm;

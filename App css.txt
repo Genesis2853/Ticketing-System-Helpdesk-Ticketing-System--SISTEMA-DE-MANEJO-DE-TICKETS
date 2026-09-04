@@ -1,0 +1,483 @@
+/*configuracion que viene con react*/
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+
+
+
+
+
+
+
+
+/*configuracion css que yo hice*/
+
+                                                    /*general*/
+*{
+    margin: 0px;
+}
+
+.inline{
+    display: inline-block;
+}
+
+.box-inline{
+    display: inline;
+}
+
+                                                        /*header*/
+
+.header-adm{
+    background: rgb(250, 66, 66);
+    padding: 10px 10px 10px 10px;
+    justify-items: right;
+}
+
+                                                            /*nav*/
+
+.div-contenedor-navmain{
+    display: flex;
+}
+
+
+                                                /*main contenedor*/
+.main-adm{
+ background: rgb(255, 255, 255);
+ width: 100%;
+ height: 100%;
+}
+
+.div-contenedor-secasi{
+    display: flex;
+}
+
+                                    /*section contenedor dashboard y aside*/
+.section-contenedor-adm{
+    background: rgb(255, 255, 255);
+    padding: 10px 10px 100px 10px;
+    width: 80%;
+    display: grid;
+    row-gap: 50px;
+}
+
+.section-adm-title{
+  padding: none;
+    margin-top: none;
+    margin-bottom: none;
+    font-size: 40px;
+    color:rgb(0, 0, 0);
+    background: none;
+}
+
+        /*dashboard*/
+
+/*opcion general para estilo de los 3 cuadros del dashboard*/
+.section-adm-A, .section-adm-B, .section-adm-C{
+    background: rgb(255, 255, 255);
+    padding: 10px 10px 10px 10px;
+    box-shadow: 0px 0px 10px 2px rgb(185, 185, 185);
+}
+
+/*box section A*/
+.div-contenedor-adm-A-boxCalculo{
+    background: rgb(255, 255, 255);
+    padding: 10px;
+    border: 2px solid rgb(179, 179, 179);
+}
+
+.div-adm-boxCalculo-A{
+  display: flex;
+  gap: 10px;
+}
+
+.art-adm-title-A{
+    margin-top: none;
+    margin-bottom: 10px;
+    font-size: 25px;
+    color:rgb(0, 2, 0);
+    background: none;
+}
+
+.adm-A-nombreCalculo{
+    color: rgb(0, 0, 0);
+}
+
+.adm-A-numeroCalculo{
+    color: rgb(0, 0, 0);
+}
+
+/*inicio section B y C*/
+.div-contenedor-secBC{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 50px;
+}
+
+  /*{}*/
+/*box de estados de solicitudes*/
+.art-adm-title-B{
+    margin-top: none;
+    font-size: 25px;
+    color:rgb(0, 0, 0);
+    background: none;
+}
+.art-adm-B{
+    background: rgb(255, 255, 255);
+    padding: 5px;
+    margin-top: 10px;
+    border: 2px solid rgb(179, 179, 179);
+}
+
+[class*="art-adm-B-2"]{
+    background: rgb(255, 255, 255);
+    padding: 5px;
+    margin: 1px;
+}
+/*box de barra de tiempo de las solicitudes*/
+.div-cont-barra-tiempo{
+    width: 100%;
+}
+
+.barra-tiempo{
+    width: 100%;
+    height: 15px;
+    margin: 5px 0px 5px 0px;
+    background: rgb(189, 38, 38);
+    border-radius: 8px;
+}
+
+.barra-tiempo-2{
+    width: 50%;
+    height: 11px;
+    top: 2px;
+    left: 2px;
+    position: relative;
+    background: rgb(153, 109, 109);
+    border-radius: 8px;
+}
+
+/*box de actividades recientes*/
+.art-adm-title-C{
+    margin-top: none;
+    font-size: 25px;
+    color:rgb(0, 0, 0);
+    background: none;
+}
+
+.art-adm-C{
+    background: rgb(255, 255, 255);
+    padding: 5px;
+    margin-top: 10px;
+    border: 2px solid rgb(179, 179, 179);
+}
+
+[class*="art-adm-C-2"]{
+    background: rgb(255, 255, 255);
+    padding: 5px;
+    margin: 1px;
+}
+
+                                                            /*aside*/
+.aside-adm{
+    background: rgb(196, 196, 196);
+    padding: 10px 10px 10px 10px;
+    width: 20%;
+    border-left: 2px solid rgb(168, 168, 168);
+}
+
+ /*box parte foto y nombre de usuario*/
+.aside-div-container-textoAdm{
+    background: rgb(196, 196, 196);
+    padding: 10px;
+}
+
+.aside-div-container-imagenperfil{
+    background: rgb(196, 196, 196);
+    padding: 10px;
+}
+
+.div-imagenperfil{
+    padding: 30px 0px 30px 0px;
+    border: 2px solid rgb(0, 0, 0);
+    border-radius: 100%;
+    margin: 10px;
+}
+
+.aside-div-container-nombreusuario{
+    background: rgb(196, 196, 196);
+    padding: 10px;
+}
+
+ /*box calendario*/
+#calendar{
+    background: white;
+    font-size: 10px;
+    border: 2px solid rgb(151, 151, 151);
+}
+ /*ajustes configuracion libreria FullCalendar*/
+:root {
+    /*bordes interiores*/
+    --fc-border-color: rgb(211, 211, 211);
+    /*botones flechita*/
+    --fc-button-text-color: #000000;
+    --fc-button-bg-color: #cccccc;
+    --fc-button-border-color: #686868;
+    --fc-button-hover-bg-color: #a01b68;
+    --fc-button-hover-border-color: #5f103e;
+    --fc-button-active-bg-color: #5f0240;
+    --fc-button-active-border-color: #29011b;
+    
+}
+
+                                                                /*footer*/
+.footer-adm{
+    background: rgb(176, 0, 0);
+    padding: 10px 10px 10px 10px;
+    width: 100%;
+    height: 100px;
+}
+
+
+
+
+.estado-solicitudes-container{
+    padding: 20px;
+}
+
+.estado-solicitudes-grid{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+
+.estado-solicitudes-card{
+    margin: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 16px;
+    width: 300px;
+    box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.1);
+}
+
+.detalle-solicitudes-conteiner{
+    justify-items: center;
+}
+
+.detalle-solicitudes-card{
+    position: relative;
+    margin: 25px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 0px;
+    width: 700px;
+    box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.1);
+    display: grid;
+    grid-template-columns: 1fr;
+}
+
+.detalle-solicitudes-parte-sup{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 260px;
+    padding: 10px 10px 0px 10px;
+    font-size: 17px;
+}
+
+.detalle-solicitudes-parte-centro{
+    margin: 5px 0px 5px 0px;
+    padding: 3px;
+    text-align: center;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    font-size: 17px;
+}
+
+.detalle-solicitudes-parte-baja{
+    padding: 0px 10px 10px 10px;
+    font-size: 18px;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+}
+
+.detalle-solicitudes-descripcion{
+    border: 2px solid rgba(0, 0, 0, 0.1);
+    padding: 4px;
+    border-radius: 5px;
+}
+
+.negrita{
+    font-weight: bold;
+}
+
+
+
+.ver-datosT-container{
+    padding: 20px;
+}
+
+.ver-datosT-grid{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+
+.ver-datosT-card{
+    margin: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 16px;
+    width: 300px;
+    box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.1);
+}
+
+.detalle-ticket-conteiner{
+    justify-items: center;
+}
+
+.detalle-ticket-card{
+    position: relative;
+    margin: 25px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 0px;
+    width: 700px;
+    box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.1);
+    display: grid;
+    grid-template-columns: 1fr;
+}
+
+
+.detalle-ticket-parte-sup{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 150px;
+    padding: 10px 10px 0px 10px;
+    font-size: 17px;
+}
+
+.detalle-tickets-parte-centro{
+    margin: 5px 0px 5px 0px;
+    padding: 3px;
+    text-align: center;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    font-size: 17px;
+}
+
+.detalle-ticket-parte-baja{
+    padding: 0px 10px 10px 10px;
+    font-size: 18px;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+}
+
+.detalle-ticket-descripcion{
+    border: 2px solid rgba(0, 0, 0, 0.1);
+    padding: 4px;
+    border-radius: 5px;
+}
+
+
+.verdatos-clientes-container, .verdatos-tecnicos-container{
+    padding: 20px;
+}
+
+.ver-datosC-grid, .ver-datosTC-grid{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+
+.ver-datosC-card, .ver-datosTC-card{
+    margin: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 16px;
+    width: 300px;
+    box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.1);
+}
+
+.detalle-cliente-conteiner, .detalle-tecnico-conteiner{
+    justify-items: center;
+}
+
+.detalle-cliente-card, .detalle-tecnico-card{
+    position: relative;
+    margin: 25px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 0px;
+    width: 700px;
+    box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.1);
+    display: grid;
+    grid-template-columns: 1fr;
+}
+
+.detalle-cliente-parte-sup, .detalle-tecnico-parte-sup{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 150px;
+    padding: 10px 10px 0px 10px;
+    font-size: 17px;
+}
+
+.detalle-cliente-parte-centro, .detalle-tecnico-parte-centro{
+    margin: 5px 0px 5px 0px;
+    padding: 3px;
+    text-align: center;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    font-size: 17px;
+}
+
+.detalle-cliente-parte-baja, .detalle-tecnico-parte-baja{
+    padding: 0px 10px 10px 10px;
+    font-size: 18px;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+}
+
+                                                                        /*MAPA UBICACION*/
+
+.contenedor-mapa-ubicacionT{
+    padding-top: 30px;
+}

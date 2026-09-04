@@ -1,0 +1,157 @@
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import PromediosPorTecnico from './SistemaResolucionSolicitudes';
+
+const App = ({ user }) => {
+    const [totalClientes, setTotalClientes] = useState(null);
+    const [totalTickets, setTotalTickets] = useState(null);
+    const [solicitudesPorTecnico, setSolicitudesPorTecnico] = useState([]);
+    const [totalSolicitudesAbiertas, setTotalSolicitudesAbiertas] = useState(null);
+    const [totalSolicitudesCompletadas, setTotalSolicitudesCompletadas] = useState(null);
+    const [totalSolicitudesNoRealizadas, setTotalSolicitudesNoRealizadas] = useState(null);
+    const [totalReportesDescargados, setTotalReportesDescargados] = useState(null);
+    const [clasificacionClientes, setClasificacionClientes] = useState([]);
+    const [totalSolicitudesPorEstado, setTotalSolicitudesPorEstado] = useState({});
+    const [totalTicketsPorMotivo, setTotalTicketsPorMotivo] = useState([]);
+    const [ticketsPorPrioridad, setTicketsPorPrioridad] = useState([]);
+    const [totalTicketsSinAsignar, setTotalTicketsSinAsignar] = useState(null);
+    const [tiempoPromedioTecnico, setTiempoPromedioTecnico] = useState(null);
+    const [solicitudesCompletadasPorTecnico, setSolicitudesCompletadasPorTecnico] = useState([]);
+    const [solicitudesNoRealizadasPorTecnico, setSolicitudesNoRealizadasPorTecnico] = useState([]);
+
+    console.log("tipo_usuario:", user?.tipo_usuario);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const [clientesRes, solicitudesRes, ticketsRes, abiertasRes, completadasRes, noRealizadasRes, reportesRes, clasificacionRes, ticketsMotivoRes, ticketsPrioridadRes, ticketsSinAsignarRes, tiempoPromedioRes, completadasPorTecnicoRes, noRealizadasPorTecnicoRes] = await Promise.all([
+                    axios.get('http://127.0.0.1:8000/api/clientes/total'),
+                    axios.get('http://127.0.0.1:8000/api/solicitudes/por_tecnico'),
+                    axios.get('http://127.0.0.1:8000/api/tickets/total'),
+                    axios.get('http://127.0.0.1:8000/api/solicitudes/abiertas'),
+                    axios.get('http://127.0.0.1:8000/api/solicitudes/cerradas/completadas'),
+                    axios.get('http://127.0.0.1:8000/api/solicitudes/no_realizadas'),
+                    axios.get('http://127.0.0.1:8000/api/reportes/descargados?tipo=tipo_reporte'), // Cambia 'tipo_reporte' por el tipo que necesites
+                    axios.get('http://127.0.0.1:8000/api/clientes/clasificacion'),
+                    axios.get('http://127.0.0.1:8000/api/tickets/motivos?motivo=sinservicio'), // Cambia 'sinservicio' por el motivo que necesites
+                    axios.get('http://127.0.0.1:8000/api/tickets/por_prioridad'),
+                    axios.get('http://127.0.0.1:8000/api/tickets/sin_asignar'),
+                    axios.get('http://127.0.0.1:8000/api/tecnicos/tiempo_promedio'),
+                    axios.get('http://127.0.0.1:8000/api/solicitudes/completadas_por_tecnico'),
+                    axios.get('http://127.0.0.1:8000/api/solicitudes/no_realizadas_por_tecnico')
+                ]);
+
+                setTotalClientes(clientesRes.data.total_clientes);
+                setSolicitudesPorTecnico(solicitudesRes.data);
+                setTotalTickets(ticketsRes.data.total_tickets);
+                setTotalSolicitudesAbiertas(abiertasRes.data.total_solicitudes_abiertas);
+                setTotalSolicitudesCompletadas(completadasRes.data.total_solicitudes_cerradas);
+                setTotalSolicitudesNoRealizadas(noRealizadasRes.data.total_solicitudes_no_realizadas);
+                setTotalReportesDescargados(reportesRes.data.total_reportes_descargados);
+                setClasificacionClientes(clasificacionRes.data);
+                setTotalTicketsPorMotivo(ticketsMotivoRes.data);
+                setTicketsPorPrioridad(ticketsPrioridadRes.data);
+                setTotalTicketsSinAsignar(ticketsSinAsignarRes.data.total_tickets_sin_asignar);
+                setTiempoPromedioTecnico(tiempoPromedioRes.data.tiempo_promedio_horas);
+                setSolicitudesCompletadasPorTecnico(completadasPorTecnicoRes.data);
+                setSolicitudesNoRealizadasPorTecnico(noRealizadasPorTecnicoRes.data);
+            } catch (error) {
+                console.error('Error al obtener datos:', error);
+            }
+        };
+
+        fetchData();
+    }, []);
+
+    return (
+    <div className="dashboard-container">
+        <h1>Dashboard de Soporte Técnico</h1>
+        <div className="cards-container">
+            <div className="card">
+                <h2>Total de Clientes</h2>
+                <p>{totalClientes}</p>
+            </div>
+            <div className="card">
+                <h2>Total de Tickets</h2>
+                <p>{totalTickets}</p>
+            </div>
+            <div className="card">
+                <h2>Total de Solicitudes Abiertas</h2>
+                <p>{totalSolicitudesAbiertas}</p>
+            </div>
+            <div className="card">
+                <h2>Total de Solicitudes Completadas</h2>
+                <p>{totalSolicitudesCompletadas}</p>
+            </div>
+            <div className="card">
+                <h2>Total de Solicitudes No Realizadas</h2>
+                <p>{totalSolicitudesNoRealizadas}</p>
+            </div>
+            <div className="card">
+                <h2>Total de Reportes Descargados</h2>
+                <p>{totalReportesDescargados}</p>
+            </div>
+            <div className="card">
+                <h2>Total de Tickets Sin Asignar</h2>
+                <p>{totalTicketsSinAsignar}</p>
+            </div>
+            <div className="card">
+                <h2>Tiempo Promedio por Técnico</h2>
+                <p>{tiempoPromedioTecnico} horas</p>
+            </div>
+        </div>
+
+        <h2>Clasificación de Clientes:</h2>
+        <ul className="list">
+            {clasificacionClientes.map((cliente) => (
+                <li key={cliente.tipo_servicio}>
+                    Tipo de Servicio: {cliente.tipo_servicio}, Total: {cliente.total}
+                </li>
+            ))}
+        </ul>
+
+        <h2>Total de Tickets por Motivo:</h2>
+        <ul className="list">
+            {Object.entries(totalTicketsPorMotivo).map(([motivo, total]) => (
+                <li key={motivo}>
+                    Motivo: {motivo}, Total: {total}
+                </li>
+            ))}
+        </ul>
+
+        <h2>Tickets por Prioridad:</h2>
+        <ul className="list">
+            {ticketsPorPrioridad.map((ticket) => (
+                <li key={ticket.prioridad_solicitud}>
+                    Prioridad: {ticket.prioridad_solicitud}, Total Tickets: {ticket.total_tickets}
+                </li>
+            ))}
+        </ul>
+
+        <h2>Solicitudes Completadas por Técnico:</h2>
+        <ul className="list">
+            {solicitudesCompletadasPorTecnico.map((tecnico) => (
+                <li key={tecnico.codigo_trabajador}>
+                    Técnico: {tecnico.codigo_trabajador}, Total Solicitudes Completadas: {tecnico.total}
+                </li>
+            ))}
+        </ul>
+
+        <h2>Solicitudes No Realizadas por Técnico:</h2>
+        <ul className="list">
+            {solicitudesNoRealizadasPorTecnico.map((tecnico) => (
+                <li key={tecnico.codigo_trabajador}>
+                    Técnico: {tecnico.codigo_trabajador}, Total Solicitudes No Realizadas: {tecnico.total}
+                </li>
+            ))}
+        </ul>
+
+        <section>
+            <PromediosPorTecnico />
+        </section>
+    </div>
+);
+
+};
+
+export default App;

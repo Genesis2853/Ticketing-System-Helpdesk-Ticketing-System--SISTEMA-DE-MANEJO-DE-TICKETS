@@ -1,0 +1,40 @@
+import React from "react";
+import './App.css';
+import Calendar from "./Calendar.jsx";
+
+const MostrarContenidoAsideAdm = () => {
+  return <aside className="aside-adm">
+  <section className="section-aside-box-perfil">
+  
+  <div className="aside-div-container-textoAdm">
+  
+  <h3>Administrador</h3>
+
+  </div>
+
+  <div className="aside-div-container-imagenperfil">
+  
+  <div className="div-imagenperfil">
+
+  </div>
+
+  </div>
+
+  <div className="aside-div-container-nombreusuario">
+  
+  <p>Nombre Usuario</p>
+  
+  </div>
+
+  </section>
+
+  <section className="section-aside-box-calendar">
+  <div id='calendar'>
+  <Calendar />
+  </div>
+  </section>
+</aside>
+}
+
+
+export default MostrarContenidoAsideAdm;

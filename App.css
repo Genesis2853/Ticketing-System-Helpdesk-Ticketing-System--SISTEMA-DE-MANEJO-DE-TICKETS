@@ -1,0 +1,302 @@
+* {
+  box-sizing: border-box;
+
+  font-family: Inter, sans-serif;
+
+}
+
+/* Estilos base (Mobile First) */
+.app-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #f8f9fa;
+}
+
+.div-contenedor-navmain.inline {
+  display: flex;
+  flex: 1;
+  flex-direction: column; /* Columna en móviles */
+  width: 100%;
+}
+
+/* Header y Footer base */
+header, footer {
+  background-color: #1f2937;
+  color: white;
+  padding: 1rem;
+  width: 100%;
+}
+
+/* Contenido principal */
+main {
+  padding: 1rem;
+  flex: 1;
+}
+
+.main-adm{
+  background-color: #f4f4f4;
+}
+
+
+/* Tablas */
+.table-container {
+  overflow-x: auto;
+  margin: 1rem 0;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+/* Formularios */
+.form-group {
+  margin-bottom: 1rem;
+}
+
+input, select, textarea {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+/* Botones */
+.btn {
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.footer-adm{
+background-color: #990f0f;
+}
+
+
+.btn-primary {
+  background-color: #4361ee;
+  color: white;
+}
+
+/* Media Queries (Responsive) */
+@media (min-width: 768px) {
+  /* Tablet: Navbars en fila */
+  .div-contenedor-navmain.inline {
+    flex-direction: row;
+  }
+  
+  .navbar-container {
+    width: 250px;
+    min-height: calc(100vh - 120px);
+  }
+  
+  main {
+    padding: 2rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  /* Desktop: Ajustes mayores */
+  main {
+    padding: 2rem 3rem;
+  }
+}
+
+/* modal.css */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background: white;
+  padding: 1rem;
+  width: 90%;
+  max-width: 500px;
+  border-radius: 8px;
+}
+
+/* App.css */
+
+/* Estilos para el contenedor principal */
+.main-adm {
+  padding: 1rem;
+}
+
+/* Contenedor para la sección y el aside */
+.div-contenedor-secasi {
+  display: flex;
+  flex-direction: column; /* Apilados en móviles */
+  gap: 1rem; /* Espacio entre sección y aside */
+}
+
+/* Estilos para el aside */
+aside {
+  background-color: #f0f0f0; /* Color de fondo para el calendario */
+  padding: 1rem;
+  border-radius: 8px;
+}
+
+/* Media Queries para pantallas más grandes */
+@media (min-width: 768px) {
+  .div-contenedor-secasi {
+    flex-direction: row; /* En fila en pantallas más grandes */
+  }
+
+  aside {
+    width: 250px; /* Ancho fijo para el aside */
+    min-height: calc(100vh - 120px); /* Altura mínima para el aside */
+  }
+
+  .main-adm {
+    padding: 2rem; /* Más espacio en pantallas grandes */
+  }
+}
+
+
+/* Asegúrate de que el contenedor principal no exceda el ancho de la pantalla */
+.main-adm {
+  padding: 1rem;
+  overflow-x: hidden; /* Evita el desplazamiento horizontal */
+}
+
+/* Ajustes para el aside */
+.aside-adm-compact {
+  background: white;
+  border-radius: 8px;
+  padding: 0.8rem;
+  margin: 0.5rem;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  width: 260px; /* Ancho fijo reducido */
+  max-width: 100%; /* Asegúrate de que no exceda el ancho de la pantalla */
+}
+
+
+.titulo-busqueda {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #33333315; /* Aquí agregamos la línea */
+}
+
+.titulo-busqueda h2 {
+    margin: 0;
+}
+
+
+.search-input {
+    padding: 0.5rem;
+    font-size: 1rem;
+    border-radius: 0.25rem;
+    border: 1px solid #ccc;
+}
+
+
+
+
+.filtros-avanzados-container {
+  position: absolute;
+  top: 110%; /* justo debajo del botón que activa los filtros */
+  right: 0;
+  z-index: 1000;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.15);
+  padding: 1rem;
+  border-radius: 0.5rem;
+  width: 320px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  transition: opacity 0.3s ease;
+}
+
+/* Inputs y selects */
+.input-filtro {
+  width: 100%;
+  padding: 0.5rem;
+  font-size: 0.95rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+/* Contenedor relativo */
+.contenedor-filtros-avanzados {
+  position: relative;
+  display: inline-block;
+  margin-top: 0.5rem;
+}
+
+/* Contenedor de fechas */
+.filtro-fechas {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+/* Etiquetas */
+.label-fecha {
+  font-weight: 500;
+  font-size: 0.85rem;
+  margin-top: 0.25rem;
+}
+
+/* Botón limpiar */
+.btn-limpiar-filtros {
+  margin-top: 0.5rem;
+  padding: 0.5rem;
+  font-size: 0.9rem;
+  background-color: #f44336;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-limpiar-filtros:hover {
+  background-color: #d32f2f;
+}
+/* Botón de toggle */
+.btn-toggle-filtros {
+  background-color: #1976d2;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 0.5rem;
+}
+.btn-toggle-filtros:hover {
+  background-color: #1565c0;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+  .filtros-avanzados-container {
+    width: 95vw;
+    left: 2.5vw;
+    right: auto;
+    top: 100%;
+  }
+}
+
+/* Animación opcional */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-0.25rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

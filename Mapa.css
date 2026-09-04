@@ -1,0 +1,287 @@
+.mapa-container {
+  display: flex;
+  justify-content: space-between;
+  font-family: 'Arial', sans-serif;
+  padding: 20px;
+  max-width: 1100px;
+  margin: auto;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+   margin-left: auto;
+}
+
+.div-contenedor-mapa{
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  justify-items: center;
+  align-items: center;
+  align-content: center;
+}
+
+.sidebar {
+  width: 30%;
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
+  max-height: 600px;
+}
+
+.map-container {
+  width: 65%;
+}
+
+.h2-mapa, .h3-mapa {
+  color: #dc3545; /* Rojo */
+}
+
+.buton-mapa {
+  padding: 10px 15px;
+  background-color: #dc3545; /* Rojo */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+  text-decoration: none;
+  font-size: 15px;
+}
+
+.buton-mapa:hover {
+  background-color: #c82333; /* Rojo más oscuro */
+}
+
+select, input[type="date"] {
+  padding: 8px;
+  font-size: 1rem;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  width: 100%;
+}
+
+input[type="checkbox"] {
+  margin-right: 8px;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+li {
+  margin-bottom: 8px;
+  font-size: 1rem;
+}
+
+
+
+.sidebar {
+  width: 30%;
+  padding: 10px 5px; /* Reducimos el padding lateral */
+  background-color: #f8f9fa;
+  border-radius: 10px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
+  max-height: 600px;
+  margin-right: 10px; /* Reducimos el margen derecho */
+}
+
+/* Contenedor de checkboxes */
+.modo-container {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+  padding: 0;
+}
+
+/* Items de la lista */
+.sidebar ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar li {
+  padding: 8px 5px; /* Reducimos el padding lateral */
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+  border-bottom: 1px solid #eee;
+  display: flex;
+  align-items: center;
+}
+
+/* Checkboxes */
+.sidebar input[type="checkbox"] {
+  margin-right: 5px;
+  transform: scale(1.1);
+}
+
+
+.contenedor-mapa-ubicacionT {
+  display: flex;
+  justify-content: center; /* Centrado horizontal */
+  align-items: center;     /* Centrado vertical */
+  width: 100%;
+  min-height: 100vh;       /* Altura total de la pantalla */
+ 
+}
+
+/*@media (max-width: 768px) {
+  .mapa-contenedor-responsive {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .panel-registros {
+    width: 100% !important;
+    max-height: none !important;
+    overflow-y: visible !important;
+    overflow-x: auto;
+    white-space: nowrap;
+    padding-bottom: 10px;
+  }
+
+  .panel-registros ul {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    overflow-x: auto;
+    padding: 10px 0;
+  }
+
+  .panel-registros li {
+    display: inline-block;
+    min-width: 250px;
+    max-width: 300px;
+    white-space: normal;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 10px;
+    background-color: #fff;
+  }
+
+  .panel-registros select,
+  .panel-registros button {
+    width: 100% !important;
+    margin-bottom: 10px;
+  }
+}*/
+
+/* Clase aplicada al contenedor principal */
+
+
+/* Para pantallas pequeñas (teléfonos) */
+@media screen and (max-width: 768px) {
+  .mapa-contenedor-responsive {
+    display: flex;
+    flex-direction: column !important;
+    margin-left: 0 !important;
+    padding: 10px;
+  }
+
+  .mapa-contenedor-responsive > div:first-child {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .mapa-contenedor-responsive > div:last-child {
+    width: 100% !important;
+    margin-top: 20px;
+  }
+
+ .contenedor-check-mapa-2{
+
+ 
+margin-right: 0px !important;
+  width: 360px;
+  margin-bottom: 5px;
+}
+}
+
+/* Para tablets medianas */
+@media screen and (min-width: 769px) and (max-width: 1024px) {
+  .mapa-contenedor-responsive {
+    display: flex;
+    flex-direction: column !important;
+    margin-left: 0 !important;
+  }
+
+  .mapa-contenedor-responsive > div:first-child,
+  .mapa-contenedor-responsive > div:last-child {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .mapa-contenedor-responsive > div:last-child {
+    margin-top: 20px;
+  }
+
+  .contenedor-check-mapa-2{
+
+ 
+margin-right: 0px !important;
+  width: 360px;
+  margin-bottom: 5px;
+}
+}
+
+
+
+.contenedor-reporte-2{
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+  
+}
+
+.butico{
+  margin-left: 10px;
+  margin-bottom: 25px;
+}
+
+.contenedor-check-mapa{
+  display: flex;
+  flex-direction: row;
+  border: 1px solid rgb(226, 226, 226);
+ 
+
+}
+
+.contenedor-check-mapa-2{
+  display: flex;
+  flex-direction: row;
+  border: 1px solid rgb(226, 226, 226);
+ 
+margin-right: 145px;
+  width: 360px;
+  margin-bottom: 5px;
+}
+
+
+
+.check-mapa{
+  margin-right: 10px;
+  
+}
+
+.contenedor-tecnicos-mapa {
+  margin-bottom: 5px;
+}
+
+.contenedor-ubicaciones{
+  display: flex;
+  flex-direction: row;
+  margin-left: 10px;
+  gap: 1px;
+}
+
+.contenedor-pedir-mapa{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  justify-items: center;
+}

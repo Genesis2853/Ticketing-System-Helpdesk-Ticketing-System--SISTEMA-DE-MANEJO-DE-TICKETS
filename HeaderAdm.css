@@ -1,0 +1,45 @@
+
+*{
+  font-family: Inter, sans-serif;
+}
+.header-adm {
+    display: flex;
+    justify-content: space-between; /* Espacio entre el logo y las acciones */
+    align-items: center; /* Centra verticalmente los elementos */
+    padding: 10px 20px; /* Espaciado interno */
+    background-color: #dadada; /* Color de fondo */
+    border-bottom: 1px solid #dee2e6; /* Línea inferior */
+}
+
+.engranaje-icon{
+    color: rgb(0, 0, 0);
+}
+.custom-icon{
+    color: rgb(0, 0, 0);
+}
+
+.header-logoo{
+    max-width: 80px;
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    width: 100%; /* Asegura que ocupe todo el ancho */
+}
+
+.header-logo {
+    font-size: 1.5em; /* Tamaño del texto del logo */
+    color: #343a40; /* Color del texto */
+}
+
+.header-actions {
+    display: flex;
+    align-items: center; /* Centra verticalmente los elementos */
+    gap: 15px; /* Espacio entre los elementos de acción */
+    align-items: center;
+    align-content: center;
+    justify-content: center;
+    justify-items: center;
+    text-align: center;
+}

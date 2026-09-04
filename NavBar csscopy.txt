@@ -1,0 +1,91 @@
+.nav-adm-func {
+    background: rgb(196, 196, 196);
+    width: 10%;
+    padding: 2px;
+    border-right: 2px solid rgb(168, 168, 168);
+    position: relative;
+  }
+  
+  .nav-items {
+    list-style: none;
+    justify-content: space-around;
+    margin-right: 0;
+    padding: 0;
+    width: 100%;
+  }
+  
+  .nav-item {
+    color: rgb(3, 1, 1);
+    cursor: pointer;
+    text-align: center;
+  }
+
+  .p-nav-adm{
+    display: block;
+    font-size: 16.5px;
+    justify-content: center;
+    padding: 10px 20px 10px 20px;
+  }
+
+  .nav-link{
+    display: block;
+    
+    justify-content: center;
+    padding: 10px 20px 10px 20px;
+  }
+
+  .nav-link-sub{
+    display: flex;
+    gap: 0px;
+    margin: 0px;
+    align-items: center;
+    align-content: center;
+    text-align: center;
+    justify-content: center;
+    justify-items: center;
+    padding: 10px 30px 10px 30px;
+    
+  }
+  
+  .submenu {
+    list-style: none;
+    background: rgb(179, 164, 164);
+    padding: 0px;
+    margin: 0px;
+    
+  }
+  
+  .nav-item:hover .submenu {
+    display: block;
+  }
+  
+  .submenu-item {
+    padding: none;
+    margin: none;
+    color: rgb(5, 1, 1);
+    cursor: pointer;
+    
+  }
+  
+  .submenu-item:hover {
+    background-color:  rgb(158, 144, 144);
+  }
+
+  .a-nav-adm{
+    
+    font-size: 16.5px;
+    
+}
+
+.a-nav-adm:hover{
+    background: rgb(155, 155, 155);
+    transition: 4.ms ease-in;
+}
+
+.a-adm-list{
+    list-style: none;
+}
+
+.div-space{
+    padding: 2px;
+}

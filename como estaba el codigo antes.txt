@@ -1,0 +1,206 @@
+codigo formulario crear tickets
+
+import React, { useState } from 'react';
+import './FormularioCreartickets.css';
+
+const Formulario = () => {
+  const [formData, setFormData] = useState({
+    nombre: '',
+    apellido: '',
+    cedula: '',
+    telefono: '',
+    email: '',
+    mensaje: '',
+    prioridad: '',
+  });
+
+  const [errors, setErrors] = useState({});
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value
+    });
+  };
+
+  const validate = () => {
+    let formErrors = {};
+    if (!formData.nombre) formErrors.nombre = '(¡El nombre es requerido!)';
+    if (!formData.apellido) formErrors.apellido = '(¡El apellido es requerido!)';
+    if (!formData.cedula) formErrors.cedula = '(¡La cèdula es requerida!)';
+    if (!formData.telefono) formErrors.telefono = '(¡El nùmero de tèlefono es requerido!)';
+    if (!formData.email) {
+      formErrors.email = '(¡El correo electrónico es requerido!)';
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      formErrors.email = '(¡El correo electrónico no es válido!)';
+    }
+    if (!formData.mensaje) formErrors.mensaje = '(¡El mensaje es requerido!)';
+    if (!formData.prioridad) formErrors.prioridad = '(¡Indica la Prioridad del caso!)';
+    return formErrors;
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const formErrors = validate();
+    if (Object.keys(formErrors).length === 0) {
+      console.log('Formulario enviado:', formData);
+      // Aquí puedes agregar la lógica para enviar el formulario
+    } else {
+      setErrors(formErrors);
+    }
+  };
+
+  return (
+    <div className="div-contenedor-formulariocrearticket">
+    <form className="form-crearticket" action=" " method="post" onSubmit={handleSubmit}>
+      <div>
+      <div><label htmlFor="nombre" className='form-titulos-CT inline'>Nombre:</label></div>
+      <div className='form-flex-CT'><div><input
+          type="text"
+          id="nombre"
+          name="nombre"
+          value={formData.nombre}
+          onChange={handleChange}
+          className='form-box-CT'
+        /></div>
+        {errors.nombre && <p className='form-alertaerror-CT'>{errors.nombre}</p>}</div>
+      </div>
+      
+      <div>
+      <div><label htmlFor="apellido" className='form-titulos-CT inline'>Apellido:</label></div>
+      <div className='form-flex-CT'><div><input
+          type="text"
+          id="apellido"
+          name="apellido"
+          value={formData.apellido}
+          onChange={handleChange}
+          className='form-box-CT'
+        /></div>
+        {errors.apellido && <p className='form-alertaerror-CT'>{errors.apellido}</p>}</div>
+      </div>
+      <div>
+      <div><label htmlFor="cedula" className='form-titulos-CT inline'>Cèdula:</label></div>
+      <div className='form-flex-CT'><div><input
+          type="number"
+          id="cedula"
+          name="cedula"
+          value={formData.cedula}
+          onChange={handleChange}
+          className='form-box-CT'
+        /></div>
+        {errors.cedula && <p className='form-alertaerror-CT'>{errors.cedula}</p>}</div>
+      </div>
+      <div>
+      <div><label htmlFor="telefono" className='form-titulos-CT inline'>N. Telèfono:</label></div>
+      <div className='form-flex-CT'><div><input
+          type="tel"
+          id="telefono"
+          name="telefono"
+          value={formData.telefono}
+          onChange={handleChange}
+          className='form-box-CT'
+        /></div>
+        {errors.telefono && <p className='form-alertaerror-CT'>{errors.telefono}</p>}</div>
+      </div>
+      <div>
+      <div><label htmlFor="email" className='form-titulos-CT inline'>Correo Electrónico:</label></div>
+      <div className='form-flex-CT'><div><input
+          type="email"
+          id="email"
+          name="email"
+          value={formData.email}
+          onChange={handleChange}
+          className='form-box-CT'
+        /></div>
+        {errors.email && <p className='form-alertaerror-CT'>{errors.email}</p>}</div>
+      </div>
+      <div>
+        <div><label htmlFor="mensaje" className='form-titulos-CT inline'>Descripciòn del Servicio o Incidencia:</label></div>
+        <div><textarea
+          id="mensaje"
+          name="mensaje"
+          value={formData.mensaje}
+          onChange={handleChange}
+          cols="46" rows="10"
+          className='form-box-CT tamano-textarea-CT'
+        /></div>
+        {errors.mensaje && <p className='form-alertaerror-CT'>{errors.mensaje}</p>}
+      </div>
+      <div>
+      <div><label htmlFor="prioridad" className='form-titulos-CT inline'>Prioridad:</label></div>
+      <div><input
+          type="text"
+          id="prioridad"
+          name="prioridad"
+          value={formData.prioridad}
+          onChange={handleChange}
+          className='form-box-CT'
+          disabled
+        />
+        <select 
+          id="prioridad"
+          name="prioridad"
+          value={formData.prioridad}
+          onChange={handleChange}
+          className='form-box-CT'
+        >
+          <option value="A">Alta</option>
+          <option value="B">Media</option>
+          <option value="C">Baja</option>
+        </select></div>
+        {errors.prioridad && <p className='form-alertaerror-CT'>{errors.prioridad}</p>}
+      </div>
+      <button type="submit">Enviar</button>
+    </form>
+    </div>
+  );
+};
+
+export default Formulario;
+
+
+
+
+
+
+codigo pgreql.js
+
+
+import { pool } from "./bd/serverPGSQL.js";
+import moment from "moment";
+
+const horaActual = moment().format('YYYY-MM-DD HH:mm:ss');
+const getLanguages = async() => {
+    try{
+        const result= await pool.query("SELECT id_ticket, codigo_ticket, nombre_cliente, apellido_cliente, CI_cliente, N_tlf_cliente, email_cliente, descripcion_servicio, prioridad_solicitud, fecha_creacion FROM tb_crear_ticket;");        
+        console.log(result);
+    }catch(error){
+        console.error(error);
+        
+    }
+};
+
+const addLanguage = async() => {
+    try{
+        const result= await pool.query("INSERT INTO tb_crear_ticket (codigo_ticket, nombre_cliente, apellido_cliente, CI_cliente, N_tlf_cliente, email_cliente, descripcion_servicio, prioridad_solicitud, fecha_creacion)" + "VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9);", ['osfnwonf', 'maria', 'Gonzalez', '22435654', '04123476234', 'manuel@gmail.com', 'problemas area 51', 'Alta', horaActual]);
+        console.log(result.rowCount);
+    }catch(error){
+        console.error(error);
+        
+    }
+};
+
+const adjustSequence = async () => {
+    try {
+        // Verificar el valor actual de la secuencia
+        const result = await pool.query("SELECT setval('tb_crear_ticket_id_ticket_seq', (SELECT MAX(id_ticket) FROM tb_crear_ticket));");
+        console.log("Secuencia ajustada:", result);
+    } catch (error) {
+        console.error("Error ajustando la secuencia:", error);
+    }
+};
+
+getLanguages();
+addLanguage();
+adjustSequence();

@@ -1,0 +1,172 @@
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import './EstadoSolicitudes.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faSearch } from '@fortawesome/free-solid-svg-icons'
+
+const EstadoSolicitud = ({ user }) => {
+    const [solicitudes, setSolicitudes] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [searchTerm, setSearchTerm] = useState('');
+    console.log('user', user)
+
+    // Filtros avanzados persistentes
+const [filtrosAvanzados, setFiltrosAvanzados] = useState(() => {
+  const guardado = sessionStorage.getItem("filtrosAvanzadosSolicitudes");
+  return guardado
+    ? JSON.parse(guardado)
+    : {
+        codigoTicket: "",
+        nroContrato: "",
+        nombreApellidoCliente: "",
+        nombreApellidoTecnico: "",
+        motivo: "",
+        prioridad: "",
+        estado: "",
+        fechaDesde: "",
+        fechaHasta: "",
+      };
+});
+
+// Mostrar/ocultar panel
+const [mostrarFiltros, setMostrarFiltros] = useState(false);
+
+// guarda cada cambio
+useEffect(() => {
+  sessionStorage.setItem(
+    "filtrosAvanzadosSolicitudes",
+    JSON.stringify(filtrosAvanzados)
+  );
+}, [filtrosAvanzados]);
+
+
+    useEffect(() => {
+        let isMounted = true;
+
+        const fetchSolicitudes = async () => {
+            const token = localStorage.getItem("token");
+
+            if (!token) {
+                setError("No autorizado: token no encontrado.");
+                setLoading(false);
+                return;
+            }
+            try {
+                const response = await fetch(`${process.env.REACT_APP_API_URL_ESTADO}/api/estado/solicitudes`, {
+                    headers: { Authorization: `Bearer ${token}` },
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`Error: ${response.status} ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                data.sort((a, b) => new Date(b.fecha_creacion) - new Date(a.fecha_creacion));
+
+                if (isMounted) {
+                    setSolicitudes(data);
+                }
+            } catch (error) {
+                if (isMounted) {
+                    setError(error.message);
+                }
+            } finally {
+                if (isMounted) {
+                    setLoading(false);
+                }
+            }
+        };
+
+        fetchSolicitudes();
+
+        return () => {
+            isMounted = false;
+        };
+
+    }, []);
+
+    const handleSearchChange = (e) => {
+        setSearchTerm(e.target.value);
+    };
+
+    const handleFiltroChange = (e) => {
+  const { name, value } = e.target;
+  setFiltrosAvanzados((prev) => ({ ...prev, [name]: value }));
+};
+
+
+    const filteredSolicitudes = solicitudes.filter(solicitud =>
+        (solicitud.codigo_solicitud?.toLowerCase() ?? '').includes(searchTerm.toLowerCase()) ||
+        (solicitud.codigo_trabajador?.toLowerCase() ?? '').includes(searchTerm.toLowerCase()) ||
+        (solicitud.id_cliente?.toLowerCase() ?? '').includes(searchTerm.toLowerCase()) ||
+        (solicitud.nombre_cliente?.toLowerCase() ?? '').includes(searchTerm.toLowerCase()) ||
+        (solicitud.apellido_cliente?.toLowerCase() ?? '').includes(searchTerm.toLowerCase()) ||
+        (solicitud.nombre_tecnico?.toLowerCase() ?? '').includes(searchTerm.toLowerCase()) ||
+        (solicitud.apellido_tecnico?.toLowerCase() ?? '').includes(searchTerm.toLowerCase()) ||
+        (solicitud.codigo_ticket?.toLowerCase() ?? '').includes(searchTerm.toLowerCase()) ||
+        (solicitud.estado_solicitud?.toLowerCase() ?? '').includes(searchTerm.toLowerCase()) ||
+        (solicitud.motivo_visita?.toLowerCase() ?? '').includes(searchTerm.toLowerCase()) ||
+        (solicitud.prioridad_solicitud?.toLowerCase() ?? '').includes(searchTerm.toLowerCase()) ||
+
+            // nombre + apellido del cliente
+        (`${solicitud.nombre_cliente ?? ''} ${solicitud.apellido_cliente ?? ''}`
+            .trim()
+            .toLowerCase())
+            .includes(searchTerm.toLowerCase()) ||
+
+        // nombre + apellido del técnico
+        (`${solicitud.nombre_tecnico ?? ''} ${solicitud.apellido_tecnico ?? ''}`
+            .trim()
+            .toLowerCase())
+            .includes(searchTerm.toLowerCase())
+
+        );
+
+    if (loading) {
+        return <div>Cargando solicitudes...</div>;
+    }
+
+    if (error) {
+        return <div>Error al cargar las solicitudes: {error}</div>;
+    }
+
+    return (
+        <main className="main-adm">
+            <div className="estado-solicitudes-container">
+
+                <div className="encabezado-titulo encabezado-titulo-ticket">
+                <h2>Estado de las Solicitudes</h2>
+                    
+                        <div className="input-container">
+                        <input
+                            type="text"
+                            placeholder="Buscar..."
+                            value={searchTerm}
+                            onChange={handleSearchChange}
+                            className="search-input"
+                        />
+                        <FontAwesomeIcon icon={faSearch} className="search-icon" />
+                        </div>
+                   
+
+                </div>
+
+                <div className="estado-solicitudes-grid">
+                    {filteredSolicitudes.map(solicitud => (
+                        <div key={solicitud.codigo_solicitud} className="estado-solicitudes-card">
+                            <h3>Servicio ID: <Link to={`/estado/solicitud/${solicitud.codigo_solicitud}`}>{solicitud.codigo_ticket}</Link></h3>
+                            <p>Técnico encargado: {solicitud.nombre_tecnico} {solicitud.apellido_tecnico}</p>
+                            <p>Cliente: {solicitud.nombre_cliente} {solicitud.apellido_cliente}</p>
+                            <p>Motivo de visita: {solicitud.motivo_visita}</p>
+                            <p>Estado: {solicitud.estado_solicitud}</p>
+                            <p>Prioridad: {solicitud.prioridad_solicitud}</p>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </main>
+    );
+};
+
+export default EstadoSolicitud;
