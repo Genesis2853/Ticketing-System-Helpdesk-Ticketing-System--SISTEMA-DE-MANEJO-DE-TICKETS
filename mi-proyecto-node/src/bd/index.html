@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmación de Asistencia</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; }
+        input { margin: 10px; padding: 8px; width: 250px; }
+        button { background: #4CAF50; color: white; border: none; padding: 10px 15px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h2>Invita a un Amigo a la Fiesta 🎉</h2>
+    <form id="formulario">
+        <input type="text" id="nombre" placeholder="Nombre del Invitado" required>
+        <input type="email" id="correo" placeholder="Correo Electrónico" required>
+        <button type="submit">Enviar Invitación</button>
+    </form>
+
+    <script>
+        document.getElementById("formulario").addEventListener("submit", async function(event) {
+            event.preventDefault();
+            
+            const nombre = document.getElementById("nombre").value;
+            const correo = document.getElementById("correo").value;
+
+            const response = await fetch("http://localhost:3000/enviarCorreo", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ nombre, correo })
+            });
+
+            const data = await response.json();
+            alert(data.mensaje);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,182 @@
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+
+const CierreCasoCompletadoModal = ({
+    codigo_solicitud,
+    codigo_ticket,
+    codigo_trabajador,
+    id_cliente,
+    fecha_solicitud,
+    prioridad_solicitud,
+    descripcion_servicio,
+    id_datosvisita,
+    dias_disponibles,
+    comentario_datosvisita,
+    id_historial_cambioestado,
+    estado_solicitud, // Estado actual de la solicitud
+    onClose,
+}) => {
+    const [comentarioTrabajo, setComentarioTrabajo] = useState('');
+    const [tipoSolucionFalla, setTipoSolucionFalla] = useState('');
+    const [solicitudAsigTec, setSolicitudAsigTec] = useState(null);
+    const [datosVisita, setDatosVisita] = useState([]);
+    const [historial, setHistorial] = useState([]);
+    const [error, setError] = useState(null);
+    const [loading, setLoading] = useState(true);
+    
+    const { id } = useParams(); // Asegúrate de que id esté definido en la URL
+
+    useEffect(() => {
+        const fetchSolicitudAsig = async () => {
+            try {
+                const response = await fetch(`${process.env.REACT_APP_API_URL_SOLICOMPLETADA}/api/solicitudAsigTec/${id}`);
+                
+                if (!response.ok) {
+                    throw new Error(`Error: ${response.status} ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                setSolicitudAsig(data);
+                
+            } catch (error) {
+                console.error('Error fetching solicitud:', error);
+                setError(error.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchSolicitudAsig();
+    }, [id]);
+
+    useEffect(() => {
+        const obtenerEventos = async () => {
+            if (!solicitudAsigTec || !solicitudAsigTec.codigo_solicitud) return;
+
+            try {
+                const response = await fetch(`${process.env.REACT_APP_API_URL_SOLICOMPLETADA}/api/datosvisitas/${solicitudAsigTec.codigo_solicitud}`);
+                
+                if (!response.ok) {
+                    throw new Error(`Error: ${response.status} ${response.statusText}`);
+                }
+        
+                const data = await response.json();
+                console.log('Datos de la API:', data);
+                if (Array.isArray(data)) {
+                    setDatosVisita(data);
+                } else {
+                    console.error('La respuesta no es un array:', data);
+                    setDatosVisita([]);
+                }
+            } catch (error) {
+                console.error('Error al obtener los datos de visita:', error);
+                setError(error.message);
+                setDatosVisita([]);
+            }
+        };
+        
+        obtenerEventos();
+    }, [solicitudAsigTec]);    
+
+    useEffect(() => {
+        const obtenerHistorial = async () => {
+            if (!solicitudAsigTec || !solicitudAsigTec.codigo_solicitud) {
+                console.error('La solicitud no está definida o no tiene codigo_solicitud');
+                return;
+            }
+        
+            try {
+                const response = await fetch(`${process.env.REACT_APP_API_URL_SOLICOMPLETADA}/api/historial/${solicitudAsigTec.codigo_solicitud}`);
+                if (!response.ok) {
+                    throw new Error('Error en la respuesta de la red');
+                }
+                const data = await response.json();
+                setHistorial(data);
+            } catch (error) {
+                console.error('Error al obtener el historial:', error);
+            }
+        };
+        
+        obtenerHistorial();
+    }, [solicitudAsigTec]);
+
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+
+        const datos = {
+            comentario_trabajo_realizado: comentarioTrabajo,
+            tipo_solucion_falla: tipoSolucionFalla,
+            // Datos de solicitud
+            codigo_solicitud,
+            codigo_ticket,
+            codigo_trabajador,
+            id_cliente,
+            fecha_solicitud,
+            prioridad_solicitud,
+            descripcion_servicio,
+            estado_solicitud,
+            // Datos de visita
+            id_datosvisita,
+            dias_disponibles,
+            comentario_datosvisita,
+            // Historial
+            id_historial_cambioestado,
+        };
+
+        try {
+            const response = await fetch(`${process.env.REACT_APP_API_URL_SOLIASIGTEC}/api/cierreCasoCompletado`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(datos),
+            });
+
+            if (response.ok) {
+                alert('Caso cerrado exitosamente');
+                onClose(); // Cerrar el modal
+            } else {
+                alert('Error al cerrar el caso');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
+
+    return (
+        <div className="modal">
+            <h2>Cierre Caso Completado</h2>
+            <form onSubmit={handleSubmit}>
+                <label htmlFor="tipoSolucionFalla">Solución/Falla:</label>
+                <select
+                    id="tipoSolucionFalla"
+                    value={tipoSolucionFalla}
+                    onChange={(e) => setTipoSolucionFalla(e.target.value)}
+                    required
+                >
+                    <option value="">Seleccione una opción</option>
+                    <option value="Config. Equipos">Config. Equipos</option>
+                    <option value="Certificación">Certificación</option>
+                    <option value="Cambio ONU">Cambio ONU</option>
+                    <option value="Cambio Patch Card">Cambio Patch Card</option>
+                    <option value="Cambio Conectores">Cambio Conectores</option>
+                </select>
+                
+                <br />
+                <label htmlFor="comentarioTrabajo">Comentario del Trabajo realizado:</label>
+                <textarea
+                    id="comentarioTrabajo"
+                    value={comentarioTrabajo}
+                    onChange={(e) => setComentarioTrabajo(e.target.value)}
+                    required
+                />
+                <br />
+                <input type="hidden" value={estado_solicitud} />
+                <button type="submit">Guardar Cambios</button>
+                <button type="button" onClick={onClose}>Cancelar</button>
+            </form>
+        </div>
+    );
+};
+
+export default CierreCasoCompletadoModal;

@@ -1,0 +1,560 @@
+
+*{
+  font-family: Inter, sans-serif;
+}
+.Modal-Datosvisita-div {
+    padding: 20px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.Modal-Datosvisita-h2 {
+    margin-bottom: 15px;
+}
+
+.Modal-Datosvisita-text {
+    margin: 5px 0;
+}
+
+.add-date-btn {
+    background-color: #919191;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.add-date-btn:hover {
+    background-color: #644848;
+}
+
+.dias-container {
+    margin-top: 15px;
+}
+
+.dias-lista {
+  display: flex;
+  flex-direction: column;   /* <- columna */
+  gap: 6px;                 /* separación entre días */
+}
+
+.dias-lista.con-scroll {    /* OJO al punto, es combinación de clases */
+  max-height: 60px;        /* ±2 líneas; ajusta a tu gusto */
+  overflow-y: auto;         /* activa scroll vertical */
+  scrollbar-width: thin;    /* (Firefox) opcional */
+}
+
+.dia-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 8px;
+  background: #f7f7f7;
+  border-radius: 4px;
+}
+
+.remove-date {
+    background: #ff4444;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.remove-date:hover {
+    background: #cc0000;
+}
+
+.Modal-Datosvisita-boton-div {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.Modal-Datosvisita-boton {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.Modal-Datosvisita-boton-cancelar {
+    background-color: #f44336;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.Modal-Datosvisita-boton-cancelar:hover {
+    background-color: #d32f2f;
+}
+
+.Modal-Datosvisita-boton:hover {
+    background-color: #998f8f;
+}
+
+/* Estilos para los botones */
+.form-button {
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+    min-width: 120px;
+    text-align: center;
+    border: none;
+}
+
+.form-button.primary {
+    background-color: #919191;
+    color: white;
+}
+
+.form-button.primary:hover {
+    background-color: #644848;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.form-button.secondary {
+    background-color: #f5f5f5;
+    color: #333;
+    border: 1px solid #ddd;
+}
+
+.form-button.secondary:hover {
+    background-color: #e0e0e0;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.button-group {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+    gap: 10px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Reset básico */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Responsive para móviles: quitar padding lateral */
+@media (max-width: 768px) {
+  .container {
+    max-width: 100%;
+    padding: 0 0.5rem; /* margen muy pequeño */
+  }
+
+  .detalle-solicitudAsigTec-conteiner {
+    padding: 1rem 0.5rem;
+  }
+
+  .Datosvisita-card {
+    padding: 1rem 0.5rem;
+  }
+
+  .div-contenedor-botonvolver-solicitudAsigTec {
+    margin-left: 0.3rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 0 0.3rem; /* casi pegado */
+  }
+
+  .detalle-solicitudAsigTec-conteiner,
+  .Datosvisita-card {
+    padding: 0.8rem 0.3rem;
+  }
+
+  .Boton-volver,
+  .Datosvisita-boton,
+  .Boton-cambioestado {
+    padding: 0.4rem 0.6rem;
+    font-size: 0.85rem;
+  }
+
+  .detalle-solicitudAsigTec-titulo,
+  .Datosvisita-titulo {
+    font-size: 1.3rem;
+  }
+}
+
+/* Asegurar que el main ocupe todo el ancho */
+.main-Tec {
+  width: 100%;
+  min-height: 100vh;
+  padding: 0.5rem 0;
+}
+
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 1rem; /* margen lateral normal en escritorio */
+}
+
+.div-contenedor-botonvolver-solicitudAsigTec {
+  margin-bottom: 1rem;
+}
+
+.Boton-volver {
+  background-color: #2d6cdf;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+.Boton-volver:hover {
+  background-color: #1b4dbf;
+}
+
+.detalle-solicitudAsigTec-conteiner {
+ 
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.detalle-solicitudAsigTec-titulo {
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+  color: #222;
+}
+
+.detalle-solicitudAsigTec-card {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.detalle-solicitudAsigTec-parte-sup {
+  display: flex;
+  justify-content: space-between;
+  font-weight: 600;
+  font-size: 1rem;
+  color: #333;
+}
+
+.detalle-solicitudAsigTec-parte-centro {
+  font-weight: 700;
+  font-size: 1.2rem;
+  border-bottom: 2px solid #e68e8e;
+  padding-bottom: 0.2rem;
+  color: #c91414;
+  margin-bottom: 0.5rem;
+}
+
+.detalle-solicitudAsigTec-parte-baja p {
+  margin-bottom: 0.5rem;
+  line-height: 1.4;
+  color: #444;
+}
+
+.detalle-solicitudAsigTec-descripcion {
+  background: #eef3fc;
+  padding: 0.5rem;
+  border-radius: 4px;
+  font-style: italic;
+}
+
+.negrita {
+  font-weight: 700;
+}
+
+.conteiner-Boton-cambioestado {
+  margin-top: 1rem;
+  justify-content: flex-start;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+}
+
+.conteiner-Boton-cambioestado-i button,
+.Boton-cambioestado {
+  background-color: #c51818;
+  color: white;
+  border: none;
+  padding: 0.5rem 1.1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.2s ease;
+  
+}
+.conteiner-Boton-cambioestado {
+        flex-direction: column;
+        align-items: stretch;}
+
+.conteiner-Boton-cambioestado-i button:disabled,
+.Boton-cambioestado:disabled {
+  background-color: #a9b9db;
+  cursor: not-allowed;
+}
+
+.Boton-cambioestado:hover:not(:disabled),
+.conteiner-Boton-cambioestado-i button:hover:not(:disabled) {
+  background-color: #c96e6e;
+}
+
+.Datosvisita-conteiner {
+  margin-top: 2rem;
+}
+
+.Datosvisita-card {
+  background: white;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgb(0 0 0 / 0.1);
+}
+
+.Datosvisita-titulo {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: #222;
+}
+
+.Datosvisita-boton-conteiner {
+  margin-top: 1rem;
+  justify-content: flex-end;
+}
+
+.Datosvisita-boton {
+  background-color: #bd1414;
+  color: white;
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.2s ease;
+}
+
+.Datosvisita-boton:hover {
+  background-color: #971212;
+}
+
+ul.ul-historialsoli-tec {
+  list-style: none;
+  max-height: 300px;
+  overflow-y: auto;
+  padding: 0;
+  margin-bottom: 1rem;
+}
+
+.li-historialsoli-tec {
+  padding: 0.8rem 1rem;
+  border-bottom: 1px solid #ccc;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  font-size: 0.9rem;
+}
+
+.li-historialsoli-tec:hover {
+  background-color: #e2e8f0;
+}
+
+.cs-historialsoli-tec,
+.ce-historialsoli-tec {
+  font-weight: 700;
+  margin-right: 0.3rem;
+}
+
+.details-container {
+  background: #f0f4ff;
+  padding: 1rem;
+  border-radius: 8px;
+  min-height: 150px;
+  font-size: 0.95rem;
+  color: #333;
+}
+
+.titulo-dr-tec {
+  font-weight: 700;
+  margin-bottom: 0.8rem;
+  color: #2d6cdf;
+}
+
+/* Responsive */
+
+@media (max-width: 768px) {
+  .detalle-solicitudAsigTec-parte-sup {
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+  .detalle-solicitudAsigTec-card{
+    max-width: 100%;
+  }
+
+  .conteiner-Boton-cambioestado {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .conteiner-Boton-cambioestado-i button {
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
+
+  .Datosvisita-boton-conteiner {
+    justify-content: center;
+  }
+
+  .li-historialsoli-tec {
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  .details-container {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .main-Tec {
+    padding: 0.5rem;
+  }
+
+  .Boton-volver,
+  .Datosvisita-boton,
+  .Boton-cambioestado {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.9rem;
+  }
+
+  .detalle-solicitudAsigTec-titulo,
+  .Datosvisita-titulo {
+    font-size: 1.4rem;
+  }
+
+  .detalle-solicitudAsigTec-parte-centro {
+    font-size: 1rem;
+  }
+}
+@media (max-width: 480px) {
+  .container {
+    max-width: 100vw;   /* ancho total de viewport */
+    padding-left: 0.3rem !important;
+    padding-right: 0.3rem !important;
+    margin: 0 auto;
+  }
+}
+
+/* 2. Quitar o reducir margen lateral en los contenedores internos */
+@media (max-width: 480px) {
+  .detalle-solicitudAsigTec-conteiner,
+  .Datosvisita-card {
+    padding-left: 0.3rem !important;
+    padding-right: 0.3rem !important;
+  }
+
+  .div-contenedor-botonvolver-solicitudAsigTec {
+    margin-left: 0 !important;
+    padding-left: 0 !important;
+  }
+}
+
+/* 3. Ajustar ancho de main-Tec para que no cree scroll horizontal */
+@media (max-width: 480px) {
+  .main-Tec {
+    width: 100vw !important;
+    padding-left: 0.3rem !important;
+    padding-right: 0.3rem !important;
+    box-sizing: border-box;
+  }
+}
+
+/* 4. Prevenir scroll horizontal en todo el documento */
+@media (max-width: 480px) {
+  body, html {
+    overflow-x: hidden !important;
+  }
+}
+
+.detalle-solicitudAsigTec-conteiner,
+.Datosvisita-card {
+  max-width: 600px; /* más compacto */
+  margin: 0 auto;    /* centrarlo */
+}
+@media (max-width: 480px) {
+  .detalle-solicitudAsigTec-conteiner,
+  .Datosvisita-card {
+    width: 100%;
+    max-width: 100%;
+    padding-left: 0.6rem !important;
+    padding-right: 0.6rem !important;
+  }
+}
+@media (max-width: 480px) {
+  .detalle-solicitudAsigTec-titulo,
+  .Datosvisita-titulo {
+    font-size: 1.1rem; /* más pequeño aún */
+  }
+
+  .Datosvisita-boton,
+  .Boton-cambioestado {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
+  }
+
+  .detalle-solicitudAsigTec-parte-sup,
+  .detalle-solicitudAsigTec-parte-centro {
+    font-size: 0.9rem;
+  }
+
+  .details-container {
+    font-size: 0.85rem;
+    padding: 0.8rem;
+  }
+}
+.detalle-solicitudAsigTec-conteiner,
+.Datosvisita-card {
+  padding: 1rem;
+}
+
+@media (max-width: 480px) {
+  .detalle-solicitudAsigTec-conteiner,
+  .Datosvisita-card {
+    padding: 0.6rem !important;
+  }
+}

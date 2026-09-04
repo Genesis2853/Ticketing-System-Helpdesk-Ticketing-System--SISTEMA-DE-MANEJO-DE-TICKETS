@@ -1,0 +1,38 @@
+app.get('/api/datosvisitacliente', async (req, res) => {
+    try {
+        const result = await pool.query(`
+            SELECT d.id_datosvisita, s.codigo_solicitud, d.direccion_cliente, d.dias_disponibles, d.campo_cualquierhora, d.hora_inicio, d.hora_fin, d.fecha_datovisita
+            FROM datos_visita_cliente d
+            JOIN solicitudes s ON s.codigo_solicitud = d.codigo_solicitud;
+        `);
+        res.json(result.rows);
+    } catch (error) {
+        console.error('Error obteniendo registro de datos visita:', error);
+        res.status(500).send('Error obteniendo registro de datos visita');
+    }
+});
+
+app.get('/api/datosvisitacliente/:codigo', async (req, res) => {
+    const { codigo_solicitud } = req.params; // Solo necesitas el código de solicitud
+    console.log('Código de solicitud recibido:', codigo_solicitud); // Verifica el código de solicitud
+
+    try {
+        const result = await pool.query(`
+            SELECT d.id_datosvisita, s.codigo_solicitud, d.direccion_cliente, d.dias_disponibles, d.campo_cualquierhora, d.hora_inicio, d.hora_fin, d.fecha_datovisita
+            FROM datos_visita_cliente d
+            JOIN solicitudes s ON s.codigo_solicitud = d.codigo_solicitud
+            WHERE s.codigo_solicitud = $1;
+        `, [codigo_solicitud]);
+
+        console.log('Resultados de la consulta:', result.rows); // Verifica los resultados de la consulta
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({ message: 'No se encontraron datos de visita para el código de solicitud proporcionado.' });
+        }
+
+        res.json(result.rows[0]); // Devuelve solo el primer registro
+    } catch (error) {
+        console.error('Error al obtener los datos de visita:', error);
+        res.status(500).json({ message: 'Error al obtener los datos de visita.' });
+    }
+});

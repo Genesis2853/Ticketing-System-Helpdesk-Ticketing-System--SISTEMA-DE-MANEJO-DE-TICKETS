@@ -1,0 +1,112 @@
+import {
+  totalClientes,
+  totalClientesFiltrar,
+  clasificacionClientes,
+  solicitudesPorTecnico,
+  solicitudesEstado,
+  solicitudesAbiertas,
+  totalSolicitudesPorPeriodo,
+  totalSolicitudesAsignadas,
+  totalTickets,
+  cantidadTicketsPorMotivo,
+  ticketsPorPrioridad,
+  ticketsSinAsignar,
+  solicitudesCerradasCompletadas,
+  totalSolucionesFallos,
+  solicitudesNoRealizadas,
+  tiempoPromedioTecnico,
+  registrarDescarga,
+  totalReportesDescargados,
+  solicitudesCompletadasPorTecnico,
+  solicitudesNoRealizadasPorTecnico
+} from './apiEstadistico';
+
+async function main() {
+  try {
+    // Obtener total de clientes
+    const totalClientesData = await totalClientes();
+    console.log('Total de Clientes:', totalClientesData);
+
+    // Filtrar total de clientes por fecha
+    const totalClientesFiltrados = await totalClientesFiltrar('2025-01-01', '2025-12-31');
+    console.log('Total de Clientes Filtrados:', totalClientesFiltrados);
+
+    // Clasificación de clientes
+    const clasificacion = await clasificacionClientes('tipo_servicio');
+    console.log('Clasificación de Clientes:', clasificacion);
+
+    // Obtener solicitudes por técnico
+    const solicitudesPorTec = await solicitudesPorTecnico();
+    console.log('Solicitudes por Técnico:', solicitudesPorTec);
+
+    // Obtener total de solicitudes por estado
+    const estadoSolicitudes = await solicitudesEstado('asignada');
+    console.log('Total de Solicitudes Asignadas:', estadoSolicitudes);
+
+    // Obtener solicitudes abiertas
+    const solicitudesAbiertasData = await solicitudesAbiertas('2025-01-01', '2025-12-31');
+    console.log('Total de Solicitudes Abiertas:', solicitudesAbiertasData);
+
+    // Total de solicitudes por periodo
+    const totalSolicitudesPeriodo = await totalSolicitudesPorPeriodo('2025-01-01', '2025-12-31');
+    console.log('Total de Solicitudes por Periodo:', totalSolicitudesPeriodo);
+
+    // Total de solicitudes asignadas
+    const totalAsignadas = await totalSolicitudesAsignadas();
+    console.log('Total de Solicitudes Asignadas:', totalAsignadas);
+
+    // Obtener total de tickets
+    const totalTicketsData = await totalTickets();
+    console.log('Total de Tickets:', totalTicketsData);
+
+    // Obtener cantidad de solicitudes por motivo
+    const motivo = 'reprogramado';
+    const solicitudesPorMotivo = await cantidadTicketsPorMotivo(motivo);
+    console.log(`Solicitudes con motivo '${motivo}':`, solicitudesPorMotivo);
+
+    // Obtener tickets clasificados por prioridad
+    const ticketsPrioridadData = await ticketsPorPrioridad();
+    console.log('Tickets por Prioridad:', ticketsPrioridadData);
+
+    // Obtener tickets sin asignar
+    const ticketsNoAsignados = await ticketsSinAsignar();
+    console.log('Tickets sin Asignar:', ticketsNoAsignados);
+
+    // Obtener solicitudes cerradas/completadas
+    const solicitudesCerradas = await solicitudesCerradasCompletadas('2025-01-01', '2025-12-31');
+    console.log('Total de Solicitudes Cerradas:', solicitudesCerradas);
+
+    // Total de soluciones o fallas
+    const totalFallos = await totalSolucionesFallos('tipo_falla');
+    console.log('Total de Soluciones/Fallas:', totalFallos);
+
+    // Total de solicitudes no realizadas
+    const totalNoRealizadas = await solicitudesNoRealizadas();
+    console.log('Total de Solicitudes No Realizadas:', totalNoRealizadas);
+
+    // Tiempo promedio por técnico
+    const tiempoPromedio = await tiempoPromedioTecnico();
+    console.log('Tiempo Promedio por Técnico:', tiempoPromedio);
+
+    // Registrar descarga de un reporte
+    const registroDescarga = await registrarDescarga('tipo_reporte');
+    console.log('Registro de Descarga:', registroDescarga);
+
+    // Total de reportes descargados
+    const totalReportes = await totalReportesDescargados('tipo_reporte', '2025-01-01', '2025-12-31');
+    console.log('Total de Reportes Descargados:', totalReportes);
+
+    // Solicitudes completadas por técnico
+    const completadasPorTecnico = await solicitudesCompletadasPorTecnico('nombre_tecnico');
+    console.log('Solicitudes Completadas por Técnico:', completadasPorTecnico);
+
+    // Solicitudes no realizadas por técnico
+    const noRealizadasPorTecnico = await solicitudesNoRealizadasPorTecnico('nombre_tecnico');
+    console.log('Solicitudes No Realizadas por Técnico:', noRealizadasPorTecnico);
+
+  } catch (error) {
+    console.error('Error al conectar con la API:', error.message);
+  }
+}
+
+main();

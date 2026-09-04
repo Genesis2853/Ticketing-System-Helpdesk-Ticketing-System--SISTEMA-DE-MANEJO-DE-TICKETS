@@ -1,0 +1,1474 @@
+
+*{
+  font-family: Inter, sans-serif;
+}
+/*configuracion que viene con react*/
+.App {
+    text-align: center;
+  }
+  
+  .App-logo {
+    height: 40vmin;
+    pointer-events: none;
+  }
+  
+  @media (prefers-reduced-motion: no-preference) {
+    .App-logo {
+      animation: App-logo-spin infinite 20s linear;
+    }
+  }
+  
+  .App-header {
+    background-color: #282c34;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(10px + 2vmin);
+    color: white;
+  }
+  
+  .App-link {
+    color: #61dafb;
+  }
+  
+  @keyframes App-logo-spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  /*configuracion css que yo hice*/
+  
+                                                      /*general*/
+  *{
+      margin: 0px;
+  }
+  
+  .inline{
+      display: inline-block;
+  }
+  
+  .box-inline{
+      display: inline;
+  }
+  
+                                                          /*header*/
+  
+  .header-Tec{
+      background: rgb(250, 66, 66);
+      padding: 10px 10px 10px 10px;
+      justify-items: right;
+  }
+  
+                                                              /*nav*/
+  
+  .div-contenedor-navmain{
+      display: flex;
+  }
+  
+  
+                                                  /*main contenedor*/
+  .main-Tec{
+   background: rgb(255, 255, 255);
+   width: 100%;
+   height: 100%;
+  }
+  
+  .div-contenedor-secasi{
+      display: flex;
+  }
+  
+                                      /*section contenedor dashboard y aside*/
+  .section-contenedor-Tec{
+      background: rgb(255, 255, 255);
+      padding: 10px 10px 100px 10px;
+      width: 80%;
+      display: grid;
+      row-gap: 50px;
+  }
+  
+  .section-Tec-title{
+    padding: none;
+      margin-top: none;
+      margin-bottom: none;
+      font-size: 40px;
+      color:rgb(0, 0, 0);
+      background: none;
+  }
+  
+          /*dashboard*/
+  
+  /*opcion general para estilo de los 3 cuadros del dashboard*/
+  .section-Tec-A, .section-Tec-B, .section-Tec-C{
+      background: rgb(255, 255, 255);
+      padding: 10px 10px 10px 10px;
+      box-shadow: 0px 0px 10px 2px rgb(185, 185, 185);
+  }
+  
+  /*box section A*/
+  .div-contenedor-Tec-A-boxCalculo{
+      background: rgb(255, 255, 255);
+      padding: 10px;
+      border: 2px solid rgb(179, 179, 179);
+  }
+  
+  .div-Tec-boxCalculo-A{
+    display: flex;
+    gap: 10px;
+  }
+  
+  .art-Tec-title-A{
+      margin-top: none;
+      margin-bottom: 10px;
+      font-size: 25px;
+      color:rgb(0, 2, 0);
+      background: none;
+  }
+  
+  .Tec-A-nombreCalculo{
+      color: rgb(0, 0, 0);
+  }
+  
+  /*inicio section B y C*/
+  .div-contenedor-secBC{
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      column-gap: 50px;
+  }
+  
+    /*{}*/
+  /*box de estados de solicitudAsigTec*/
+  .art-Tec-title-B{
+      margin-top: none;
+      font-size: 25px;
+      color:rgb(0, 0, 0);
+      background: none;
+  }
+  .art-Tec-B{
+      background: rgb(255, 255, 255);
+      padding: 5px;
+      margin-top: 10px;
+      border: 2px solid rgb(179, 179, 179);
+  }
+  
+  [class*="art-Tec-B-2"]{
+      background: rgb(255, 255, 255);
+      padding: 5px;
+      margin: 1px;
+  }
+  /*box de barra de tiempo de las solicitudAsigTec*/
+  .div-cont-barra-tiempo{
+      width: 100%;
+  }
+  
+  .barra-tiempo{
+      width: 100%;
+      height: 15px;
+      margin: 5px 0px 5px 0px;
+      background: rgb(189, 38, 38);
+      border-radius: 8px;
+  }
+  
+  .barra-tiempo-2{
+      width: 50%;
+      height: 11px;
+      top: 2px;
+      left: 2px;
+      position: relative;
+      background: rgb(153, 109, 109);
+      border-radius: 8px;
+  }
+  
+  /*box de actividades recientes*/
+  .art-Tec-title-C{
+      margin-top: none;
+      font-size: 25px;
+      color:rgb(0, 0, 0);
+      background: none;
+  }
+  
+  .art-Tec-C{
+      background: rgb(255, 255, 255);
+      padding: 5px;
+      margin-top: 10px;
+      border: 2px solid rgb(179, 179, 179);
+  }
+  
+  [class*="art-Tec-C-2"]{
+      background: rgb(255, 255, 255);
+      padding: 5px;
+      margin: 1px;
+  }
+  
+                                                              /*aside*/
+  .aside-Tec{
+      background: rgb(196, 196, 196);
+      padding: 10px 10px 10px 10px;
+      width: 20%;
+      border-left: 2px solid rgb(168, 168, 168);
+  }
+  
+   /*box parte foto y nombre de usuario*/
+  .aside-div-container-textoTec{
+      background: rgb(196, 196, 196);
+      padding: 10px;
+  }
+  
+  .aside-div-container-imagenperfil{
+      background: rgb(196, 196, 196);
+      padding: 10px;
+  }
+  
+  .div-imagenperfil{
+      padding: 30px 0px 30px 0px;
+      border: 2px solid rgb(0, 0, 0);
+      border-radius: 100%;
+      margin: 10px;
+  }
+  
+  .aside-div-container-nombreusuario{
+      background: rgb(196, 196, 196);
+      padding: 10px;
+  }
+  
+   /*box calendario*/
+  #calendar{
+      background: white;
+      font-size: 10px;
+      border: 2px solid rgb(151, 151, 151);
+  }
+   /*ajustes configuracion libreria FullCalendar*/
+  :root {
+      /*bordes interiores*/
+      --fc-border-color: rgb(211, 211, 211);
+      /*botones flechita*/
+      --fc-button-text-color: #000000;
+      --fc-button-bg-color: #cccccc;
+      --fc-button-border-color: #686868;
+      --fc-button-hover-bg-color: #a01b68;
+      --fc-button-hover-border-color: #5f103e;
+      --fc-button-active-bg-color: #5f0240;
+      --fc-button-active-border-color: #29011b;
+      
+  }
+  
+                                                                  /*footer*/
+  .footer-Tec{
+      background: rgb(176, 0, 0);
+      padding: 10px 10px 10px 10px;
+      width: 100%;
+      height: 100px;
+  }
+  
+  
+                                                                            /*SOLICITUDES ASIGNADAS TECNICO*/
+  
+  .estado-solicitudAsigTec-container{
+      padding: 20px;
+  }
+  
+  .estado-solicitudAsigTec-grid{
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+  }
+  
+  .estado-solicitudAsigTec-card{
+      margin: 20px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      padding: 16px;
+      width: 300px;
+      box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  .estado-solicitudAsigTec-mensajevacio{
+    margin-top: 15px;
+    font-size: 17px;
+    margin-left: 20px;
+  }
+
+                                                         /*SOLICITUDES ASIGNADAS DETALLE*/
+  
+  .detalle-solicitudAsigTec-conteiner{
+      justify-items: center;
+  }
+  
+  .detalle-solicitudAsigTec-card{
+      position: relative;
+      margin: 25px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      padding: 0px;
+      width: 700px;
+      box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.1);
+      display: grid;
+      grid-template-columns: 1fr;
+  }
+  
+  .detalle-solicitudAsigTec-parte-sup{
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 260px;
+      padding: 10px 10px 0px 10px;
+      font-size: 17px;
+  }
+  
+  .detalle-solicitudAsigTec-parte-centro{
+      margin: 5px 0px 5px 0px;
+      padding: 3px;
+      text-align: center;
+      border-top: 1px solid rgba(0, 0, 0, 0.1);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      font-size: 17px;
+  }
+  
+  .detalle-solicitudAsigTec-parte-baja{
+      padding: 0px 10px 10px 10px;
+      font-size: 18px;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+  }
+  
+  .detalle-solicitudAsigTec-descripcion{
+      border: 2px solid rgba(0, 0, 0, 0.1);
+      padding: 4px;
+      border-radius: 5px;
+  }
+  
+  .negrita{
+      font-weight: bold;
+  }
+
+  .detalle-solicitudAsigTec-titulo{
+    text-align: center;
+    justify-content: center;
+}
+
+
+
+
+                                                                    /*CAMBIO ESTADO*/
+
+.conteiner-Boton-cambioestado{
+    text-align: center;
+}
+
+.Boton-cambioestado{
+    width: 140px;
+    font-size: 13.5px;
+    text-align: center;
+    margin-top: 15px;
+    margin-bottom: 5px;
+}
+
+.conteiner-Boton-cambioestado-i{
+    justify-content: center;
+
+
+    display: flex;
+    gap: 30px;
+}
+
+.subtitulo-form-cambioestado{
+    font-weight: bold;
+}
+
+.input-form-cambioestado{
+    width: 200px;
+    margin-bottom: 10px;
+    border: 2px solid rgb(219, 219, 219);
+    padding: 5px 2px 5px 2px;
+}
+
+.input-form-cambioestado-textarea{
+    resize: none;
+    margin-bottom: 10px;
+    width: 300px;
+    border: 2px solid rgb(219, 219, 219);
+}
+
+.form-cambioestado-titulo{
+    text-align: center;
+}
+
+.div-contenedor-cambioestado{
+    display: flex;
+    flex-direction:column;
+    gap: 5px;
+}
+
+.contenedor-boton-guardar-cambioestado{
+    justify-content: center;
+    margin-top: 10px;
+    display: flex;
+    gap: 30px;
+}
+  
+  
+                                                                    /*HISTORIAL*/
+
+
+  .boton-historialsoli-tec{
+    background: rgb(236, 15, 15);
+    border: 2px solid rgb(118, 119, 118);
+    border-radius: 5px;
+    font-size: 14px;
+    padding: 5px;
+    width: 90px;
+
+    transition: background-color 0.1s ease;
+  }
+
+  .barra-historialsoli-tec{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .MuiPaper-root{
+    width: 50%;
+  }
+
+  .div-historialsoli-tec{
+    display: flex;
+    flex-direction: column; /* Alinea los elementos en columna */
+    justify-content: center; /* Centra verticalmente */
+    align-items: center; /* Centra horizontalmente */
+    background-color: white; /* Fondo blanco para el modal */
+    padding: 20px; /* Espaciado interno */
+    border-radius: 8px; /* Bordes redondeados */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra para el modal */
+    width: 80%; /* Ajusta el ancho según sea necesario */
+    max-width: 600px; /* Ancho máximo */
+  }
+
+  .h2-historialsoli-tec{
+    color: #100620;
+    text-align: center;
+    padding: 1px 1px 15px 1px;
+  }
+
+  .ul-historialsoli-tec{
+    list-style: none;
+    margin: none;
+    padding: 1px 5px 0px 5px;
+    width: 50%; /* Ajusta el ancho según sea necesario */
+    max-height: 300px; /* Establece una altura máxima */
+    overflow-y: auto; /* Habilita el desplazamiento vertical */
+    height: 200px;
+  }
+
+  .li-historialsoli-tec{
+    font-style: none;
+    margin: 0px;
+    border: 2px solid rgba(250, 239, 239, 0.575);
+    margin: 10px 1px 10px 1px;
+    padding: 5px 5px 5px 5px;
+    display: grid;
+  }
+
+  .ce-historialsoli-tec, .cs-historialsoli-tec{
+    font-size: 16px;
+    font-weight: bold;
+  }
+
+  .modal-content{
+    width: 500px;
+    justify-content: center;
+    justify-items: center;
+    background-color: #61dafb;
+  }
+
+  .css-1g04pbp-MuiModal-root{
+    justify-content: center;
+    justify-items: center;
+    align-items: center;
+    align-content: center;
+    background-color: none;
+  }
+
+  .container{
+    display: flex;
+}
+
+.historial-container{
+    display: flex;
+    flex-direction: row; /* Alinea los elementos en fila */
+    justify-content: center; /* Centra el contenido dentro del contenedor */
+    align-items: flex-start; /* Alinea los elementos al inicio verticalmente */
+    width: 100%; /* Asegúrate de que ocupe todo el ancho disponible */
+}
+
+
+
+.details-container{
+    padding: 20px;
+    border-left: 1px solid #ccc; /* Línea divisoria entre la lista y los detalles */
+    width: 50%; /* Ajusta el ancho según sea necesario */
+}
+
+.titulo-dr-tec{
+    padding-bottom: 10px;
+    text-align: center;
+}
+
+
+
+
+
+                                                    /*DATOS VISITAAAA*/
+
+.Datosvisita-conteiner{
+    justify-items: center;
+}
+
+.Datosvisita-card{
+    position: relative;
+    margin: 25px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 10px;
+    width: 700px;
+    box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.1);
+    display: grid;
+    grid-template-columns: 1fr;
+}
+
+.Datosvisita-completadas-card{
+    padding: 10px;
+    max-width: 680px;
+}
+
+.Datosvisita-titulo{
+    text-align: center;
+    padding: 10px 0px 10px 0px;
+}
+
+
+.Datosvisita-boton{
+    margin-top: 20px;
+    padding: 5px 5px 5px 5px;
+    width: 120px;
+    font-size: 13.5px;
+}
+
+.Datosvisita-boton-conteiner{
+    justify-items: center;
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+    align-content: center;
+    margin-bottom: 10px;
+}
+
+.Modal-Datosvisita{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.Modal-Datosvisita-div{
+        display: flex;
+        flex-direction: column; /* Alinea los elementos en columna */
+        justify-content: center; /* Centra verticalmente */
+        align-items: center; /* Centra horizontalmente */
+        background-color: white; /* Fondo blanco para el modal */
+        padding: 20px; /* Espaciado interno */
+        border-radius: 8px; /* Bordes redondeados */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra para el modal */
+        width: 80%; /* Ajusta el ancho según sea necesario */
+        max-width: 600px; /* Ancho máximo */
+}
+
+.Modal-Datosvisita-h2{
+    padding-bottom: 10px;
+}
+
+.Modal-Datosvisita-text{
+    font-size: 17px;
+    padding-bottom: 5px;
+}
+
+.Modal-Datosvisita-divinput{
+    display: grid;
+    font-size: 17px;
+    padding: 5px;
+}
+
+.Modal-Datosvisita-divinput-2{
+    display: grid;
+    font-size: 17px;
+    padding: 5px;
+    padding-bottom: 10px;
+}
+
+.Modal-Datosvisita-dirc{
+    border: #000000 1px solid;
+    padding: 3px 4px 3px 4px;
+    border-radius: 5px;
+    max-width: 200px;
+}
+
+.Modal-Datosvisita-fecha{
+    border: #000000 1px solid;
+    padding: 3px 4px 3px 4px;
+    border-radius: 5px;
+    max-width: 200px;
+}
+
+.Modal-Datosvisita-h{
+    border: #000000 1px solid;
+    padding: 3px 4px 3px 4px;
+    border-radius: 5px;
+}
+
+.Modal-Datosvisita-boton{
+    margin-top: 20px;
+    padding: 5px 5px 5px 5px;
+    width: 120px;
+}
+
+.Modal-Datosvisita-boton-div{
+    text-align: center;
+}
+
+.dias-seleccionados {
+    max-height: 100px; /* Altura máxima del contenedor */
+    overflow-y: auto; /* Permitir desplazamiento vertical */
+    border: 1px solid #ccc; /* Opcional: borde para el contenedor */
+    padding: 5px; /* Espaciado interno */
+    margin-top: 5px; /* Espaciado superior */
+}
+
+
+
+                                                    /*NOTIFICACIONES*/
+
+                                                    /*SOLICITUDES COMPLETADAS TECNICO*/
+
+                                                                          /*SOLICITUDES ASIGNADAS TECNICO*/
+  
+.estado-SolicitudcompletadaTec-container{
+    padding: 20px;
+}
+
+.estado-SolicitudcompletadaTec-grid{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+
+.estado-SolicitudcompletadaTec-card{
+    margin: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 16px;
+    width: 300px;
+    box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.1);
+}
+
+                                                        /*SOLICITUDES completas DETALLE*/
+
+ .detalle-solicitudComplTec-conteiner{
+    justify-items: center;
+}
+
+.detalle-solicitudComplTec-card{
+    position: relative;
+    margin: 25px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 0px;
+    width: 700px;
+    box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.1);
+    display: grid;
+    grid-template-columns: 1fr;
+    background-color: white;
+}
+
+.detalle-solicitudComplTec-parte-sup{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 260px;
+    padding: 10px 10px 0px 10px;
+    font-size: 17px;
+}
+
+.detalle-solicitudComplTec-parte-centro{
+    margin: 5px 0px 5px 0px;
+    padding: 3px;
+    text-align: center;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    font-size: 17px;
+}
+
+.detalle-solicitudComplTec-parte-baja{
+    padding: 0px 10px 10px 10px;
+    font-size: 18px;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+}
+
+.detalle-solicitudComplTec-descripcion{
+    border: 2px solid rgba(0, 0, 0, 0.1);
+    padding: 4px;
+    border-radius: 5px;
+}
+
+.detalle-solicitudComplTec-titulo{
+    text-align: center;
+    justify-content: center;
+}
+
+                                                                 /*HISTORIAL COMPLETADAS*/
+
+.boton-historialsoli-completadas-tec{
+    background: rgb(236, 15, 15);
+    border: 2px solid rgb(118, 119, 118);
+    border-radius: 5px;
+    font-size: 14px;
+    padding: 5px;
+    width: 90px;
+
+    transition: background-color 0.1s ease;
+}
+
+.barra-historialsoli-completadas-tec{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.div-historialsoli-completadas-tec{
+    display: flex;
+    flex-direction: column; /* Alinea los elementos en columna */
+    justify-content: center; /* Centra verticalmente */
+    align-items: center; /* Centra horizontalmente */
+    background-color: white; /* Fondo blanco para el modal */
+    padding: 20px; /* Espaciado interno */
+    border-radius: 8px; /* Bordes redondeados */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra para el modal */
+    width: 80%; /* Ajusta el ancho según sea necesario */
+    max-width: 600px; /* Ancho máximo */
+}
+
+.h2-historialsoli-completadas-tec{
+    color: #100620;
+    text-align: center;
+    padding: 1px 1px 15px 1px;
+}
+
+.ul-historialsoli-completadas-tec{
+    list-style: none;
+    margin: none;
+    padding: 1px 5px 0px 5px;
+    width: 50%; /* Ajusta el ancho según sea necesario */
+    max-height: 300px; /* Establece una altura máxima */
+    overflow-y: auto; /* Habilita el desplazamiento vertical */
+    height: 200px;
+}
+
+.li-historialsoli-completadas-tec{
+    font-style: none;
+    margin: 0px;
+    border: 2px solid rgba(250, 239, 239, 0.575);
+    margin: 10px 1px 10px 1px;
+    padding: 5px 5px 5px 5px;
+    display: grid;
+}
+
+.cs-historialsoli-completadas-tec, .ce-historialsoli-completadas-tec{
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.container, .container-completadas, .container-solicitudNoRealizada{
+    display: flex;
+}
+
+.historial-completadas-container {
+    display: flex;
+    flex-direction: row; /* Alinea los elementos en fila */
+    justify-content: center; /* Centra el contenido dentro del contenedor */
+    align-items: flex-start; /* Alinea los elementos al inicio verticalmente */
+    width: 100%; /* Asegúrate de que ocupe todo el ancho disponible */
+}
+
+
+
+.details-completadas-container{
+    padding: 20px;
+    border-left: 1px solid #ccc; /* Línea divisoria entre la lista y los detalles */
+    width: 50%; /* Ajusta el ancho según sea necesario */
+}
+
+.titulo-dr-completadas-tec{
+    padding-bottom: 10px;
+    text-align: center;
+}
+
+
+                                                         /*DATOS VISITAAAA COMPLETADAS*/
+
+.Datosvisita-completadas-conteiner{
+    justify-items: center;
+}
+
+.Datosvisita-completadas-card{
+    position: relative;
+    margin: 25px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 0px;
+    width: 700px;
+    box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.1);
+    display: grid;
+    grid-template-columns: 1fr;
+    padding: 10px;
+    max-width: 680px;
+}
+
+
+.Datosvisita-completadas-titulo{
+    text-align: center;
+    padding: 10px 0px 10px 0px;
+}
+
+.Datosvisita-completadas-tec-parrafo{
+    font-size: 17px;
+}
+
+                                                        /*COMENTARIO TECNICO COMPLETADO*/
+
+.datos-cierre-tec-conteiner{
+    justify-items: center;
+}
+
+.datos-cierre-tec-card{
+    position: relative;
+    margin: 25px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    width: 700px;
+    box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.1);
+    display: grid;
+    grid-template-columns: 1fr;
+    padding: 10px;
+    max-width: 680px;
+}
+
+.datos-cierre-tec-titulo{
+    text-align: center;
+    padding: 10px 0px 15px 0px;
+}
+
+.datos-cierre-tec-parrafo{
+    font-size: 17px;
+}
+
+
+
+
+
+.div-contenedor-botonvolver-solicitudComplTec{
+    position: relative;
+    top: 30px;
+    left: 30px;
+}
+
+.Boton-volver{
+    background-color: rgb(241, 241, 241);
+    border: 2px solid rgb(206, 206, 206);
+    color: #100620;
+    font-size: 14px;
+    border-radius: 4px;
+    padding: 4px;
+    transition: background-color 0.05s ease;
+}
+
+.Boton-volver:hover{
+    background-color: rgb(192, 192, 192);
+    border: 2px solid rgb(172, 172, 172);
+}
+
+.boton-historialsoli-completadas-tec{
+    background-color: #fc1a1a;
+    font-weight: bold;
+}
+
+
+                                                            /*FORMULARIO CAMBIO ESTADO SOLICITUD*/
+
+
+
+.subtitulo-form-cambioestado{
+    font-weight: bold;
+}
+
+.input-form-cambioestado{
+    width: 200px;
+    margin-bottom: 10px;
+    border: 2px solid rgb(219, 219, 219);
+    padding: 5px 2px 5px 2px;
+}
+
+.input-form-cambioestado-textarea{
+    resize: none;
+    margin-bottom: 10px;
+    width: 300px;
+    border: 2px solid rgb(219, 219, 219);
+}
+
+.form-cambioestado-titulo{
+    text-align: center;
+}
+
+.div-contenedor-cambioestado{
+    display: flex;
+    flex-direction:column;
+    gap: 5px;
+}
+
+.contenedor-boton-guardar-cambioestado{
+    justify-content: center;
+    margin-top: 10px;
+    display: flex;
+    gap: 30px;
+}
+
+                                                /*FORMULARIO CIERRE SOLICITUD*/
+
+.form-completado-titulo{
+    text-align: center;
+}
+
+.form-completado-parte-centro{
+    margin: 5px 0px 10px 0px;
+    padding: 3px;
+    text-align: center;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    font-size: 17px;
+}
+
+.div-contenedor-form-completado-parte-superior{
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    max-width: 250px;
+}
+
+.subtitulo-form-completado{
+    font-weight: bold;
+}
+
+.input-form-completado{
+    width: 200px;
+    margin-top: 3px;
+    margin-bottom: 10px;
+    border: 2px solid rgb(219, 219, 219);
+    padding: 5px 2px 5px 2px;
+}
+
+.input-form-completado-textaterea{
+    resize: none;
+    margin-top: 3px;
+    margin-bottom: 10px;
+    width: 300px;
+    border: 2px solid rgb(219, 219, 219);
+}
+
+.div-contenedor-form-completado-botones{
+    justify-content: center;
+    display: flex;
+    gap: 30px;
+    margin-top: 5px;
+}
+
+                                                                /*SOLICITUD NO REALIZADA*/
+
+
+.estado-SolicitudNoRealizadaTec-container{
+    padding: 20px;
+}
+
+.estado-SolicitudNoRealizadaTec-grid{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+
+.estado-SolicitudNoRealizadaTec-card{
+    margin: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 16px;
+    width: 300px;
+    box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.1);
+}
+
+
+                                                    /*SOLICITUD NO REALIZADA DETALLE*/
+
+
+.detalle-solicitudNoRealizada-conteiner{
+    justify-items: center;
+}
+
+.detalle-solicitudNoRealizada-card{
+    position: relative;
+    margin: 25px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 0px;
+    width: 700px;
+    box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.1);
+    display: grid;
+    grid-template-columns: 1fr;
+}
+
+.detalle-solicitudNoRealizada-parte-sup{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 260px;
+    padding: 10px 10px 0px 10px;
+    font-size: 17px;
+}
+
+.detalle-solicitudNoRealizada-parte-centro{
+    margin: 5px 0px 5px 0px;
+    padding: 3px;
+    text-align: center;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    font-size: 17px;
+}
+
+.detalle-solicitudNoRealizada-parte-baja{
+    padding: 0px 10px 10px 10px;
+    font-size: 18px;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+}
+
+.detalle-solicitudNoRealizada-descripcion{
+    border: 2px solid rgba(0, 0, 0, 0.1);
+    padding: 4px;
+    border-radius: 5px;
+}
+
+.detalle-solicitudNoRealizada-titulo{
+  text-align: center;
+  justify-content: center;
+}
+
+
+.div-contenedor-botonvolver-solicitudNoRealizada{
+  position: relative;
+  top: 30px;
+  left: 30px;
+}
+
+
+                                                            /*DATOS VISITA NO REALIZADO*/
+
+.Datosvisita-solicitudNoRealizada-conteiner{
+    justify-items: center;
+}
+
+.Datosvisita-solicitudNoRealizada-card{
+    position: relative;
+    margin: 25px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 0px;
+    width: 700px;
+    box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.1);
+    display: grid;
+    grid-template-columns: 1fr;
+    padding: 10px;
+    max-width: 680px;
+}
+
+.Datosvisita-solicitudNoRealizada-titulo{
+    text-align: center;
+    padding: 10px 0px 10px 0px;
+}
+
+.Datosvisita-solicitudNoRealizada-tec-parrafo{
+    font-size: 17px;
+}
+
+                                                        /*COMENTARIO TECNICO COMPLETADO*/
+
+.datos-cierreNoRealizada-tec-conteiner{
+    justify-items: center;
+}
+
+.datos-cierreNoRealizada-tec-card{
+    position: relative;
+    margin: 25px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    width: 700px;
+    box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.1);
+    display: grid;
+    grid-template-columns: 1fr;
+    padding: 10px;
+    max-width: 680px;
+}
+
+.datos-cierreNoRealizada-tec-titulo{
+    text-align: center;
+    padding: 10px 0px 15px 0px;
+}
+
+.datos-cierreNoRealizada-tec-parrafo{
+    font-size: 17px;
+}
+
+                                                                /*HISTORIAL NO REALIZADAS*/
+
+  .boton-historialsoli-solicitudNoRealizada-tec{
+    background: rgb(236, 15, 15);
+    border: 2px solid rgb(118, 119, 118);
+    border-radius: 5px;
+    font-size: 14px;
+    padding: 5px;
+    width: 90px;
+
+    transition: background-color 0.1s ease;
+}
+
+.barra-historialsoli-solicitudNoRealizada-tec{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.div-historialsoli-solicitudNoRealizada-tec{
+    display: flex;
+    flex-direction: column; /* Alinea los elementos en columna */
+    justify-content: center; /* Centra verticalmente */
+    align-items: center; /* Centra horizontalmente */
+    background-color: white; /* Fondo blanco para el modal */
+    padding: 20px; /* Espaciado interno */
+    border-radius: 8px; /* Bordes redondeados */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra para el modal */
+    width: 80%; /* Ajusta el ancho según sea necesario */
+    max-width: 600px; /* Ancho máximo */
+}
+
+.h2-historialsoli-solicitudNoRealizada-tec{
+    color: #100620;
+    text-align: center;
+    padding: 1px 1px 15px 1px;
+}
+
+.ul-historialsoli-solicitudNoRealizada-tec{
+    list-style: none;
+    margin: none;
+    padding: 1px 5px 0px 5px;
+    width: 50%; /* Ajusta el ancho según sea necesario */
+    max-height: 300px; /* Establece una altura máxima */
+    overflow-y: auto; /* Habilita el desplazamiento vertical */
+    height: 200px;
+}
+
+.li-historialsoli-solicitudNoRealizada-tec{
+    font-style: none;
+    margin: 0px;
+    border: 2px solid rgba(250, 239, 239, 0.575);
+    margin: 10px 1px 10px 1px;
+    padding: 5px 5px 5px 5px;
+    display: grid;
+}
+
+.cs-historialsoli-solicitudNoRealizada-tec, .ce-historialsoli-solicitudNoRealizada-tec{
+    font-size: 16px;
+    font-weight: bold;
+}
+
+
+.historial-solicitudNoRealizada-container {
+    display: flex;
+    flex-direction: row; /* Alinea los elementos en fila */
+    justify-content: center; /* Centra el contenido dentro del contenedor */
+    align-items: flex-start; /* Alinea los elementos al inicio verticalmente */
+    width: 100%; /* Asegúrate de que ocupe todo el ancho disponible */
+}
+
+
+
+.details-solicitudNoRealizada-container{
+    padding: 20px;
+    border-left: 1px solid #ccc; /* Línea divisoria entre la lista y los detalles */
+    width: 50%; /* Ajusta el ancho según sea necesario */
+}
+
+.titulo-dr-solicitudNoRealizada-tec{
+    padding-bottom: 10px;
+    text-align: center;
+}
+
+                                                        /*REPORTE SERVICIO*/
+
+.reporte-atributo-cliente{
+    margin-right: 5.5px;
+}
+
+.estado-reporteSolicitudTec-container{
+    padding: 20px;
+}
+
+.estado-reporteSolicitudTec-grid{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+
+.estado-reporteSolicitudTec-card{
+    margin: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 16px;
+    width: 300px;
+    box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.1);
+}
+
+/*REPORTE DESCARGA*/
+
+.div-descargareportespdf-conteiner{
+    justify-content: center;
+    justify-items: center;
+    align-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.pdf-reporte-conteiner{
+    justify-content: center;
+    text-align: center;
+}
+
+.pdf-reporte-titulo{
+    margin-bottom: 10px;
+}
+
+
+
+.main-Tec {
+    display: flex;
+    justify-content: center; /* Centra el contenido horizontalmente */
+    padding: 20px;
+}
+
+.div-contenedor-secasi {
+    display: flex;
+    flex-direction: row; /* Alinea los elementos en fila */
+    width: 100%;
+    max-width: 1200px; /* Ancho máximo del contenedor */
+    gap: 20px; /* Espacio entre los componentes */
+}
+
+.section-tec-content {
+    flex: 3; /* Toma más espacio en comparación con el aside */
+    background-color: #ffffff; /* Fondo blanco */
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 20px; /* Espaciado interno */
+}
+
+.aside-tec-content {
+    flex: 1; /* Toma menos espacio */
+    background-color: #f9f9f9; /* Fondo gris claro */
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 20px; /* Espaciado interno */
+}
+
+/* Responsive: Ajustes para móviles */
+@media (max-width: 768px) {
+    .div-contenedor-secasi {
+        flex-direction: column; /* Cambia a columna en pantallas pequeñas */
+    }
+
+    .section-tec-content, .aside-tec-content {
+        width: 100%; /* Asegura que ambos ocupen todo el ancho */
+    }
+}
+
+.dias-scroll {
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+.dias-lista p {
+    display: inline-block;
+    margin: 0 5px;
+}
+
+.Modal-Datosvisita-dirc {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-top: 5px;
+}
+
+
+
+
+.main-Tec {
+    padding: 20px;
+    background-color: #f9f9f9;
+}
+
+
+
+.Boton-volver, .Boton-cambioestado, .Datosvisita-boton {
+    background-color: #9b9b9b;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.Boton-volver:hover, .Boton-cambioestado:hover, .Datosvisita-boton:hover {
+    background-color: #686767;
+}
+
+.detalle-solicitudAsigTec-card {
+    background-color: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.Datosvisita-card {
+    background-color: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.negrita {
+    font-weight: bold;
+}
+
+
+.modal-ubicacion{
+  position:fixed;top:10px;left:50%;transform:translateX(-50%);
+  width:90%;max-width:400px;padding:15px;text-align:center;
+  background:#f0f2f5;border-radius:10px;z-index:1000;
+  box-shadow:0 4px 12px rgba(0,0,0,.1);
+}
+.modal-ubicacion button{margin:8px;padding:8px 16px;border:none;border-radius:5px;cursor:pointer}
+
+
+.estado-solicitudAsigTec-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.div-contenedor-tituloybuscar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.div-contenedor-tituloybuscar h2 {
+  margin: 0;
+}
+
+.search-input {
+  padding: 0.5rem;
+  font-size: 1rem;
+  width: 250px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* Grid para escritorio */
+.estado-solicitudAsigTec-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.estado-solicitudAsigTec-card {
+  background-color: #f9f9f9;
+  padding: 1rem;
+  border-radius: 6px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+/* -------- MEDIA QUERIES PARA TABLETS Y MÓVILES -------- */
+
+@media (max-width: 768px) {
+  .div-contenedor-tituloybuscar {
+    flex-direction: column;
+    align-items: stretch;
+    margin-bottom: 0.25rem; /* menos espacio debajo del título */
+  }
+
+  .search-input {
+    width: 100%;
+    margin-top: 0.5rem;
+  }
+
+  .estado-solicitudAsigTec-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem; /* menos espacio entre tarjetas */
+  }
+
+  .estado-solicitudAsigTec-card {
+    width: 100%;
+    margin-top: 0; /* eliminar margen superior extra si hubiera */
+  }
+}
+
+
+@media (max-width: 480px) {
+  .div-contenedor-tituloybuscar h2 {
+    font-size: 1.2rem;
+    text-align: center;
+  }
+
+  .search-input {
+    font-size: 1rem;
+  }
+}
+.nombreusuario-text {
+  color: #8a1313; /* Letra clara */
+  font-size: 1.2rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  margin: 0;
+  user-select: none;
+  margin-bottom: 45px;
+}

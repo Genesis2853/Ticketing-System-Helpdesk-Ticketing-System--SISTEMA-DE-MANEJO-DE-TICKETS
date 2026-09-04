@@ -1,0 +1,28 @@
+   import axios from 'axios';
+
+   async function createItem() {
+       const item = {
+           name: "Example Item",
+           price: 10.99
+       };
+
+       try {
+           const response = await axios.post('http://127.0.0.1:8000/items/', item);
+           console.log('Item creado:', response.data);
+       } catch (error) {
+           console.error('Error al crear el item:', error);
+       }
+   }
+
+   async function getItems() {
+       try {
+           const response = await axios.get('http://127.0.0.1:8000/items/');
+           console.log('Items:', response.data);
+       } catch (error) {
+           console.error('Error al obtener los items:', error);
+       }
+   }
+
+   createItem();
+   getItems();
+   

@@ -1,0 +1,144 @@
+import { pool } from "../bd/serverPGSQL.js";
+import express from 'express';
+import bodyParser from 'body-parser';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import config from '../config.js'; // Usar import en lugar de require
+
+// Cargar variables de entorno al inicio
+dotenv.config();
+
+const app = express();
+const port = config.portSoliCompletada || 3051;
+
+// Middleware para parsear el cuerpo de las solicitudes
+app.use(bodyParser.json());
+app.use(cors());
+
+// Ruta para obtener la lista de tickets
+app.get('/api/solicitudtecnico/:id', async (req, res) => {
+    const solicitudtecnico = String(req.params.id); // Convertir a cadena
+    try {
+        const result = await pool.query(`
+            SELECT s.codigo_solicitud, s.codigo_ticket, s.codigo_trabajador, t.id_cliente, t.prioridad_solicitud, t.descripcion_servicio, s.estado_solicitud, s.fecha_solicitud
+            FROM solicitudes s
+            JOIN tb_crear_ticket t ON s.codigo_ticket = t.codigo_ticket
+            WHERE s.codigo_solicitud = $1;
+        `, [solicitudtecnico]); // Aquí ya es una cadena
+        
+        if (result.rows.length > 0) {
+            res.json(result.rows[0]);
+        } else {
+            res.status(404).send('Solicitud no encontrada');
+        }
+    } catch (error) {
+        console.error('Error obteniendo la solicitud:', error);
+        res.status(500).send('Error obteniendo la solicitud');
+    }
+});
+
+// Ruta para obtener la lista de datos de visitas
+app.get('/api/datosvisitas/:codigo_solicitud', async (req, res) => {
+    const { codigo_solicitud } = req.params;
+    try {
+        const result = await pool.query('SELECT id_datosvisita, dias_disponibles, comentario_datosvisita, fecha_datovisita FROM datos_visita_cliente WHERE codigo_solicitud = $1', [codigo_solicitud]);
+        if (result.rows.length > 0) 
+            { res.json(result.rows[0]); } else { res.status(404).json({ message: 'No se encontraron datos para esta solicitud.' }); }    
+    } catch (err) {
+        console.error('Error obteniendo datos de visitas:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Ruta para obtener el historial de cambios de estado
+app.get('/api/historial/:codigo_solicitud', async (req, res) => {
+    const { codigo_solicitud } = req.params;
+    try {
+        const result = await pool.query(`
+            SELECT id_historial_cambioestado, codigo_solicitud, estado_solicitud, fecha_historial_cambioestado, razon_cambioestado 
+            FROM historial_cambioestado_solicitudes
+            WHERE codigo_solicitud = $1
+            ORDER BY fecha_historial_cambioestado DESC;
+        `, [codigo_solicitud]);
+
+        res.json(result.rows);
+    } catch (error) {
+        console.error('Error al obtener el historial:', error);
+        res.status(500).json({ message: 'Error al obtener el historial' });
+    }
+});
+
+// Ruta para manejar la asignación de tickets a técnicos
+app.post('/api/enviardatoscompletado', async (req, res) => {
+    const { codigo_solicitud, id_datosvisita, id_historial_cambioestado, comentario_trabajo_realizado, tipo_solucion_falla, fecha_caso_cerrado } = req.body;
+    try {
+        const result1 = await pool.query(
+            "SELECT codigo_solicitud, codigo_ticket, codigo_trabajador, id_cliente, prioridad_solicitud, descripcion_servicio, estado_solicitud, fecha_solicitud FROM solicitudes WHERE codigo_solicitud = $1",
+            [codigo_solicitud]
+        );
+        if (result1.rows.length === 0) {
+            return res.status(404).json({ message: 'Solicitud no encontrada' });
+        }
+    
+        const { codigo_ticket, codigo_trabajador, id_cliente, prioridad_solicitud, descripcion_servicio, estado_solicitud, fecha_solicitud } = result1.rows[0];
+
+        const result2 = await pool.query(
+            "SELECT id_datosvisita, dias_disponibles, comentario_datosvisita, fecha_datovisita FROM datos_visita_cliente WHERE id_datosvisita = $1",
+            [id_datosvisita]
+        );
+    
+        if (result2.rows.length === 0) {
+            return res.status(404).json({ message: 'Datos de visita no encontrados' });
+        }
+    
+        const { dias_disponibles, comentario_datosvisita } = result2.rows[0];
+
+        const result3 = await pool.query(
+            "SELECT id_historial_cambioestado, codigo_solicitud, estado_solicitud, fecha_historial_cambioestado, razon_cambioestado FROM historial_cambioestado_solicitudes WHERE id_historial_cambioestado = $1",
+            [id_historial_cambioestado]
+        );
+    
+        if (result3.rows.length === 0) {
+            return res.status(404).json({ message: 'Historial no encontrado' });
+        }
+    
+        const {fecha_historial_cambioestado, razon_cambioestado } = result3.rows[0];
+
+        // Insertar en solicitudes y devolver el código de solicitud recién creado
+        const insertResult = await pool.query(
+            "INSERT INTO solicitud_cerrada_completada (codigo_solicitud, codigo_ticket, codigo_trabajador, id_cliente, prioridad_solicitud, descripcion_servicio, estado_solicitud, fecha_solicitud, id_datosvisita, dias_disponibles, comentario_datosvisita, id_historial_cambioestado, fecha_historial_cambioestado, razon_cambioestado, comentario_trabajo_realizado, tipo_solucion_falla, fecha_caso_cerrado) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17) RETURNING id_soli_completada",
+            [codigo_solicitud, codigo_ticket, codigo_trabajador, id_cliente, prioridad_solicitud, descripcion_servicio, estado_solicitud, fecha_solicitud, id_datosvisita, dias_disponibles, comentario_datosvisita, id_historial_cambioestado, fecha_historial_cambioestado, razon_cambioestado, comentario_trabajo_realizado, tipo_solucion_falla, fecha_caso_cerrado]
+        );
+
+        const nuevoCodigoSolicomple = insertResult.rows[0].id_soli_completada; // Mensaje de creación más el código
+        console.log('Filas insertadas:', insertResult.rowCount);
+        res.json({ message: ' cerrada y asignada correctamente', id_soli_completada: nuevoCodigoSolicomple }); // Mensaje de creación más el código
+    } catch (error) {
+        console.error('Error cerrando caso:', error);
+        res.status(500).json({ message: 'Error cerrando caso' });
+    }
+});
+
+// Ruta para obtener la lista de solicitudes
+app.get('/api/solicitudescompletas', async (req, res) => {
+    try {
+        const result = await pool.query(`
+            SELECT c.id_soli_completada, s.codigo_solicitud, s.codigo_ticket, s.codigo_trabajador, s.id_cliente, s.prioridad_solicitud, s.descripcion_servicio, s.estado_solicitud, s.fecha_solicitud, d.id_datosvisita, d.dias_disponibles, d.comentario_datosvisita, d.fecha_datovisita, h.id_historial_cambioestado, h.fecha_historial_cambioestado, h.razon_cambioestado, c.comentario_trabajo_realizado, c.tipo_solucion_falla, c.fecha_caso_cerrado
+            FROM solicitud_cerrada_completada c
+            JOIN solicitudes s ON c.codigo_solicitud = s.codigo_solicitud
+            JOIN historial_cambioestado_solicitudes h ON c.id_historial_cambioestado = h.id_historial_cambioestado
+            JOIN datos_visita_cliente d ON c.id_datosvisita = d.id_datosvisita;
+        `);
+        res.json(result.rows);
+    } catch (error) {
+        console.error('Error obteniendo solicitudes:', error);
+        res.status(500).send('Error obteniendo solicitudes');
+    }
+});
+
+
+
+app.listen(port, () => {
+    console.log(`Servidor escuchando en http://localhost:${port}`);
+});
+

@@ -1,0 +1,273 @@
+import { pool } from "../bd/serverPGSQL.js";
+import express from 'express';
+import bodyParser from 'body-parser';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import config from '../config.js'; // Usar import en lugar de require
+import { autenticarToken, autorizarRoles, autorizarPorPermiso } from "../Modulo_Usuario/modulo_usuario.js";
+
+dotenv.config();
+
+const app = express();
+const port = config.portAssignTickets || 3032; // Cambiamos el puerto a 3062
+
+// Middleware para parsear el cuerpo de las solicitudes
+app.use(bodyParser.json());
+app.use(cors());
+
+// Ruta para obtener la lista de tickets
+app.get('/api/tickets',  async (req, res) => {
+    try {
+        const result = await pool.query(`
+            SELECT t.codigo_ticket, t.descripcion_servicio, t.prioridad_solicitud, t.id_cliente, t.motivo_visita, t.fecha_creacion
+            FROM tb_crear_ticket t
+            JOIN cliente c ON t.id_cliente = c.id_cliente
+            WHERE t.codigo_ticket NOT IN (SELECT s.codigo_ticket FROM solicitudes s);
+        `);
+        res.json(result.rows);
+    } catch (error) {
+        console.error('Error obteniendo solicitudes:', error);
+        res.status(500).send('Error obteniendo solicitudes');
+    }
+});
+
+// Ruta para obtener la lista de técnicos
+app.get('/api/tecnicos',  async (req, res) => {
+    try {
+        const result = await pool.query("SELECT codigo_trabajador, nombre_tecnico, apellido_tecnico FROM tecnicos;");
+        console.log('Resultados de la consulta:', result.rows); // Agrega esto para depuración
+        res.json(result.rows);
+    } catch (error) {
+        console.error('Error obteniendo técnicos:', error);
+        res.status(500).send('Error obteniendo técnicos');
+    }
+});
+
+// Ruta para obtener la lista de solicitudes
+app.get('/api/solicitudes', async (req, res) => {
+    try {
+        const result = await pool.query(`
+            SELECT s.codigo_solicitud, s.codigo_ticket, s.codigo_trabajador, t.id_cliente, t.prioridad_solicitud, t.motivo_visita, t.descripcion_servicio, s.estado_solicitud, s.fecha_solicitud
+            FROM solicitudes s
+            JOIN tb_crear_ticket t ON s.codigo_ticket = t.codigo_ticket
+            WHERE s.estado_solicitud != 'Completado' AND s.estado_solicitud != 'No Realizado';
+        `);
+        res.json(result.rows);
+    } catch (error) {
+        console.error('Error obteniendo solicitudes:', error);
+        res.status(500).send('Error obteniendo solicitudes');
+    }
+});
+
+// Ruta para manejar la asignación manual de tickets a técnicos
+app.post('/api/asignar', autenticarToken, autorizarRoles('Admin', 'Moderador'), autorizarPorPermiso('crear_clientes'), async (req, res) => {
+    const { codigo_ticket, codigo_trabajador } = req.body;
+    try {
+        const result = await pool.query(
+            "SELECT prioridad_solicitud, descripcion_servicio, id_cliente, motivo_visita FROM tb_crear_ticket WHERE codigo_ticket = $1",
+            [codigo_ticket]
+        );
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({ message: 'Ticket no encontrado' });
+        }
+
+        const { prioridad_solicitud, descripcion_servicio, id_cliente, motivo_visita } = result.rows[0];
+
+        const insertResult = await pool.query(
+            "INSERT INTO solicitudes (codigo_ticket, codigo_trabajador, prioridad_solicitud, descripcion_servicio, id_cliente, motivo_visita) VALUES ($1, $2, $3, $4, $5, $6) RETURNING codigo_solicitud",
+            [codigo_ticket, codigo_trabajador, prioridad_solicitud, descripcion_servicio, id_cliente, motivo_visita]
+        );
+
+        const nuevoCodigoSoli = insertResult.rows[0].codigo_solicitud;
+        res.json({ message: 'Ticket asignado correctamente', codigo_solicitud: nuevoCodigoSoli });
+    } catch (error) {
+        console.error('Error asignando el ticket:', error);
+        res.status(500).json({ message: 'Error asignando el ticket' });
+    }
+});
+
+// Ruta para asignar tickets automáticamente
+// Ruta para asignar tickets automáticamente
+app.post('/api/asignar/automatico', async (req, res) => {
+    const { ticketIds } = req.body; // Se espera un array de IDs de tickets
+
+    if (!ticketIds || !Array.isArray(ticketIds) || ticketIds.length === 0) {
+        return res.status(400).json({ message: "❌ Se requieren IDs de tickets válidos." });
+    }
+
+    try {
+        const technicians = await getTechniciansWithRequests(); // Asegúrate que await está aquí!
+
+        const assignedResults = [];
+
+        for (const ticketId of ticketIds) {
+            // Obtener información del ticket
+            const ticketResult = await pool.query("SELECT prioridad_solicitud, descripcion_servicio, id_cliente, motivo_visita FROM tb_crear_ticket WHERE codigo_ticket = $1", [ticketId]);
+            if (ticketResult.rows.length === 0) {
+                assignedResults.push({ ticketId, message: `Ticket ${ticketId} no encontrado` });
+                continue;
+            }
+            const { prioridad_solicitud, descripcion_servicio, id_cliente, motivo_visita } = ticketResult.rows[0];
+
+            // Asignar el ticket al técnico adecuado
+            const assignedTechnician = assignRequest(technicians, prioridad_solicitud);
+            if (assignedTechnician) {
+                // Insertar la nueva solicitud en la tabla de solicitudes
+                const insertResult = await pool.query(
+                    "INSERT INTO solicitudes (codigo_ticket, codigo_trabajador, prioridad_solicitud, descripcion_servicio, id_cliente, motivo_visita) VALUES ($1, $2, $3, $4, $5, $6) RETURNING codigo_solicitud",
+                    [ticketId, assignedTechnician.codigo_trabajador, prioridad_solicitud, descripcion_servicio, id_cliente, motivo_visita]
+                );
+
+                const nuevoCodigoSoli = insertResult.rows[0].codigo_solicitud;
+                assignedResults.push({
+                    ticketId: ticketId,
+                    assignedTo: assignedTechnician.codigo_trabajador,
+                    codigo_solicitud: nuevoCodigoSoli,
+                    message: 'Ticket asignado correctamente.'
+                });
+            } else {
+                assignedResults.push({
+                    ticketId: ticketId,
+                    message: 'No se pudo asignar el ticket.'
+                });
+            }
+        }
+
+        res.json(assignedResults);
+    } catch (error) {
+        console.error('❌ Error en la asignación automática:', error);
+        res.status(500).json({ message: '❌ Error en el servidor al asignar tickets.' });
+    }
+});
+
+
+// Función para obtener técnicos con sus solicitudes activas
+const getTechniciansWithRequests = async () => {
+    try {
+        const result = await pool.query(`
+            SELECT 
+                t.codigo_trabajador,
+                t.nombre_tecnico,
+                t.promedio_tecnico,
+                COUNT(s.codigo_solicitud) FILTER (WHERE s.estado_solicitud IN ('asignado', 'En Proceso', 'Pendiente', 'En Lugar')) AS total_solicitudes_activas,
+                COUNT(s.codigo_solicitud) FILTER (WHERE s.prioridad_solicitud = 'Alta' AND s.estado_solicitud IN ('asignado', 'En Proceso', 'Pendiente', 'En Lugar')) AS solicitudes_alta,
+                COUNT(s.codigo_solicitud) FILTER (WHERE s.prioridad_solicitud = 'Media' AND s.estado_solicitud IN ('asignado', 'En Proceso', 'Pendiente', 'En Lugar')) AS solicitudes_media,
+                COUNT(s.codigo_solicitud) FILTER (WHERE s.prioridad_solicitud = 'Baja' AND s.estado_solicitud IN ('asignado', 'En Proceso', 'Pendiente', 'En Lugar')) AS solicitudes_baja
+            FROM 
+                tecnicos t
+            LEFT JOIN 
+                solicitudes s ON t.codigo_trabajador = s.codigo_trabajador
+            GROUP BY 
+                t.codigo_trabajador, t.nombre_tecnico, t.promedio_tecnico;
+        `);
+        return result.rows;
+    } catch (error) {
+        console.error('Error obteniendo técnicos con solicitudes:', error);
+        throw error;
+    }
+};
+
+// Función para asignar un ticket a un técnico
+const aleatorio = (length) => Math.floor(Math.random() * length);
+const MAX_SOLICITUDES = 5; // Define el número máximo de solicitudes que un técnico puede manejar
+
+
+const assignRequest = (technicians, newRequestPriority) => {
+    // Asegúrate de que technicians no esté vacío
+    if (!technicians || technicians.length === 0) {
+        console.error('No hay técnicos disponibles para asignar.');
+        return null; // Manejo de error
+    }
+
+    // Filtrar técnicos sin solicitudes asignadas
+    const techniciansWithoutRequests = technicians.filter(tech => 
+        tech.solicitudes_alta === 0 && tech.solicitudes_media === 0 && tech.solicitudes_baja === 0
+    );
+    // Si hay técnicos sin solicitudes, asignar a uno de ellos
+    if (techniciansWithoutRequests.length > 0) {
+        // Puedes elegir aleatoriamente uno de los técnicos sin solicitudes
+        const randomIndex = aleatorio(techniciansWithoutRequests.length);
+        return techniciansWithoutRequests[randomIndex];
+    }
+
+    // Contar solicitudes activas para cada técnico
+    const techniciansWithActiveCounts = technicians.map(tech => {
+        const activeRequestsCount = tech.solicitudes_alta + tech.solicitudes_media + tech.solicitudes_baja; // Contar solicitudes activas
+        return {
+            ...tech,
+            activeRequestsCount // Agregar el conteo de solicitudes activas
+        };
+    });
+
+    // Filtrar técnicos según la prioridad de la solicitud
+    let filteredTechnicians;
+    if (newRequestPriority === 'Alta') {
+        filteredTechnicians = techniciansWithActiveCounts.filter(tech => tech.solicitudes_alta < MAX_SOLICITUDES);
+    } else if (newRequestPriority === 'Media') {
+        filteredTechnicians = techniciansWithActiveCounts.filter(tech => tech.solicitudes_media < MAX_SOLICITUDES);
+    } else if (newRequestPriority === 'Baja') {
+        filteredTechnicians = techniciansWithActiveCounts.filter(tech => tech.activeRequestsCount < MAX_SOLICITUDES);
+    } else {
+        throw new Error('Prioridad inválida');
+    }
+
+    // Verificar si hay técnicos disponibles después del filtrado
+    if (filteredTechnicians.length === 0) {
+        console.error('No se encontraron técnicos disponibles para la asignación.');
+        return null; // Manejo de error
+    }
+
+    // Evaluar según la prioridad de la solicitud
+    let selectedTechnician = null;
+
+    if (newRequestPriority === 'Alta') {
+        // Buscar el técnico con menos solicitudes de alta
+        selectedTechnician = filteredTechnicians.reduce((prev, curr) => {
+            if (prev.solicitudes_alta < curr.solicitudes_alta) return prev;
+            if (prev.solicitudes_alta > curr.solicitudes_alta) return curr;
+            // Si hay empate, evaluar carga total
+            if (prev.activeRequestsCount < curr.activeRequestsCount) return prev;
+            if (prev.activeRequestsCount > curr.activeRequestsCount) return curr;
+            // Si hay empate en carga total, evaluar desempeño
+            return prev.promedio_tecnico > curr.promedio_tecnico ? prev : curr;
+        });
+    } else if (newRequestPriority === 'Media') {
+        // Buscar el técnico con menos solicitudes de media
+        selectedTechnician = filteredTechnicians.reduce((prev, curr) => {
+            if (prev.solicitudes_media < curr.solicitudes_media) return prev;
+            if (prev.solicitudes_media > curr.solicitudes_media) return curr;
+            // Si hay empate, evaluar carga total
+            if (prev.activeRequestsCount < curr.activeRequestsCount) return prev;
+            if (prev.activeRequestsCount > curr.activeRequestsCount) return curr;
+            // Si hay empate en carga total, evaluar desempeño
+            return prev.promedio_tecnico > curr.promedio_tecnico ? prev : curr;
+        });
+    } else if (newRequestPriority === 'Baja') {
+        // Buscar el técnico con menos solicitudes totales
+        selectedTechnician = filteredTechnicians.reduce((prev, curr) => {
+            if (prev.activeRequestsCount < curr.activeRequestsCount) return prev;
+            if (prev.activeRequestsCount > curr.activeRequestsCount) return curr;
+            // Si hay empate en carga total, evaluar desempeño
+            return prev.promedio_tecnico > curr.promedio_tecnico ? prev : curr;
+        });
+    }
+
+   // Si hay empate en desempeño, seleccionar aleatoriamente entre los mejores
+    const bestTechnicians = filteredTechnicians.filter(tech => 
+        tech.promedio_tecnico === selectedTechnician.promedio_tecnico
+    );
+    if (bestTechnicians.length > 1) {
+        // Elegir uno aleatoriamente si hay varios con el mismo desempeño
+        return bestTechnicians[aleatorio(bestTechnicians.length)];
+    }
+    return selectedTechnician; // Retorna el técnico seleccionado
+};
+
+
+
+
+// Inicializa el servidor
+app.listen(port, () => {
+    console.log(`Servidor escuchando en http://localhost:${port}`);
+});

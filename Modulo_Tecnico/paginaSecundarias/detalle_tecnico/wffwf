@@ -1,0 +1,287 @@
+import React, { useState, useEffect } from 'react';
+import { useParams, useNavigate, Link } from 'react-router-dom';
+import axios from 'axios'; //parte d historial cambio de estado
+import { Button, Modal} from '@mui/material';
+import ChangeStatusModal from './Cambio_estado_Tec';
+import DatosVisitaCliente from './Datos_Visita';
+
+const DetalleSolicitudAsigTec = ({ solicitud })  => {//parte d historial cambio de estado ({ solicitud }
+    const { id } = useParams();
+    const { codigo } = useParams();
+    console.log('Código de solicitud:', codigo);
+    const navigate = useNavigate();
+    const [solicitudAsigTec, setSolicitudAsig] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [successMessage, setSuccessMessage] = useState('');
+
+    const [historial, setHistorial] = useState([]);//parte d historial cambio de estado ({ solicitud }
+    const [open, setOpen] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedRegistro, setSelectedRegistro] = useState(null);
+
+    const [isContactarModalOpen, setIsContactarModalOpen] = useState(false);
+    const [datosVisita, setDatosVisita] = useState([]); // Inicializa como un array vacío // Estado para los datos de visita
+    
+
+    useEffect(() => {
+        const fetchSolicitudAsig = async () => {
+            try {
+                const response = await fetch(`${process.env.REACT_APP_API_URL_SOLIASIGTEC}/api/solicitudAsigTec/${id}`);
+                
+                if (!response.ok) {
+                    throw new Error(`Error: ${response.status} ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                setSolicitudAsig(data);
+            } catch (error) {
+                console.error('Error fetching solicitud:', error);
+                setError(error.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchSolicitudAsig();
+    }, [id]);
+
+    useEffect(() => {
+        if (codigo) {
+            const fetchDatosVisita = async () => {
+                try {
+                    const response = await fetch(`${process.env.REACT_APP_API_URL_SOLIASIGTEC}/api/datosvisitacliente/${codigo}`);
+                    if (!response.ok) {
+                        throw new Error(`Error: ${response.status} ${response.statusText}`);
+                    }
+                    const data = await response.json();
+                    console.log('Datos de visita:', data); // Verifica la respuesta
+                    setDatosVisita(data); // Asegúrate de que estás accediendo a la propiedad correcta
+                } catch (error) {
+                    console.error('Error al obtener los datos de visita:', error);
+                    setError(error.message);
+                } finally {
+                    setLoading(false);
+                }
+            };
+            fetchDatosVisita();
+        } else {
+            console.error('Código de solicitud no definido');
+            setLoading(false); // Asegúrate de que el loading se detenga si no hay código
+        }
+    }, [codigo]);
+
+    const formatearFecha = (fecha) => {
+        const date = new Date(fecha);
+        const dia = String(date.getDate()).padStart(2, '0');
+        const mes = String(date.getMonth() + 1).padStart(2, '0');
+        const año = date.getFullYear();
+        const horas = String(date.getHours()).padStart(2, '0');
+        const minutos = String(date.getMinutes()).padStart(2, '0');
+        return `${dia}/${mes}/${año} ${horas}:${minutos}`;
+    };
+
+    const handleEstadoChange = async (nuevoEstado) => {
+        try {
+            const response = await fetch(`${process.env.REACT_APP_API_URL_SOLIASIGTEC}/api/actualizarEstado`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    codigo_solicitud: solicitudAsigTec.codigo_solicitud,
+                    estado_solicitud: nuevoEstado,
+                    razon_cambioestado: nuevoEstado === 'En Proceso' ? 'Solicitud empezada' : '', // Mensaje automático solo para "En Proceso"
+                }),
+            });
+    
+            const responseData = await response.json();
+            console.log(responseData); // Verifica la respuesta de la API
+    
+            if (!response.ok) {
+                throw new Error('Error al actualizar el estado de la solicitud');
+            }
+    
+            // Actualiza el estado local
+            setSolicitudAsig({ ...solicitudAsigTec, estado_solicitud: nuevoEstado });
+            setSuccessMessage(`Actualización exitosa. Solicitud: ${id} está en proceso.`);
+        } catch (error) {
+            console.error('Error actualizando el estado de la solicitud:', error);
+            setError('Error actualizando el estado de la solicitud');
+        }
+    };
+
+    const updateLocalState = (nuevoEstado) => {
+        setSolicitudAsig({ ...solicitudAsigTec, estado_solicitud: nuevoEstado });
+    };
+
+    const obtenerHistorial = async () => {// parte para obtener historial
+        if (!solicitudAsigTec || !solicitudAsigTec.codigo_solicitud) {
+            console.error('La solicitud no está definida o no tiene codigo_solicitud');
+            return; // Salir si solicitudAsigTec no está definido
+        }
+
+        try {
+            const response = await axios.get(`${process.env.REACT_APP_API_URL_SOLIASIGTEC}/api/historial/${solicitudAsigTec.codigo_solicitud}`);
+            setHistorial(response.data);
+        } catch (error) {
+            console.error('Error al obtener el historial:', error);
+        }
+    };
+
+    const toggleSidebar = () => {
+    setOpen(!open);
+    if (!open) {
+        obtenerHistorial(); // Cargar historial al abrir el sidebar
+    }
+    };
+
+    const handleRegistroClick = (registro) => {
+    setSelectedRegistro(registro);
+    };
+
+    const handleDatosVisitaSubmit = (datos) => {
+        setDatosVisita(datos); // Actualiza el estado con los datos de visita
+        setIsContactarModalOpen(false); // Cierra el modal
+    };
+
+ 
+
+    
+    if (loading) {
+        return <div>Cargando...</div>;
+    }
+
+    if (error) {
+        return <div>Error al cargar la solicitud: {error}</div>;
+    }
+
+    if (!solicitudAsigTec) {
+        return <div>No se encontró la solicitudAsigTec.</div>;
+    }
+    
+    
+    return (
+        <main className="main-Tec">
+            <div>
+                <button onClick={() => navigate(-1)}>Volver</button>
+                <h2>Detalle de la Solicitud</h2>
+                <div className="detalle-solicitudAsigTec-conteiner">
+                    <div className="detalle-solicitudAsigTec-card">
+                        <div className="detalle-solicitudAsigTec-parte-sup">
+                            <p><span className="negrita">ID:</span> {solicitudAsigTec.codigo_solicitud}</p>
+                            <p><span className="negrita">Fecha C.:</span> {formatearFecha(solicitudAsigTec.fecha_solicitud)}</p>
+                        </div>
+                        <p className="detalle-solicitudAsigTec-parte-centro">Datos Solicitud</p>
+                        <div className="detalle-solicitudAsigTec-parte-baja">
+                            <p><span className="negrita">Técnico encargado:</span> {solicitudAsigTec.codigo_trabajador}</p>
+                            <p><span className="negrita">Cliente:</span> <Link to={`/vercliente/${solicitudAsigTec.id_cliente}`}>{solicitudAsigTec.id_cliente}</Link></p>
+                            <p><span className="negrita">ID Solicitud:</span> <Link to={`/vertickets/${solicitudAsigTec.codigo_ticket}`}>{solicitudAsigTec.codigo_ticket}</Link></p>
+                            <p><span className="negrita">Descripción del Servicio:</span></p>
+                            <p className="detalle-solicitudAsigTec-descripcion">{solicitudAsigTec.descripcion_servicio}</p>
+                            <p><span className="negrita">Estado:</span> {solicitudAsigTec.estado_solicitud}</p>
+                            <p><span className="negrita">Prioridad:</span> {solicitudAsigTec.prioridad_solicitud}</p>
+                        </div>
+                        {solicitudAsigTec.estado_solicitud === 'asignado' && (
+                            <button onClick={() => handleEstadoChange('En Proceso')}>Empezar</button>
+                        )}
+                        {solicitudAsigTec.estado_solicitud !=='asignado' && (
+                            <button onClick={() => setIsModalOpen(true)}>Cambiar Estado</button>               
+                        )}
+
+                        {isModalOpen && (
+                        <ChangeStatusModal 
+                        codigo_solicitud={solicitudAsigTec.codigo_solicitud} 
+                        onClose={() => setIsModalOpen(false)} 
+                        onEstadoChange={updateLocalState} // Pasa la función para actualizar el estado local, para que se vea el cambio, no se queria actualizar solo
+                        />
+                        )}
+
+                        {successMessage && <p className='form-success-AS'>{successMessage}</p>}
+                    </div>
+
+
+
+                    <section className='Datosvisita-conteiner'>
+                    <div className='Datosvisita-card'>
+                    <h2 className='Datosvisita-titulo'>Datos de Visita</h2>
+                    
+                    {datosVisita.length > 0 ? ( // Verifica si hay elementos en el array
+                        <div>
+                            {datosVisita.map(visita => (
+                                <div key={visita.id_datosvisita}> {/* Asegúrate de tener una clave única para cada elemento */}
+                                    <p><strong>Solicitud:</strong> {visita.codigo_solicitud}</p>
+                                    <p><strong>Dirección:</strong> {visita.direccion_cliente}</p>
+                                    <p><strong>Días Disponibles:</strong> {visita.dias_disponibles}</p>
+                                    <p><strong>Horario General:</strong> {visita.campo_cualquierhora ? 'SI' : 'NO'}</p>
+                                    <p><strong>Horario Específico:</strong> {visita.hora_inicio} - {visita.hora_fin}</p>
+                                    <p><strong>Fecha de Registro:</strong> {new Date(visita.fecha_datovisita).toLocaleString()}</p>
+                                </div>
+                            ))}
+                        </div>
+                    ) : (
+                        <p className='Datosvisita-text'>Sin datos del cliente.</p>
+                    )}
+                    <div className='Datosvisita-boton-conteiner'>
+                    <button onClick={() => setIsContactarModalOpen(true)} className='Datosvisita-boton'>Registrar datos del Cliente</button>  
+                    </div>
+                    </div>   
+                    </section>
+
+                    
+
+                  {/* Modal para Datos de Visita */}
+<DatosVisitaCliente 
+    isOpen={isContactarModalOpen} 
+    onClose={() => setIsContactarModalOpen(false)} 
+    onSubmit={handleDatosVisitaSubmit} // Pasa la función de envío
+    solicitudAsigTec={solicitudAsigTec} // Pasa la solicitud si es necesario
+/>
+                
+
+
+
+                <div className="container">
+                <Button onClick={toggleSidebar} className='boton-historialsoli-tec'>Ver Historial</Button>
+                <Modal  className='barra-historialsoli-tec' open={open} onClose={toggleSidebar}>
+                <div className='div-historialsoli-tec'>
+                    <h2 className='h2-historialsoli-tec'>Historial de Solicitudes</h2>
+                    <div className="historial-container">
+                        <ul className='ul-historialsoli-tec'>
+                            {historial.length > 0 ? (
+                                historial.map((registro) => (
+                                    <li className='li-historialsoli-tec' key={registro.codigo_solicitud} onClick={() => handleRegistroClick(registro)}>
+                                        <div><span className='cs-historialsoli-tec'>ID:</span>{registro.codigo_solicitud}</div>
+                                        <div><span className='ce-historialsoli-tec'>Cambio de estado:</span> {registro.estado_solicitud}</div>
+                                    </li>
+                                ))
+                            ) : (
+                                <p>No hay historial disponible.</p>
+                            )}
+                        </ul>
+                        <div className="details-container">
+                            {selectedRegistro ? (
+                                <>
+                                    <h2 className='titulo-dr-tec'>Detalles del Reporte</h2>
+                                    <div><strong>ID:</strong> {selectedRegistro.codigo_solicitud}</div>
+                                    <div><strong>Fecha:</strong> {new Date(selectedRegistro.fecha).toLocaleString()}</div>
+                                    <div><strong>Cambio de estado:</strong> {selectedRegistro.estado_solicitud}</div>
+                                    <div><strong>Razón:</strong> {selectedRegistro.razon_cambioestado}</div>
+                                    {/* Agrega más detalles si es necesario */}
+                                </>
+                            ) : (
+                                <p>Selecciona un registro para ver los detalles.</p>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            </Modal>
+        </div>
+
+                </div>
+            </div>
+        </main>
+    );
+};
+
+export default DetalleSolicitudAsigTec;

@@ -1,0 +1,109 @@
+import { pool } from "../bd/serverPGSQL.js";
+import express from 'express';
+import bodyParser from 'body-parser';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import config from '../config.js'; // Usar import en lugar de require
+import { autenticarToken, autorizarRoles, autorizarPorPermiso } from "../Modulo_Usuario/modulo_usuario.js";
+
+// Cargar variables de entorno al inicio
+dotenv.config();
+
+console.log(config.dbHost); // localhost
+console.log(config.dbUser); // root
+console.log(config.dbPass); // s1mpl3
+console.log(config.portCreateTickets); // 3031
+console.log(config.portAssignTickets); // 3032
+
+const getLanguages = async () => {
+    try {
+        const result = await pool.query("SELECT codigo_ticket, descripcion_servicio, prioridad_solicitud, fecha_creacion, id_cliente, motivo_visita FROM tb_crear_ticket;");
+        console.log(result);
+    } catch (error) {
+        console.error(error);
+    }
+};
+
+const app = express();
+const port = config.portAssignTickets || 3032;
+
+// Middleware para parsear el cuerpo de las solicitudes
+app.use(bodyParser.json());
+app.use(cors());
+
+// Ruta para obtener la lista de tickets
+app.get('/api/tickets',  async (req, res) => {
+    try {
+        const result = await pool.query("SELECT codigo_ticket, prioridad_solicitud, descripcion_servicio, id_cliente, motivo_visita FROM tb_crear_ticket;");
+        res.json(result.rows);
+    } catch (error) {
+        console.error('Error obteniendo tickets:', error);
+        res.status(500).send('Error obteniendo tickets');
+    }
+});
+
+// Ruta para obtener la lista de técnicos
+app.get('/api/tecnicos',  async (req, res) => {
+    try {
+        const result = await pool.query("SELECT codigo_trabajador, nombre_tecnico, apellido_tecnico FROM tecnicos;");
+        console.log('Resultados de la consulta:', result.rows); // Agrega esto para depuración
+        res.json(result.rows);
+    } catch (error) {
+        console.error('Error obteniendo técnicos:', error);
+        res.status(500).send('Error obteniendo técnicos');
+    }
+});
+
+// Ruta para manejar la asignación de tickets a técnicos
+app.post('/api/asignar', autenticarToken, autorizarRoles('Admin', 'Moderador'), autorizarPorPermiso('crear_clientes'), async (req, res) => {
+    const { codigo_ticket, codigo_trabajador } = req.body;
+    try {
+        // Obtener prioridad_solicitud y descripcion_servicio desde tb_crear_ticket
+        const result = await pool.query(
+            "SELECT prioridad_solicitud, descripcion_servicio, id_cliente, motivo_visita FROM tb_crear_ticket WHERE codigo_ticket = $1",
+            [codigo_ticket]
+        );
+    
+        if (result.rows.length === 0) {
+            return res.status(404).json({ message: 'Ticket no encontrado' });
+        }
+    
+        const { prioridad_solicitud, descripcion_servicio, id_cliente, motivo_visita} = result.rows[0];
+    
+        // Insertar en solicitudes y devolver el código de solicitud recién creado
+        const insertResult = await pool.query(
+            "INSERT INTO solicitudes (codigo_ticket, codigo_trabajador, prioridad_solicitud, descripcion_servicio, id_cliente, motivo_visita) VALUES ($1, $2, $3, $4, $5, $6) RETURNING codigo_solicitud",
+            [codigo_ticket, codigo_trabajador, prioridad_solicitud, descripcion_servicio, id_cliente, motivo_visita]
+        );
+
+        const nuevoCodigoSoli = insertResult.rows[0].codigo_solicitud; //Mensaje de creacion mas el codigo
+        console.log('Filas insertadas:', insertResult.rowCount);
+        res.json({ message: 'Ticket asignado correctamente', codigo_solicitud: nuevoCodigoSoli }); //Mensaje de creacion mas el codigo
+    } catch (error) {
+        console.error('Error asignando el ticket:', error);
+        res.status(500).json({ message: 'Error asignando el ticket' });
+    }
+});
+
+// Ruta para obtener la lista de solicitudes
+app.get('/api/solicitudes', autenticarToken, autorizarRoles('Admin', 'Moderador'), autorizarPorPermiso('crear_clientes'), async (req, res) => {
+    try {
+        const result = await pool.query(`
+            SELECT s.codigo_solicitud, s.codigo_ticket, s.codigo_trabajador, t.id_cliente, t.prioridad_solicitud, t.motivo_visita, t.descripcion_servicio, s.estado_solicitud, s.fecha_solicitud
+            FROM solicitudes s
+            JOIN tb_crear_ticket t ON s.codigo_ticket = t.codigo_ticket;
+        `);
+        res.json(result.rows);
+    } catch (error) {
+        console.error('Error obteniendo solicitudes:', error);
+        res.status(500).send('Error obteniendo solicitudes');
+    }
+});
+
+
+
+app.listen(port, () => {
+    console.log(`Servidor escuchando en http://localhost:${port}`);
+});
+
+getLanguages();

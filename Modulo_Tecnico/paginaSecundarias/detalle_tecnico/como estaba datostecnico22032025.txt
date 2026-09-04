@@ -1,0 +1,237 @@
+import React, { useState, useEffect } from 'react';
+import { Modal } from '@mui/material';
+import { useParams } from 'react-router-dom';
+import { format, parseISO } from 'date-fns';
+
+const DatosVisitaCliente = ({ isOpen, onClose, onSubmit }) => {
+    const [successMessage, setSuccessMessage] = useState('');
+    const [errors, setErrors] = useState({});
+    const [solicitudAsigTec, setSolicitudAsig] = useState({});
+    const { id } = useParams();
+
+    const [datosvisita, setDatosVisitas] = useState([
+        {
+            direccion_cliente: '',
+            dias_disponibles: [], // Este puede ser un array de fechas
+            campo_cualquierhora: 'Si', // O 'No', según tu lógica
+            campo_hora_especifica: 'No', // O 'Si', según tu lógica
+            horas: {
+                rango: { inicio: '00:00', fin: '00:00' }, // Valores por defecto para evitar null
+            },
+        }
+    ]);
+
+    const [selectedDate, setSelectedDate] = useState('');
+
+    useEffect(() => {
+        const fetchSolicitudAsig = async () => {
+            try {
+                const response = await fetch(`${process.env.REACT_APP_API_URL_SOLIASIGTEC}/api/solicitudAsigTec/${id}`);
+                if (!response.ok) {
+                    throw new Error(`Error: ${response.status} ${response.statusText}`);
+                }
+                const data = await response.json();
+                setSolicitudAsig(data);
+            } catch (error) {
+                console.error('Error fetching solicitud:', error);
+                setErrors({ fetch: error.message }); // Maneja el error
+            }
+        };
+        fetchSolicitudAsig();
+    }, [id]);
+
+    const validate = () => {
+        let errors = {};
+        // Accede a las propiedades del primer objeto en el array
+        if (!datosvisita[0].direccion_cliente) errors.direccion_cliente = '(¡La dirección es requerida!)';
+        if (datosvisita[0].dias_disponibles.length === 0) errors.dias_disponibles = '(¡El día es requerido!)';
+        if (!datosvisita[0].campo_cualquierhora && (!datosvisita[0].horas.rango.inicio || !datosvisita[0].horas.rango.fin)) {
+            errors.horas = '(¡La hora es requerida!)';
+        }
+        return errors;
+    };
+
+
+    const handleContactarSubmit = async (e, nuevaVisita) => {
+        e.preventDefault();
+        const errors = validate();
+        if (Object.keys(errors).length === 0) {
+            try {
+                
+                const response = await fetch(`${process.env.REACT_APP_API_URL_SOLIASIGTEC}/api/datosvisita`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        direccion_cliente: datosvisita[0].direccion_cliente,
+                        dias_disponibles: datosvisita[0].dias_disponibles, // Asegúrate de que esto sea un array
+                        campo_cualquierhora: datosvisita[0].campo_cualquierhora,
+                        hora_inicio: datosvisita[0].horas.rango.inicio, // Enviar como hora_inicio
+                        hora_fin: datosvisita[0].horas.rango.fin, // Enviar como hora_fin
+                        codigo_solicitud: solicitudAsigTec ? solicitudAsigTec.codigo_solicitud : '',
+                    })
+                });
+                const result = await response.json();
+                console.log('Respuesta del servidor:', result);
+
+                // Actualiza el estado de datosvisita
+                setDatosVisitas((prev) => [{ ...prev[0], id_datosvisita: result.id_datosvisita }]); // Asegúrate de que result tenga el id
+
+                setSuccessMessage(`Datos de visita registrados correctamente.`);
+                setErrors({});
+                onSubmit(datosvisita); // Asegúrate de que datosvisita tenga los datos actualizados
+                onClose();
+                
+            } catch (error) {
+                console.error('Error enviando datos:', error);
+                setErrors({ submit: 'Error registrando datos' });
+            }
+        } else {
+            setErrors(errors);
+        }
+    };
+
+    const toggleDia = (selectedDate) => {
+        setDatosVisitas((prev) => {
+            const dias = prev[0].dias_disponibles.includes(selectedDate)
+                ? prev[0].dias_disponibles.filter(dia => dia !== selectedDate)
+                : [...prev[0].dias_disponibles, selectedDate];
+            return [{ ...prev[0], dias_disponibles: dias }]; // Retorna un nuevo array con el objeto actualizado
+        });
+        setSelectedDate(selectedDate);
+    };
+
+    const getDayOfWeek = (dateString) => {
+        if (!dateString) return '';
+        const date = parseISO(dateString);
+        return format(date, 'EEEE');
+    };
+
+    return (
+        <div>
+            <Modal className='Modal-Datosvisita' open={isOpen} onClose={onClose}>
+                <div className='Modal-Datosvisita-div'>
+                    <h2 className='Modal-Datosvisita-h2'>Contactar al Cliente</h2>
+                    <p className='Modal-Datosvisita-text'><b>Cliente:</b> {solicitudAsigTec.id_cliente}</p>
+                    <form onSubmit={handleContactarSubmit}>
+                        
+                        <div className='Modal-Datosvisita-divinput'>
+                            <label htmlFor="direccion_cliente">Dirección</label>
+                            <input
+                                type="text"
+                                id="direccion_cliente"
+                                name="direccion_cliente"
+                                placeholder="Dirección"
+                                value={datosvisita[0].direccion_cliente}
+                                onChange={(e) => setDatosVisitas([{ ...datosvisita[0], direccion_cliente: e.target.value }])}
+                                className='Modal-Datosvisita-dirc'
+                            />
+                            {errors.direccion_cliente && <p className='form-alertaerror-CT'>{errors.direccion_cliente}</p>}
+                        </div>
+
+                        <div className='Modal-Datosvisita-divinput-2'>
+                            <label htmlFor="dias_disponibles">Días disponibles</label>
+                            <input
+                                type="date"
+                                id="dias_disponibles"
+                                name="dias_disponibles"
+                                className='Modal-Datosvisita-fecha'
+                                onChange={(e) => toggleDia(e.target.value)}
+                            />
+                            {errors.dias_disponibles && <p className='form-alertaerror-CT'>{errors.dias_disponibles}</p>}
+                            <div className='dias-seleccionados'>
+                                {/* Verifica que datosvisita tenga al menos un elemento */}
+                                {datosvisita.length > 0 && datosvisita[0].dias_disponibles && (
+                                    <p>Días seleccionados: {datosvisita[0].dias_disponibles.join(', ')}</p>
+                                )}
+                                {selectedDate && (
+                                    <p>Día seleccionado: {getDayOfWeek(selectedDate)}</p>
+                                )}
+                            </div>
+                        </div>
+
+                        <div>
+                            <label htmlFor="campo_cualquierhora">
+                                <input
+                                    type="checkbox"
+                                    id="campo_cualquierhora"
+                                    name="campo_cualquierhora"
+                                    className='Modal-Datosvisita-chebo'
+                                    checked={datosvisita[0].campo_cualquierhora === 'Si'} // Mantener el estado
+                                    onChange={() => {
+                                        // Al marcar "Horario General", desmarcar "Horario Específico"
+                                        setDatosVisitas((prev) => [{
+                                            ...prev[0],
+                                            campo_cualquierhora: 'Si', // Marcar "Horario General"
+                                            campo_hora_especifica: 'No', // Desmarcar "Horario Específico"
+                                            horas: { rango: { inicio: '00:00', fin: '00:00' } }, // Reiniciar horas
+                                        }]);
+                                    }}
+                                />
+                                Horario General
+                                {errors.horas && <p className='form-alertaerror-CT'>{errors.horas}</p>}
+                            </label>
+                        </div>
+
+                        <div>
+                            <label htmlFor="campo_hora_especifica">
+                                <input
+                                    type="checkbox"
+                                    id="campo_hora_especifica"
+                                    name="campo_hora_especifica"
+                                    className='Modal-Datosvisita-chebo'
+                                    checked={datosvisita[0].campo_hora_especifica === 'Si'} // Mantener el estado
+                                    onChange={() => {
+                                        // Al marcar "Horario Específico", desmarcar "Horario General"
+                                        setDatosVisitas((prev) => [{
+                                            ...prev[0],
+                                            campo_cualquierhora: 'No', // Desmarcar "Horario General"
+                                            campo_hora_especifica: 'Si', // Marcar "Horario Específico"
+                                            horas: { rango: { inicio: '', fin: '' } }, // Reiniciar horas
+                                        }]);
+                                    }}
+                                />
+                                Horario Específico
+                            </label>
+                            {datosvisita[0].campo_cualquierhora === 'No' && ( // Si "Horario General" no está seleccionado
+                                <div>
+                                    <input
+                                        type="time"
+                                        id="hora_inicio"
+                                        name="hora_inicio"
+                                        className='Modal-Datosvisita-h'
+                                        value={datosvisita[0].horas.rango.inicio}
+                                        onChange={(e) => setDatosVisitas((prev) => [{
+                                            ...prev[0],
+                                            horas: { ...prev[0].horas, rango: { ...prev[0].horas.rango, inicio: e.target.value } },
+                                        }])}
+                                    />
+                                    -
+                                    <input
+                                        type="time"
+                                        id="hora_fin"
+                                        name="hora_fin"
+                                        className='Modal-Datosvisita-h'
+                                        value={datosvisita[0].horas.rango.fin}
+                                        onChange={(e) => setDatosVisitas((prev) => [{
+                                            ...prev[0],
+                                            horas: { ...prev[0].horas, rango: { ...prev[0].horas.rango, fin: e.target.value } },
+                                        }])}
+                                    />
+                                </div>
+                            )}
+                        </div>
+
+                        <div className='Modal-Datosvisita-boton-div'>
+                            <button type="submit" className='Modal-Datosvisita-boton'>Aceptar</button>
+                            {successMessage && <p className=''>{successMessage}</p>}
+                        </div>
+                    </form>
+                </div>
+            </Modal>
+        </div>
+    );
+};
+
+export default DatosVisitaCliente;

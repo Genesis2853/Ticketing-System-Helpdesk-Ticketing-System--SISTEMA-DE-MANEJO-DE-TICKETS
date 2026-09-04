@@ -1,0 +1,156 @@
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+
+const CrearReporteServicio = ({ onClose }) => {
+    const { id } = useParams();
+    const [herramientasUtilizadas, setHerramientasUtilizadas] = useState('');
+    const [solucion, setSolucion] = useState('');
+    const [tiempoInvertido, setTiempoInvertido] = useState('');
+    const [solicitudComplTec, setSolicitudCompl] = useState({});
+
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [cargaDatos, setCargaDatos] = useState(false);
+
+    useEffect(() => {
+        let isMounted = true; // Flag para verificar si el componente está montado
+
+        const fetchSolicitudAsig = async () => {
+            try {
+                const response = await fetch(`${process.env.REACT_APP_API_URL_SOLICOMPLETADA}/api/solicitudcompltecnico/${id}`);
+                
+                if (!response.ok) {
+                    throw new Error(`Error: ${response.status} ${response.statusText}`);
+                }
+                const data = await response.json();
+   
+                if (isMounted) {
+                    setSolicitudCompl(data);
+                    console.log('Codigo que se pasa al modal:', data.codigo_solicitud);
+                }
+            } catch (error) {
+                console.error('Error fetching solicitud:', error);
+                if (isMounted) {
+                    setError(error.message);
+                }
+            } finally {
+                if (isMounted) {
+                    setLoading(false);
+                }
+            }
+        };
+
+        fetchSolicitudAsig();
+
+        // Función de limpieza
+        return () => {
+            isMounted = false; // Cambia el flag a false cuando el componente se desmonte
+        };
+    }, [id]);
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setCargaDatos(true);
+
+        const data = {
+            estado_solicitud: solicitudComplTec.estado_solicitud,
+            tipo_solucion_falla: solicitudComplTec.tipo_solucion_falla,
+            herramientas_utilizadas: herramientasUtilizadas,
+            solucion_efectuada: solucion,
+            tiempo_invertido: tiempoInvertido,
+            id_soli_completada: solicitudComplTec.id_soli_completada,
+        };
+
+        try {
+            const response = await fetch(`${process.env.REACT_APP_API_URL_SOLICOMPLETADA}/api/guardarreportesolicitudcompleta`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            });
+
+            if (response.ok) {
+                // Manejar la respuesta, por ejemplo, redirigir o mostrar un mensaje de éxito
+                alert('Reporte creado con éxito');
+                onClose();
+            } else {
+                // Manejar el error
+                alert('Error al crear el reporte');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Error al crear el reporte');
+        } finally {
+            setCargaDatos(false); // Detener el mensaje de carga
+        }
+    };
+
+    if (loading) {
+        return <div>Cargando...</div>;
+    }
+
+    if (error) {
+        return <div>Error al cargar la solicitud: {error}</div>;
+    }
+
+    return (
+        <section>
+            {cargaDatos ? (
+                <h2>Cerrando la Solicitud, por favor espere...</h2>
+            ) : (
+                <form onSubmit={handleSubmit}>
+                    <label>
+                        Estado:
+                        {solicitudComplTec.estado_solicitud}
+                    </label>
+                    <br />
+                    <label>
+                        Cliente:
+                        {solicitudComplTec.nombre_cliente} {solicitudComplTec.apellido_cliente}
+                    </label>
+                    <br />
+                    <label>
+                        Tipo de Falla:
+                        {solicitudComplTec.tipo_solucion_falla}
+                    </label>
+                    <br />
+                    <label>
+                        Herramientas Utilizadas:
+                        <input
+                            type="text"
+                            value={herramientasUtilizadas}
+                            onChange={(e) => setHerramientasUtilizadas(e.target.value)}
+                        />
+                    </label>
+                    <br />
+                    <label>
+                        Solución Efectuada:
+                        <textarea
+                            value={solucion}
+                            onChange={(e) => setSolucion(e.target.value)}
+                        />
+                    </label>
+                    <br />
+                    <label>
+                        Tiempo Invertido (horas):
+                        <input
+                            type="number"
+                            value={tiempoInvertido}
+                            onChange={(e) => setTiempoInvertido(e.target.value)}
+                        />
+                    </label>
+                    <br />
+  
+           
+           
+            <br />
+            <button type="submit">Crear Reporte</button>
+            <button type="button" onClick={onClose}>Cancelar</button>
+        </form>
+        )}
+        </section>
+    );
+};
+
+export default CrearReporteServicio;

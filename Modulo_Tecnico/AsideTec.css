@@ -1,0 +1,73 @@
+
+*{
+  font-family: Inter, sans-serif;
+}
+/* Estilo compacto para el aside */
+.aside-adm-compact {
+  background: white;
+  border-radius: 8px;
+  padding: 0.8rem;
+  margin: 0.5rem;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  width: 260px; /* Ancho fijo reducido */
+  max-width: 100%; /* Asegúrate de que no exceda el ancho de la pantalla */
+}
+
+/* Contenedor del calendario */
+.calendar-compact-container {
+  width: 100%;
+  margin: 0 auto; /* Centra el calendario horizontalmente */
+  padding: 0 10px; /* Agrega un poco de padding lateral en móviles */
+}
+
+/* Overrides para FullCalendar */
+.fc .fc-toolbar {
+  padding: 0.2rem 0;
+}
+
+.fc .fc-toolbar-title {
+  font-size: 0.9rem !important;
+  margin: 0 0.3rem;
+}
+
+.fc .fc-button {
+  padding: 0.2rem 0.4rem !important;
+  min-width: 24px;
+  font-size: 0.7rem !important;
+}
+
+.fc .fc-col-header-cell {
+  padding: 0.2rem 0 !important;
+}
+
+.fc .fc-col-header-cell-cushion {
+  font-size: 0.65rem !important;
+  padding: 0.1rem !important;
+}
+
+.fc .fc-daygrid-day {
+  padding: 0.1rem !important;
+}
+
+.fc .fc-daygrid-day-number {
+  font-size: 0.7rem;
+  padding: 0.1rem !important;
+}
+
+.fc .fc-daygrid-event {
+  margin: 1px !important;
+  font-size: 0.6rem !important;
+}
+
+/* Responsive: Ajustes para móviles */
+@media (max-width: 768px) {
+  .aside-adm-compact {
+    width: 100%; /* Asegura que el aside ocupe todo el ancho en móviles */
+    margin: 0.5rem 0; /* Margen superior e inferior */
+  }
+
+  .calendar-compact-container {
+    margin: 0; /* Elimina el margen lateral en móviles */
+    padding: 0 10px; /* Agrega un poco de padding lateral */
+  }
+}

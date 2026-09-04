@@ -1,0 +1,161 @@
+/* Contenedor principal del modal */
+.modal {
+  max-width: 480px;       /* ancho máximo razonable */
+  width: 80%;             /* ancho general */
+  margin: 1rem auto;      /* margen para centrar */
+  background: white;
+  padding: 1.5rem 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+/* Cada bloque de input y label */
+.div-contenedor-cambioestado {
+  margin-bottom: 1.25rem;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Etiqueta del input */
+.subtitulo-form-cambioestado {
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin-bottom: 0.4rem;
+}
+
+/* Select e input textarea */
+.input-form-cambioestado,
+.input-form-cambioestado-textarea {
+  padding: 0.5rem 0.75rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-family: inherit;
+  resize: vertical;
+  transition: border-color 0.2s ease;
+}
+
+.input-form-cambioestado:focus,
+.input-form-cambioestado-textarea:focus {
+  outline: none;
+  border-color: #007bff;
+}
+
+/* Contenedor de los botones */
+.contenedor-boton-guardar-cambioestado {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+/* Estilos generales para botones */
+.contenedor-boton-guardar-cambioestado button {
+  padding: 0.5rem 1.3rem;
+  font-size: 1rem;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.25s ease;
+}
+
+/* Botón submit */
+.contenedor-boton-guardar-cambioestado button[type="submit"] {
+  background-color: #007bff;
+  color: white;
+}
+
+.contenedor-boton-guardar-cambioestado button[type="submit"]:hover {
+  background-color: #0056b3;
+}
+
+/* Botón cancelar */
+.contenedor-boton-guardar-cambioestado button[type="button"] {
+  background-color: #ccc;
+  color: #333;
+}
+
+.contenedor-boton-guardar-cambioestado button[type="button"]:hover {
+  background-color: #999;
+}
+
+/* Responsive para móviles */
+@media (max-width: 480px) {
+  .modal {
+    width: 95vw;          /* casi todo el ancho del viewport */
+    max-width: none;      /* sin límite máximo para usar casi todo */
+    margin: 0.5rem auto;  /* menos margen arriba/abajo */
+    padding: 1rem 1rem;
+  }
+
+  .contenedor-boton-guardar-cambioestado {
+    flex-direction: column;
+    gap: 0.6rem;
+    width: 98vw;
+  }
+
+  .contenedor-boton-guardar-cambioestado button {
+    width: 100%;          /* botones a todo ancho */
+  }
+}
+/* Estilos normales para desktop */
+.input-form-cambioestado,
+.input-form-cambioestado-textarea {
+  padding: 0.5rem 0.75rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-family: inherit;
+  resize: vertical;
+  transition: border-color 0.2s ease;
+}
+
+.contenedor-boton-guardar-cambioestado button {
+  padding: 0.5rem 1.3rem;
+  font-size: 1rem;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.25s ease;
+}
+
+/* Ajustes para tablets y móviles */
+@media (max-width: 768px) {
+  .input-form-cambioestado,
+  .input-form-cambioestado-textarea {
+    padding: 0.3rem 0.5rem;
+    font-size: 0.85rem;
+  }
+
+  .contenedor-boton-guardar-cambioestado button {
+    padding: 0.3rem 0.8rem;
+    font-size: 0.85rem;
+  }
+}
+@media (max-width: 768px) {
+  /* Select y textarea más pequeños */
+  select.input-form-cambioestado,
+  textarea.input-form-cambioestado-textarea {
+    padding: 0.25rem 0.4rem;
+    font-size: 0.8rem;
+  }
+
+  /* Botones guardar y cancelar más pequeños */
+  .contenedor-boton-guardar-cambioestado button {
+    padding: 0.25rem 0.6rem;
+    font-size: 0.8rem;
+    border-radius: 4px;
+  }
+}
+@media (max-width: 768px) {
+  select.input-form-cambioestado,
+  textarea.input-form-cambioestado-textarea {
+    max-width: 100%;
+    box-sizing: border-box;
+    overflow-wrap: break-word; /* Para texto largo en textarea */
+    word-wrap: break-word;
+    word-break: break-word;
+    white-space: normal;
+  }
+}

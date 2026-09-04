@@ -1,0 +1,125 @@
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+
+const CreaReporteServNoRealizado = ({ onClose }) => {
+    const { id } = useParams();
+    const [comentarios, setComentarios] = useState('');
+    const [solicitudNoRealizada, setSolicitudAsig] = useState({});
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        let isMounted = true; // Flag para verificar si el componente está montado
+
+        const fetchSolicitudAsig = async () => {
+            try {
+                const response = await fetch(`${process.env.REACT_APP_API_URL_SOLINOREALIZADA}/api/solicitudNoReTec/${id}`);
+                
+                if (!response.ok) {
+                    throw new Error(`Error: ${response.status} ${response.statusText}`);
+                }
+                const data = await response.json();
+       
+                if (isMounted) {
+                    setSolicitudAsig(data);
+                    console.log('Codigo que se pasa al modal:', data.codigo_solicitud);
+                }
+            } catch (error) {
+                console.error('Error fetching solicitud:', error);
+                if (isMounted) {
+                    setError(error.message);
+                }
+            } finally {
+                if (isMounted) {
+                    setLoading(false);
+                }
+            }
+        };
+
+        fetchSolicitudAsig();
+
+        // Función de limpieza
+        return () => {
+            isMounted = false; // Cambia el flag a false cuando el componente se desmonte
+        };
+    }, [id]);
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        const data = {
+            estado_solicitud: solicitudNoRealizada.estado_solicitud,
+            motivo_norealizacion: solicitudNoRealizada.motivo_norealizacion,
+            comentario_trabajo_norealizado: comentarios,
+            id_soli_norealizada: solicitudNoRealizada.id_soli_norealizada,
+        };
+
+        try {
+            const response = await fetch(`${process.env.REACT_APP_API_URL_SOLINOREALIZADA}/api/guardarreportenorealizado`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            });
+
+            if (response.ok) {
+                // Manejar la respuesta, por ejemplo, redirigir o mostrar un mensaje de éxito
+                alert('Reporte creado con éxito');
+                onClose();
+            } else {
+                // Manejar el error
+                alert('Error al crear el reporte');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Error al crear el reporte');
+        }
+    };
+
+    if (error) {
+        return (
+            <div>
+                <p style={{ color: 'red' }}>{error}</p>
+                <button onClick={onClose}>Cerrar</button> {/* Botón de cerrar cuando hay un error */}
+            </div>
+        );
+    }
+
+    if (loading) {
+        return <div>Cargando...</div>;
+    }
+
+    return (
+        <form onSubmit={handleSubmit}>
+            <h2>Crear Reporte</h2>
+            <label>
+                Estado:
+                {solicitudNoRealizada.estado_solicitud}
+            </label>
+            <br />
+            <label>
+                Cliente:
+                {solicitudNoRealizada.nombre_cliente} {solicitudNoRealizada.apellido_cliente}
+            </label>
+            <br />
+            <label>
+                Motivo de No Realización:
+                {solicitudNoRealizada.motivo_norealizacion}
+            </label>
+            <br />
+            <label>
+                Comentarios:
+                <textarea
+                    value={comentarios}
+                    onChange={(e) => setComentarios(e.target.value)}
+                />
+            </label>
+            <br />
+            <button type="submit">Crear Reporte</button>
+            <button type="button" onClick={onClose}>Cancelar</button>
+        </form>
+    );
+};
+
+export default CreaReporteServNoRealizado;
