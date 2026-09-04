@@ -1,0 +1,217 @@
+import React, { useState, useEffect } from 'react';
+import { useSnackbar } from 'notistack';
+import './Formularioasignacionsoli.css';
+import DecisionReport from './InformeArbolDecision';
+
+const AsignacionForm = ({ user }) => {
+  const [tickets, setTickets] = useState([]);
+  const [tecnicos, setTecnicos] = useState([]);
+
+  const [codigoTicket, setCodigoTicket] = useState('');
+  const [codigoTrabajador, setCodigoTrabajador] = useState('');
+  const [autoAsignar, setAutoAsignar] = useState(false);
+  const [rangoTickets, setRangoTickets] = useState(5);
+
+  const [selectedTickets, setSelectedTickets] = useState([]);
+  const [errors, setErrors] = useState({});
+
+  const { enqueueSnackbar } = useSnackbar();
+  console.log("Usuario recibido en asignaticke:", user);
+
+  useEffect(() => {
+    let mounted = true;
+
+    async function fetchData() {
+      try {
+        const ticketsRes = await fetch(`${process.env.REACT_APP_API_URL_ASSIGN}/api/tickets`);
+        const ticketsData = await ticketsRes.json();
+        if (Array.isArray(ticketsData) && mounted) setTickets(ticketsData);
+
+        const tecnicosRes = await fetch(`${process.env.REACT_APP_API_URL_ASSIGN}/api/tecnicos`);
+        const tecnicosData = await tecnicosRes.json();
+        if (mounted) setTecnicos(tecnicosData);
+      } catch (error) {
+        console.error('Error cargando datos:', error);
+      }
+    }
+
+    fetchData();
+    return () => { mounted = false; };
+  }, []);
+
+  function validate() {
+    const formErrors = {};
+    if (!codigoTicket) formErrors.codigoTicket = '(¡El código de ticket es requerido!)';
+    if (!codigoTrabajador) formErrors.codigoTrabajador = '(¡El código del trabajador es requerido!)';
+    return formErrors;
+  }
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+
+    const token = localStorage.getItem('token');
+    if (!token) {
+      setErrors({ submit: 'No autorizado: token no encontrado.' });
+      return;
+    }
+
+    const formErrors = validate();
+    if (Object.keys(formErrors).length) {
+      setErrors(formErrors);
+      return;
+    }
+
+    try {
+      const response = await fetch(`${process.env.REACT_APP_API_URL_ASSIGN}/api/asignar`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ codigo_ticket: codigoTicket, codigo_trabajador: codigoTrabajador }),
+      });
+      if (!response.ok) throw new Error('Error al asignar el ticket');
+      const result = await response.json();
+      enqueueSnackbar(`Ticket asignado correctamente. Código de solicitud: ${result.codigo_solicitud}`, { variant: 'success' });
+
+      setCodigoTicket('');
+      setCodigoTrabajador('');
+      setErrors({});
+    } catch (err) {
+      console.error('Error asignando ticket:', err);
+      setErrors({ submit: 'Error asignando ticket' });
+    }
+  }
+
+  function toggleTicketSelection(id) {
+    setSelectedTickets(s => (s.includes(id) ? s.filter(x => x !== id) : [...s, id]));
+  }
+
+  async function handleAutoAsignar() {
+    
+    if (!selectedTickets.length && rangoTickets < 1) {
+      enqueueSnackbar('Debes seleccionar tickets para asignar.', { variant: 'warning' });
+      return;
+    }
+
+    // Si no hay tickets individuales escogidos, asignar rango desde tickets ordenados
+    let ticketsToAssign = selectedTickets.length ? selectedTickets : tickets.slice(0, rangoTickets).map(t => t.codigo_ticket);
+
+    for (const ticketId of ticketsToAssign) {
+      try {
+        const response = await fetch(`${process.env.REACT_APP_API_URL_ASSIGN}/api/asignar/automatico`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ ticketIds: [ticketId] }),
+        });
+        if (!response.ok) throw new Error(`Error asignando ticket ${ticketId}`);
+
+        const [result] = await response.json();
+        if (result.assignedTo) {
+          enqueueSnackbar(`Ticket ${ticketId} asignado a técnico ${result.assignedTo}`, { variant: 'success' });
+        } else {
+          enqueueSnackbar(`Ticket ${ticketId} no pudo ser asignado`, { variant: 'error' });
+        }
+      } catch (error) {
+        enqueueSnackbar(`Error asignando ticket ${ticketId}`, { variant: 'error' });
+      }
+    }
+    setSelectedTickets([]);
+  }
+
+  return (
+    <div style={{ maxWidth: '1200px', margin: '3rem auto', padding: '0 1rem', display: 'flex', gap: '4rem' }}>
+      {/* Formulario manual centrado */}
+      <form className="form-asignacionsoli" onSubmit={handleSubmit} style={{ flex: '1', minWidth: '320px' }}>
+        <h2 style={{ fontWeight: 700, fontSize: '2rem', marginBottom: '1rem', color: '#111827' }}>Asignación Manual</h2>
+
+        <label htmlFor="codigo_ticket" className="form-titulos-AS">Código de Ticket:</label>
+        <select
+          id="codigo_ticket"
+          className="form-box-AS"
+          value={codigoTicket}
+          onChange={e => setCodigoTicket(e.target.value)}
+          required
+          disabled={autoAsignar}
+        >
+          <option value="">Seleccione un ticket</option>
+          {tickets.map(t => <option key={t.codigo_ticket} value={t.codigo_ticket}>{t.codigo_ticket}</option>)}
+        </select>
+        {errors.codigoTicket && <p className="form-alertaerror-AS">{errors.codigoTicket}</p>}
+
+        <label htmlFor="codigo_trabajador" className="form-titulos-AS" style={{ marginTop: '1rem' }}>Técnico:</label>
+        <select
+          id="codigo_trabajador"
+          className="form-box-AS"
+          value={codigoTrabajador}
+          onChange={e => setCodigoTrabajador(e.target.value)}
+          required
+          disabled={autoAsignar}
+        >
+          <option value="">Seleccione un técnico</option>
+          {tecnicos.map(t => (
+            <option key={t.codigo_trabajador} value={t.codigo_trabajador}>
+              {t.codigo_trabajador} {t.nombre_tecnico} {t.apellido_tecnico}
+            </option>
+          ))}
+        </select>
+        {errors.codigoTrabajador && <p className="form-alertaerror-AS">{errors.codigoTrabajador}</p>}
+
+        <button type="submit" className="form-button-AS" style={{ marginTop: '1.5rem' }} disabled={autoAsignar}>Asignar Ticket</button>
+
+        {errors.submit && <p className="form-alertaerror-AS">{errors.submit}</p>}
+      </form>
+
+      {/* Panel asignación automática */}
+      <section style={{ flex: '1', minWidth: '320px' }}>
+        <h2 style={{ fontWeight: 700, fontSize: '2rem', marginBottom: '1rem', color: '#111827' }}>Asignación Automática</h2>
+
+        <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <input type="checkbox" checked={autoAsignar} onChange={e => setAutoAsignar(e.target.checked)} />
+          Activar Asignación Automática
+        </label>
+
+        {autoAsignar && (
+          <>
+            <div style={{ marginTop: '1rem' }}>
+              <label htmlFor="rango_tickets">Cantidad de tickets a asignar (del más viejo): </label>
+              <input
+                id="rango_tickets"
+                type="number"
+                value={rangoTickets}
+                onChange={e => setRangoTickets(Math.min(Math.max(1, Number(e.target.value)), tickets.length))}
+                min={1}
+                max={tickets.length}
+                style={{ width: '60px', marginLeft: '0.5rem' }}
+              />
+            </div>
+
+            <div style={{ maxHeight: '300px', overflowY: 'auto', marginTop: '1rem', border: '1px solid #e5e7eb', borderRadius: '0.5rem', padding: '0.5rem' }}>
+              <strong>Selecciona tickets a asignar:</strong>
+              {tickets.slice(0, rangoTickets).map(t => (
+                <div key={t.codigo_ticket}>
+                  <label>
+                    <input
+                      type="checkbox"
+                      checked={selectedTickets.includes(t.codigo_ticket)}
+                      onChange={() => toggleTicketSelection(t.codigo_ticket)} // Usando la función toggleTicketSelection
+                    />{' '}
+                    {t.codigo_ticket} - {t.prioridad_solicitud} - {t.motivo_visita}
+                  </label>
+                </div>
+              ))}
+            </div>
+
+            <button onClick={handleAutoAsignar} className="form-button-AS" style={{ marginTop: '1rem' }}>
+              Asignar Automáticamente
+            </button>
+          </>
+        )}
+
+        <DecisionReport />
+      </section>
+    </div>
+  );
+};
+
+export default AsignacionForm;

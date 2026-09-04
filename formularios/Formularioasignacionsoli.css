@@ -1,0 +1,197 @@
+
+*{
+  font-family: Inter, sans-serif;
+}
+/* === VARIABLES DE DISEÑO === */
+:root {
+  --color-boton-negro: #000000;
+  --color-boton-rojo: #ff0000;
+  --color-fondo-blanco: #ffffff;
+  --color-texto-oscuro: #141313;
+  --color-fondo-form: #fafafa;
+  --color-error: #d9534f;
+  --border-radius: 8px;
+  --box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* === CONTENEDOR PRINCIPAL === */
+.form-asignacionsoli {
+  background: var(--color-fondo-blanco);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  padding: 2rem;
+  width: 100%;
+  max-width: 600px;
+  margin-top: 0px;
+}
+
+/* === TÍTULOS DE CAMPOS === */
+.form-titulos-AS {
+  font-weight: bold;
+  color: var(--color-texto-oscuro);
+  margin-bottom: 0.5rem;
+}
+
+/* === INPUTS Y SELECTS === */
+.form-box-AS {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  margin-bottom: 1rem;
+}
+
+/* === BOTÓN "ASIGNAR TICKET" === */
+.form-button-AS {
+  width: 100%;
+  padding: 12px;
+  background-color: var(--color-boton-rojo);
+  color: white;
+  border: none;
+  border-radius: var(--border-radius);
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* === MENSAJES DE ERROR === */
+.form-alertaerror-AS {
+  color: var(--color-error);
+  margin-top: -0.8rem;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+}
+
+/* === PANEL DE ASIGNACIÓN AUTOMÁTICA === */
+section {
+  background: #fafafa;
+  border-radius: var(--border-radius);
+  padding: 1rem;
+  margin-top: 1rem;
+}
+
+/* === CHECKBOX Y MENSAJES === */
+.label-asig {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 768px) {
+  .form-asignacionsoli {
+    padding: 1.5rem;
+  }
+}
+
+/* === BOTÓN TOGGLE (ESTILO NEGRO COMO TUS OTROS BOTONES) === */
+.boton-toggle {
+  background-color: var(--color-boton-negro);
+  color: white;
+  border: none;
+  border-radius: var(--border-radius);
+  padding: 12px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-bottom: 1px;
+  transition: background-color 0.3s;
+  max-width: 120px;
+  max-height: 70px;
+}
+
+.boton-toggle:hover {
+  background-color: #333; /* Un negro más claro al pasar el mouse */
+}
+
+/* Form container para manual y automático */
+.form-container {
+  display: flex;
+  gap: 4rem;
+  justify-content: center;
+  align-items: flex-start;
+  flex-wrap: nowrap;
+}
+
+/* Formularios con ancho flexible */
+.form-asignacionsoli,
+.auto-asignacion-section {
+  flex: 1;
+  min-width: 320px;
+  max-width: 600px;
+}
+
+/* Para móviles y tablets, apilar verticalmente */
+@media (max-width: 900px) {
+  .form-container {
+    flex-direction: column;
+    gap: 2rem;
+    padding: 0 1rem;
+  }
+
+  .form-asignacionsoli,
+  .auto-asignacion-section {
+    max-width: 100%;
+  }
+}
+
+/* Ajustes para inputs y botones en móvil */
+@media (max-width: 480px) {
+  .form-box-AS,
+  .form-button-AS {
+    width: 100%;
+    box-sizing: border-box;
+  }
+}
+
+.asignacion-container {
+  max-width: 1200px;
+  margin: 3rem auto;
+  padding: 0 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+/* En móvil quitar el margin y el padding para que quede al ras */
+@media (max-width: 600px) {
+  .asignacion-container {
+    max-width: 100%;
+    margin: 0;
+    padding: 0 0.5rem; /* o 0 para pegar al 100% */
+  }
+}
+
+@media (max-width: 600px) {
+  .boton-toggle {
+    width: 100%;      /* Para que ocupe todo el ancho disponible */
+    max-width: none;  /* Quitar máximo para que se adapte */
+  }
+}
+@media (max-width: 600px) {
+  .form-asignacionsoli,
+  .auto-asignacion-section {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+}
+
+.auto-asignacion-section, .h2-asig {
+  text-align: center;
+}
+
+.auto-asignacion-section label.label-asig {
+  justify-content: center; /* ya tienes flex, solo alinea al centro */
+  justify-items: center;
+  align-items: center;
+  align-content: center;
+  text-align: center;
+}
+
+.sectionactivar-asigauto{
+  justify-content: center;
+  justify-items: center;
+  align-items: center;
+  align-content: center;
+}

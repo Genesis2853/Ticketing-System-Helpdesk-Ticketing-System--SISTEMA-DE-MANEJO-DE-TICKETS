@@ -1,0 +1,52 @@
+import React from "react";
+
+const RequestViewer = ({ solicitudes, evaluadas }) => {
+  // Filtrar solicitudes no evaluadas
+  const solicitudesPendientes = solicitudes.filter(solicitud => 
+    !evaluadas.some(evaluada => evaluada.id_soli_completada === solicitud.id_soli_completada)
+  );
+
+  return (
+    <div className="request-viewer">
+      <h2>Solicitudes</h2>
+
+      {/* Sección de solicitudes pendientes */}
+      <h3>Pendientes</h3>
+      {solicitudesPendientes.length === 0 ? (
+        <p>No hay solicitudes pendientes.</p>
+      ) : (
+        <div className="pending-requests">
+          {solicitudesPendientes.map((solicitud) => {
+            if (!solicitud || !solicitud.id_soli_completada) {
+              return null; // No renderizar si no hay id_soli_completada
+            }
+            return (
+              <div key={solicitud.id_soli_completada} className="request-item">
+                <p><strong>{solicitud.id_soli_completada}</strong></p>
+                - Técnico: {solicitud.nombre_tecnico}{" "}
+                {solicitud.apellido_tecnico}
+              </div>
+            );
+          })}
+        </div>
+      )}
+
+      {/* Sección de solicitudes evaluadas */}
+      <h3>✅ Evaluadas</h3>
+      {evaluadas.length === 0 ? (
+        <p>No hay evaluaciones registradas.</p>
+      ) : (
+        <div className="evaluated-requests">
+          {evaluadas.map((solicitud) => (
+            <div key={solicitud.id_soli_completada} className="request-item">
+              <strong>{solicitud.id_soli_completada}</strong> - Técnico: {solicitud.nombre_tecnico} {solicitud.apellido_tecnico}
+              <span className="evaluated-tag">✔</span>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default RequestViewer;

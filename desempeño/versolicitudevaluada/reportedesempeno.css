@@ -1,0 +1,83 @@
+.detalle-solicitudComplTec-container {
+max-width: 690px;
+  margin: 1rem auto;
+  box-sizing: border-box;
+  justify-items: center;
+}
+
+.detalle-solicitudComplTec-card {
+  border: 2px solid #d32f2f; /* borde rojo fuerte */
+  border-radius: 8px;
+  padding: 25px 30px; /* más padding interno */
+  background-color: #fff7f7; /* fondo ligeramente rosado muy suave */
+  box-shadow: 0 4px 12px rgba(211, 47, 47, 0.15); /* sombra roja suave */
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem; 
+  
+}
+
+.detalle-solicitudComplTec-header {
+  display: flex;
+  justify-content: space-between;
+  font-weight: 600;
+  font-size: 1rem;
+  color: #000000; /* rojo oscuro para texto del header */
+  margin: 1rem;
+  
+}
+
+.detalle-solicitudComplTec-title {
+  margin: 0;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #d32f2f; /* rojo fuerte para el título */
+  border-bottom: 3px solid #d32f2f; /* borde inferior rojo */
+  margin-bottom: 1.2rem;
+  margin: 1rem;
+  align-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.detalle-solicitudComplTec-body {
+  margin: 0.4rem 0;
+  font-size: 1rem;
+  color: #000000; /* texto rojo oscuro */
+  padding-left: 1rem;
+}
+.p-mui-eva{
+    padding-bottom: 7px;
+}
+
+.detalle-solicitudComplTec-body {
+  color: #000000; /* etiquetas en rojo fuerte */
+}
+
+.detalle-solicitudComplTec-descripcion {
+  background-color: #fff0f0; /* fondo rosado claro */
+  border: 1.5px solid #f44336; /* borde rojo medio */
+  padding: 16px 20px;
+  border-radius: 8px;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #7f0000;
+  white-space: pre-wrap;
+}
+
+/* Responsivo */
+@media (max-width: 600px) {
+  .detalle-solicitudComplTec-container {
+    max-width: 100%;
+    padding: 1rem;
+  }
+
+  .detalle-solicitudComplTec-card {
+    padding: 20px 25px;
+  }
+
+  .detalle-solicitudComplTec-header {
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+}

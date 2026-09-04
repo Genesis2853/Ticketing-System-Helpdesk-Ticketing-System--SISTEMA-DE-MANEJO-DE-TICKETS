@@ -1,0 +1,170 @@
+.detalle-solicitudEstado-container {
+  max-width: 850px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.detalle-solicitudEstado-contenido {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* Reutilizable */
+.detalle-solicitudEstado-card {
+  background-color: #fff;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Cabecera */
+.detalle-solicitudEstado-header {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+/* Subtítulo */
+.detalle-solicitudEstado-subtitulo {
+  text-align: center;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+}
+
+/* Info general */
+.detalle-solicitudEstado-info p {
+  margin: 0.3rem 0;
+}
+
+/* Descripción */
+.detalle-solicitudEstado-descripcion {
+  background-color: #f8f8f8;
+  padding: 0.5rem;
+  border-radius: 6px;
+  margin-bottom: 1rem;
+}
+
+.detalle-solicitudEstado-boton-volver {
+  background-color: #1976d2; /* o tu rojo si quieres, por ejemplo #b30000 */
+  color: white;
+  padding: 0.4rem 0.8rem; /* menos padding para que sea más pequeño */
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  
+ 
+
+  /* Tamaño fijo para que no estire */
+  width: auto;
+  min-width: 80px;
+
+  /* Quitar cualquier alineación flex para no interferir */
+  align-self: initial;
+}
+
+/* Hover con color un poco más oscuro */
+.detalle-solicitudEstado-boton-volver:hover {
+  background-color: #155a9a;
+}
+
+/* Para dispositivos móviles o pantallas pequeñas, que quede estático dentro del flujo */
+@media (max-width: 768px) {
+  .detalle-solicitudEstado-boton-volver {
+    position: relative;
+    top: auto;
+    left: auto;
+    width: 100%;
+    padding: 0.6rem;
+    border-radius: 8px;
+  }
+}
+
+/* Modal */
+.detalle-solicitudEstado-modal-contenido {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  max-width: 700px;
+  margin: auto;
+}
+
+.detalle-solicitudEstado-modal-body {
+  display: flex;
+  gap: 2rem;
+  margin-top: 1rem;
+}
+
+.detalle-solicitudEstado-historial-lista {
+  list-style: none;
+  padding: 0;
+  width: 40%;
+}
+
+.detalle-solicitudEstado-historial-item {
+  padding: 0.5rem;
+  border-bottom: 1px solid #ddd;
+  cursor: pointer;
+}
+
+.detalle-solicitudEstado-historial-item:hover {
+  background-color: #f0f0f0;
+}
+
+.detalle-solicitudEstado-detalles-historial {
+  flex: 1;
+  background-color: #f9f9f9;
+  padding: 1rem;
+  border-radius: 8px;
+}
+
+/* Botón de historial y descarga */
+.detalle-solicitudEstado-boton-historial,
+.detalle-solicitudEstado-boton-descarga {
+  background-color: #2e7d32;
+  color: white;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  align-self: start;
+}
+
+.detalle-solicitudEstado-boton-descarga {
+  background-color: #00695c;
+}
+
+.detalle-solicitudEstado-boton-historial:hover {
+  background-color: #27642a;
+}
+
+.detalle-solicitudEstado-boton-descarga:hover {
+  background-color: #004d40;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+  .detalle-solicitudEstado-container {
+    max-width: 95%;
+    padding: 0.5rem;
+  }
+
+  .detalle-solicitudEstado-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .detalle-solicitudEstado-modal-body {
+    flex-direction: column;
+  }
+
+  .detalle-solicitudEstado-historial-lista {
+    width: 100%;
+  }
+}
+

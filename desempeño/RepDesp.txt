@@ -1,0 +1,126 @@
+import React, { useState, useEffect } from "react";
+import { SnackbarProvider, useSnackbar } from 'notistack';
+import EvaluationForm from "./desempeño/evaluacioninterna";
+import TechnicianPerformance from "./desempeño/tabladesempeño";
+import RequestViewer from "./desempeño/versolicitudevaludesem";
+import './desempeño/estilodesempeño.css';
+
+// Componente principal con lógica y notificaciones
+const AppContent = () => {
+  const { enqueueSnackbar } = useSnackbar();
+  const [solicitudes, setSolicitudes] = useState([]);
+  const [evaluadas, setEvaluadas] = useState([]);
+  const [technicians, setTechnicians] = useState([]);
+  const [evaluaciones, setEvaluaciones] = useState([]);
+
+  // Cargar datos iniciales
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [solicitudesRes, techniciansRes, evaluacionesRes] = await Promise.all([
+          fetch(`${process.env.REACT_APP_API_URL_RETROCLIENTE}/api/solicitudes`),
+          fetch(`${process.env.REACT_APP_API_URL_RETROCLIENTE}/api/tecnicos`),
+          fetch(`${process.env.REACT_APP_API_URL_RETROCLIENTE}/api/evaluadas`)
+        ]);
+
+        const solicitudesData = await solicitudesRes.json();
+        const techniciansData = await techniciansRes.json();
+        const evaluacionesData = await evaluacionesRes.json();
+
+        setSolicitudes(solicitudesData);
+        setTechnicians(techniciansData);
+        setEvaluaciones(evaluacionesData);
+
+        // Marcar solicitudes evaluadas
+        const evaluatedSolicitudIds = new Set(evaluacionesData.map(ev => ev.id_soli_completada));
+        setEvaluadas(solicitudesData.filter(s => evaluatedSolicitudIds.has(s.id_soli_completada)));
+
+      } catch (error) {
+        console.error("❌ Error al cargar datos:", error);
+        enqueueSnackbar("Error al cargar datos iniciales", { variant: 'error' });
+      }
+    };
+    fetchData();
+  }, [enqueueSnackbar]);
+
+  // Recalcular rendimiento técnicos
+  const recalcTechniciansPerformance = (techniciansList, evaluacionesList) => {
+    return techniciansList.map(tech => {
+      const techEvals = evaluacionesList.filter(ev => ev.codigo_trabajador === tech.codigo_trabajador);
+      const solicitudesCount = techEvals.length;
+      const avg = solicitudesCount > 0
+        ? (techEvals.reduce((acc, ev) => acc + ev.puntuacion_tecnico, 0) / solicitudesCount)
+        : 0;
+      return {
+        ...tech,
+        solicitudes: solicitudesCount,
+        promedio: avg.toFixed(2),
+      };
+    });
+  };
+
+  // Manejar envío de evaluación
+  const handleEvaluationSubmit = async (data) => {
+    try {
+      const response = await fetch(`${process.env.REACT_APP_API_URL_RETROCLIENTE}/api/evaluaciones`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        const errData = await response.json();
+        console.error("Error al guardar la evaluación:", errData);
+        enqueueSnackbar("❌ Error al guardar la evaluación.", { variant: 'error' });
+        return;
+      }
+
+      const newEvaluation = await response.json();
+
+      // Actualizar evaluaciones en estado
+      const updatedEvaluaciones = [...evaluaciones, newEvaluation];
+      setEvaluaciones(updatedEvaluaciones);
+
+      // Añadir solicitud evaluada si no está
+      const solicitudEvaluada = solicitudes.find(s => s.id_soli_completada === data.id_soli_completada);
+      if (solicitudEvaluada && !evaluadas.find(e => e.id_soli_completada === data.id_soli_completada)) {
+        setEvaluadas([...evaluadas, solicitudEvaluada]);
+      }
+
+      // Recalcular rendimiento técnicos
+      setTechnicians(recalcTechniciansPerformance(technicians, updatedEvaluaciones));
+
+      // Mensaje de éxito
+      enqueueSnackbar("✅ Evaluación guardada correctamente.", { variant: 'success' });
+
+    } catch (error) {
+      console.error("❌ Error al enviar la evaluación:", error);
+      enqueueSnackbar("❌ Error al enviar la evaluación.", { variant: 'error' });
+    }
+  };
+
+  return (
+    <div className="app">
+      <div className="grid-container">
+        <div className="grid-item viewer">
+          <RequestViewer solicitudes={solicitudes} evaluadas={evaluadas} />
+        </div>
+        <div className="grid-item evaluation">
+          <EvaluationForm solicitudes={solicitudes} evaluadas={evaluadas} onSubmit={handleEvaluationSubmit} />
+        </div>
+      </div>
+      <div className="grid-item performance">
+        <TechnicianPerformance technicians={technicians} evaluaciones={evaluaciones} />
+      </div>
+    </div>
+  );
+};
+
+// Componente principal exportado envuelto en SnackbarProvider
+const App = () => (
+  <SnackbarProvider maxSnack={5} autoHideDuration={10000} anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
+    <AppContent />
+  </SnackbarProvider>
+);
+
+export default App;

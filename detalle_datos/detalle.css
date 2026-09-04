@@ -1,0 +1,373 @@
+.detalle-solicitudComplTec-conteiner{
+    justify-items: center;
+}
+
+.detalle-solicitudComplTec-card{
+    position: relative;
+    margin: 25px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 0px;
+    width: 700px;
+    box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.1);
+    display: grid;
+    grid-template-columns: 1fr;
+}
+
+.detalle-solicitudComplTec-parte-sup{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 260px;
+    padding: 10px 10px 0px 10px;
+    font-size: 17px;
+}
+
+.detalle-solicitudComplTec-parte-centro{
+    margin: 5px 0px 5px 0px;
+    padding: 3px;
+    text-align: center;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    font-size: 17px;
+}
+
+.detalle-solicitudComplTec-parte-baja{
+    padding: 0px 10px 10px 10px;
+    font-size: 18px;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+}
+
+.detalle-solicitudComplTec-descripcion{
+    border: 2px solid rgba(0, 0, 0, 0.1);
+    padding: 4px;
+    border-radius: 5px;
+}
+
+.detalle-solicitudComplTec-titulo{
+    text-align: center;
+    justify-content: center;
+}
+
+/* 1. Contenedor principal */
+.detalle-tecnico-main {
+  padding: 1rem;
+  background-color: #f9f9f9;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+}
+
+.detalle-tecnico-container {
+  width: 100%;
+  max-width: 600px;
+  background: #ffffff;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+/* 2. Botón volver */
+.btn-volver {
+  background: #c62828;
+  color: #fff;
+  border: none;
+  padding: 0.6rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  margin-bottom: 1rem;
+  transition: background 0.3s;
+}
+
+.btn-volver:hover {
+  background: #a71d1d;
+}
+
+/* 3. Títulos */
+.detalle-tecnico-titulo {
+  font-size: 1.6rem;
+  margin-bottom: 1rem;
+  text-align: center;
+  color: #333;
+}
+
+.detalle-tecnico-subtitulo {
+  font-size: 1.2rem;
+  color: #444;
+  margin: 1rem 0 0.5rem;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 0.3rem;
+}
+
+/* 4. Tarjeta de detalles */
+.detalle-tecnico-card {
+  border: 1px solid #ddd;
+  border-left: 5px solid #c62828;
+  border-radius: 8px;
+  padding: 1rem;
+  background-color: #fafafa;
+}
+
+.detalle-tecnico-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-bottom: 1rem;
+}
+
+.detalle-tecnico-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.detalle-tecnico-info p {
+  margin: 0;
+  font-size: 1rem;
+}
+
+/* 5. Botón modificar */
+.btn-modificar-wrapper {
+  margin-top: 2rem;
+  text-align: center;
+}
+
+.btn-modificar {
+  background: #1976d2;
+  border: none;
+  color: #fff;
+  padding: 0.8rem 1.5rem;
+  font-size: 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.btn-modificar:hover {
+  background: #125ea9;
+}
+
+/* 6. Responsive */
+@media (max-width: 480px) {
+  .detalle-tecnico-container {
+    padding: 1rem;
+  }
+
+  .detalle-tecnico-titulo {
+    font-size: 1.3rem;
+  }
+
+  .detalle-tecnico-subtitulo {
+    font-size: 1.1rem;
+  }
+
+  .btn-modificar,
+  .btn-volver {
+    width: 100%;
+    font-size: 1rem;
+  }
+
+  .detalle-tecnico-info p {
+    font-size: 0.95rem;
+  }
+}
+
+.detalle-cliente-main {
+  padding: 1rem;
+  background-color: #f9f9f9;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+}
+
+.detalle-cliente-container {
+  width: 100%;
+  max-width: 600px;
+  background: #ffffff;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+/* Botón volver */
+.btn-volver {
+  background: #c62828;
+  color: #fff;
+  border: none;
+  padding: 0.6rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  margin-bottom: 1rem;
+  transition: background 0.3s;
+}
+
+.btn-volver:hover {
+  background: #a71d1d;
+}
+
+/* Títulos */
+.detalle-cliente-titulo {
+  font-size: 1.6rem;
+  margin-bottom: 1rem;
+  text-align: center;
+  color: #333;
+}
+
+.detalle-cliente-subtitulo {
+  font-size: 1.2rem;
+  color: #444;
+  margin: 1rem 0 0.5rem;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 0.3rem;
+}
+
+/* Tarjeta */
+.detalle-cliente-card {
+  border: 1px solid #ddd;
+  border-left: 5px solid #1976d2;
+  border-radius: 8px;
+  padding: 1rem;
+  background-color: #fafafa;
+}
+
+.detalle-cliente-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-bottom: 1rem;
+}
+
+.detalle-cliente-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.detalle-cliente-info p {
+  margin: 0;
+  font-size: 1rem;
+}
+
+/* Botón editar */
+.detalle-cliente-editar-wrapper {
+  margin-top: 2rem;
+  text-align: center;
+}
+
+.btn-editar {
+  background: #1976d2;
+  border: none;
+  color: #fff;
+  padding: 0.8rem 1.5rem;
+  font-size: 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.btn-editar:hover {
+  background: #125ea9;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .detalle-cliente-container {
+    padding: 1rem;
+  }
+
+  .detalle-cliente-titulo {
+    font-size: 1.3rem;
+  }
+
+  .detalle-cliente-subtitulo {
+    font-size: 1.1rem;
+  }
+
+  .btn-volver,
+  .btn-editar {
+    width: 100%;
+    font-size: 1rem;
+  }
+
+  .detalle-cliente-info p {
+    font-size: 0.95rem;
+  }
+}
+
+/* Más ancho en pantallas grandes comparado con otras vistas */
+.detalle-solicitudEstado-container {
+  max-width: 850px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+/* Card */
+.detalle-solicitudEstado-card {
+  background-color: #fff;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Cabecera */
+.detalle-solicitudEstado-header {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+/* Subtítulo */
+.detalle-solicitudEstado-subtitulo {
+  text-align: center;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+}
+
+/* Info */
+.detalle-solicitudEstado-info p {
+  margin: 0.3rem 0;
+}
+
+/* Descripción larga */
+.detalle-solicitudEstado-descripcion {
+  background-color: #f8f8f8;
+  padding: 0.5rem;
+  border-radius: 6px;
+  margin-bottom: 1rem;
+}
+
+/* Botón volver */
+.btn-volver {
+  background-color: #1976d2;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  margin-bottom: 1rem;
+  font-weight: bold;
+}
+
+.btn-volver:hover {
+  background-color: #155a9a;
+}
+
+/* Responsivo para móviles */
+@media (max-width: 768px) {
+  .detalle-solicitudEstado-container {
+    max-width: 95%;
+    padding: 0.5rem;
+  }
+
+  .detalle-solicitudEstado-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+

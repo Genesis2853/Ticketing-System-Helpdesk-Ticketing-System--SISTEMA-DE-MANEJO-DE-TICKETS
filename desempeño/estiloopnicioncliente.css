@@ -1,0 +1,80 @@
+/* Estilos para el contenedor horizontal */
+.customer-feedback-container {
+    background-color: #f8f8f8;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.feedback-title {
+    color: #d10000; /* Rojo */
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+/* Estilo de la tarjeta de feedback */
+.feedback-card {
+    flex: 0 0 280px; /* Ancho fijo para cada tarjeta */
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Estilo para los ratings con estrellas */
+.rating-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 8px 0;
+}
+
+.stars {
+    --percent: calc(var(--rating) / 5 * 100%);
+    display: inline-block;
+    font-size: 18px;
+    line-height: 1;
+    color: #ccc;
+    position: relative;
+}
+
+.stars::before {
+    content: '★★★★★';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: var(--percent);
+    overflow: hidden;
+    color: #d10000; /* Rojo para estrellas seleccionadas */
+}
+
+.feedback-comment {
+    font-style: italic;
+    margin: 10px 0;
+    color: #333;
+}
+
+/* Estilo de la barra de scroll */
+.feedback-horizontal-scroll::-webkit-scrollbar {
+    height: 8px;
+}
+
+.feedback-horizontal-scroll::-webkit-scrollbar-track {
+    background: #f0f0f0;
+    border-radius: 4px;
+}
+
+.feedback-horizontal-scroll::-webkit-scrollbar-thumb {
+    background-color: #d10000; /* Rojo */
+    border-radius: 4px;
+}
+
+/* Estilo cuando no hay feedback */
+.no-feedback {
+    width: 100%;
+    text-align: center;
+    padding: 20px;
+    color: #666;
+}

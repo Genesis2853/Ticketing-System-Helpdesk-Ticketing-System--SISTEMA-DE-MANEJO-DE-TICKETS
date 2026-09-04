@@ -1,0 +1,170 @@
+import React, { useState } from "react";
+import './estilodesempeño.css';
+
+const EvaluationForm = ({ solicitudes, evaluaciones, evaluadas, feedbacks, onSubmit }) => {
+    const [solicitudSeleccionada, setSolicitudSeleccionada] = useState(null);
+    const [puntuacion_tecnico, setPuntuacion] = useState(0);
+    const [comentario_puntuacion_tecnico, setComentario] = useState("");
+    const [id_feedback, setIdFeedback] = useState("");
+    const [solicitudevaluacioneseleccionada, setSolicitudevaluacioneseleccionada] = useState(null);
+
+    // Filtrar solicitudes no evaluadas
+    const solicitudesNoevaluaciones = solicitudes.filter(s =>
+        !evaluadas.some(e => e.id_soli_completada === s.id_soli_completada)
+    );
+
+    // Filtrar evaluaciones que no tienen feedback
+    const evaluacionesSinFeedback = evaluaciones.filter(ev => ev.id_feedback === null);
+
+    // Obtener el objeto feedback seleccionado actual para acceder a sus comentarios_cliente
+    const feedbackSeleccionado = id_feedback ? feedbacks.find(fb => String(fb.id_feedback) === String(id_feedback)) : null;
+
+    const handleSolicitudChange = (e) => {
+        const selectedSolicitud = solicitudesNoevaluaciones.find(s => s.id_soli_completada === e.target.value);
+        setSolicitudSeleccionada(selectedSolicitud);
+        setSolicitudevaluacioneseleccionada(null); // Resetear selección de evaluaciones
+    };
+
+    const handleEvaluacionChange = (e) => {
+        const selectedEvaluacion = evaluacionesSinFeedback.find(ev => ev.id_soli_completada === e.target.value);
+        setSolicitudevaluacioneseleccionada(selectedEvaluacion);
+        setSolicitudSeleccionada(null); // Resetear selección de solicitudes pendientes
+    };
+
+    const handleSubmit = () => {
+        const selectedSolicitud = solicitudSeleccionada || solicitudevaluacioneseleccionada;
+        if (!selectedSolicitud) {
+            alert("Selecciona una solicitud antes de evaluar.");
+            return;
+        }
+        const tecnicoID = selectedSolicitud.codigo_trabajador;
+        const evaluationData = {
+            id_soli_completada: selectedSolicitud.id_soli_completada,
+            codigo_trabajador: tecnicoID,
+            puntuacion_tecnico: puntuacion_tecnico, // Para evaluación interna, cero si no aplica
+            comentario_puntuacion_tecnico: comentario_puntuacion_tecnico,
+            calificacion_cliente: feedbackSeleccionado ? feedbackSeleccionado.calificacion_cliente : null,
+            comentarios_cliente: feedbackSeleccionado ? feedbackSeleccionado.comentarios_cliente : null,
+            id_feedback: id_feedback === "" ? null : id_feedback
+        };
+        onSubmit(evaluationData);
+    };
+
+    return (
+        <div className="evaluation-form">
+            <h2>Evaluación Interna</h2>
+
+            {(solicitudSeleccionada || solicitudevaluacioneseleccionada) && (
+                <div className="preview">
+                    <h3>Informe de {(solicitudSeleccionada || solicitudevaluacioneseleccionada).id_soli_completada}</h3>
+                    <p><strong>Técnico asignado:</strong> {(solicitudSeleccionada || solicitudevaluacioneseleccionada).nombre_tecnico} {(solicitudSeleccionada || solicitudevaluacioneseleccionada).apellido_tecnico}</p>
+                    <p><strong>Descripción:</strong> {(solicitudSeleccionada || solicitudevaluacioneseleccionada).comentario_trabajo_realizado}</p>
+                    <p><strong>ID Solicitud:</strong> {(solicitudSeleccionada || solicitudevaluacioneseleccionada).codigo_solicitud}</p>
+                    <p><strong>Fecha Solicitud:</strong> {new Date((solicitudSeleccionada || solicitudevaluacioneseleccionada).fecha_solicitud).toLocaleString()}</p>
+                    <p><strong>Cliente:</strong> {(solicitudSeleccionada || solicitudevaluacioneseleccionada).nombre_cliente} {(solicitudSeleccionada || solicitudevaluacioneseleccionada).apellido_cliente}</p>
+                    <p><strong>Email:</strong> {(solicitudSeleccionada || solicitudevaluacioneseleccionada).email_cliente}</p>
+                    <p><strong>Teléfono:</strong> {(solicitudSeleccionada || solicitudevaluacioneseleccionada).n_tlf_cliente}</p>
+                    <p><strong>Estado:</strong> {(solicitudSeleccionada || solicitudevaluacioneseleccionada).estado_solicitud}</p>
+                    <p><strong>Comentario:</strong> {(solicitudSeleccionada || solicitudevaluacioneseleccionada).comentario_trabajo_realizado}</p>
+                    {( solicitudevaluacioneseleccionada) && (
+                        <>
+                        {solicitudevaluacioneseleccionada.id_evaluaciones}
+                        {solicitudevaluacioneseleccionada.id_soli_completada}
+                        {solicitudevaluacioneseleccionada.codigo_trabajador}
+                        <h3>Informe de {solicitudevaluacioneseleccionada.id_soli_completada}</h3>
+                    <p><strong>Técnico asignado:</strong> {solicitudevaluacioneseleccionada.nombre_tecnico} {solicitudevaluacioneseleccionada.apellido_tecnico}</p>
+                    <p><strong>Descripción:</strong> {solicitudevaluacioneseleccionada.comentario_trabajo_realizado}</p>
+                    <p><strong>ID Solicitud:</strong> {solicitudevaluacioneseleccionada.codigo_solicitud}</p>
+                    <p><strong>Fecha Solicitud:</strong> {new Date(solicitudevaluacioneseleccionada.fecha_solicitud).toLocaleString()}</p>
+                    <p><strong>Cliente:</strong> {solicitudevaluacioneseleccionada.nombre_cliente} {solicitudevaluacioneseleccionada.apellido_cliente}</p>
+                    <p><strong>Email:</strong> {solicitudevaluacioneseleccionada.email_cliente}</p>
+                    <p><strong>Teléfono:</strong> {solicitudevaluacioneseleccionada.n_tlf_cliente}</p>
+                    <p><strong>Estado:</strong> {solicitudevaluacioneseleccionada.estado_solicitud}</p>
+                    <p><strong>Comentario:</strong> {solicitudevaluacioneseleccionada.comentario_trabajo_realizado}</p>
+                        </>
+                    )}
+                    {(solicitudSeleccionada) && (
+                        <>
+                        <h3>Informe de {solicitudSeleccionada.id_soli_completada}</h3>
+                    <p><strong>Técnico asignado:</strong> {solicitudSeleccionada.nombre_tecnico} {solicitudSeleccionada.apellido_tecnico}</p>
+                    <p><strong>Descripción:</strong> {solicitudSeleccionada.comentario_trabajo_realizado}</p>
+                    <p><strong>ID Solicitud:</strong> {solicitudSeleccionada.codigo_solicitud}</p>
+                    <p><strong>Fecha Solicitud:</strong> {new Date(solicitudSeleccionada.fecha_solicitud).toLocaleString()}</p>
+                    <p><strong>Cliente:</strong> {solicitudSeleccionada.nombre_cliente} {solicitudSeleccionada.apellido_cliente}</p>
+                    <p><strong>Email:</strong> {solicitudSeleccionada.email_cliente}</p>
+                    <p><strong>Teléfono:</strong> {solicitudSeleccionada.n_tlf_cliente}</p>
+                    <p><strong>Estado:</strong> {solicitudSeleccionada.estado_solicitud}</p>
+                    <p><strong>Comentario:</strong> {solicitudSeleccionada.comentario_trabajo_realizado}</p>
+                        </>
+                    )}
+                </div>
+            )}
+
+            {/* Select para solicitud no evaluada */}
+            <div className="select-container">
+                <select onChange={handleSolicitudChange} value={solicitudSeleccionada ? solicitudSeleccionada.id_soli_completada : ""}>
+                    <option value="">Selecciona una solicitud no evaluada</option>
+                    {solicitudesNoevaluaciones.map(s => (
+                        <option key={s.id_soli_completada} value={s.id_soli_completada}>
+                            {s.id_soli_completada} - {s.nombre_tecnico} {s.apellido_tecnico}
+                        </option>
+                    ))}
+                </select>
+            </div>
+
+            {/* Select para solicitud evaluada sin feedback */}
+            <div className="select-container">
+                <select onChange={handleEvaluacionChange} value={solicitudevaluacioneseleccionada ? solicitudevaluacioneseleccionada.id_soli_completada : ""}>
+                    <option value="">Selecciona una solicitud evaluada sin opinión del cliente</option>
+                    {evaluacionesSinFeedback.map(ev => (
+                        <option key={ev.id_soli_completada} value={ev.id_soli_completada}>
+                            {ev.id_soli_completada} - {ev.codigo_trabajador} {/* Aquí puedes agregar más información si es necesario */}
+                        </option>
+                    ))}
+                </select>
+            </div>
+
+            {/* Estrellas para puntuación */}
+            <p>Calificación:</p>
+            <div className="stars-container">
+                {[1, 2, 3, 4, 5].map(star => (
+                    <button
+                        key={star}
+                        onClick={() => setPuntuacion(star)}
+                        className={`star-button ${puntuacion_tecnico === star ? 'selected' : ''}`}
+                        type="button"
+                        aria-label={`Calificación ${star} estrella${star > 1 ? 's' : ''}`}
+                    >
+                        ⭐{star}
+                    </button>
+                ))}
+            </div>
+
+            {/* Select para feedback cliente */}
+            <div className="feedback-selection">
+                <label htmlFor="feedback-select">Selecciona una opinión del cliente:</label>
+                <select id="feedback-select" onChange={(e) => setIdFeedback(e.target.value)} value={id_feedback}>
+                    <option value="">No usar opinión del cliente</option>
+                    {feedbacks.map(feedback => (
+                        <option key={feedback.id_feedback} value={feedback.id_feedback}>
+                            {feedback.nombre_tecnico} - {feedback.calificacion_cliente} - {feedback.comentarios_cliente}
+                        </option>
+                    ))}
+                </select>
+            </div>
+
+            {/* Textarea para comentarios internos */}
+            <textarea
+                value={comentario_puntuacion_tecnico}
+                onChange={(e) => setComentario(e.target.value)}
+                placeholder="Comentarios internos"
+                rows={4}
+            />
+
+            {/* Botón para guardar evaluación */}
+            <button className="submit-button" onClick={handleSubmit}>Guardar Evaluación</button>
+        </div>
+    );
+};
+
+export default EvaluationForm;

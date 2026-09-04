@@ -1,0 +1,146 @@
+import React, { useState, useEffect } from 'react';
+import './Formularioasignacionsoli.css';
+
+const AsignacionForm = ({ user }) => {
+    const [tickets, setTickets] = useState([]);
+    const [tecnicos, setTecnicos] = useState([]);
+    const [codigoTicket, setCodigoTicket] = useState('');
+    const [codigoTrabajador, setCodigoTrabajador] = useState('');
+    const [errors, setErrors] = useState({});
+    const [successMessage, setSuccessMessage] = useState('');
+    console.log('Tickets:', tickets);
+    console.log("Usuario recibido en asignaticke:", user);
+
+    useEffect(() => {
+        let isMounted = true; // Flag para verificar si el componente está montado
+
+           const fetchDatos = async () => {
+       try {
+           const ticketsResponse = await fetch(`${process.env.REACT_APP_API_URL_ASSIGN}/api/tickets`);
+           const ticketsData = await ticketsResponse.json();
+           console.log('Tickets:', ticketsData); // Verifica los datos recibidos
+           if (Array.isArray(ticketsData)) {
+               if (isMounted) {
+                   setTickets(ticketsData);
+               }
+           } else {
+               console.error('Los datos de tickets no son un array:', ticketsData);
+           }
+
+           const tecnicosResponse = await fetch(`${process.env.REACT_APP_API_URL_ASSIGN}/api/tecnicos`);
+           const tecnicosData = await tecnicosResponse.json();
+           console.log('Técnicos:', tecnicosData); // Verifica los datos recibidos
+           if (isMounted) {
+               setTecnicos(tecnicosData);
+           }
+       } catch (error) {
+           console.error('Error cargando datos:', error);
+       }
+   };
+   
+
+        fetchDatos();
+
+        // Función de limpieza
+        return () => {
+            isMounted = false; // Cambia el flag a false cuando el componente se desmonte
+        };
+    }, []);
+
+    const validate = () => {
+        let formErrors = {};
+        if (!codigoTicket) formErrors.codigoTicket = '(¡El código de ticket es requerido!)';
+        if (!codigoTrabajador) formErrors.codigoTrabajador = '(¡El código del trabajador es requerido!)';
+        return formErrors;
+    };
+
+    const handleSubmit = async (event) => {
+        const token = localStorage.getItem("token");
+            console.log("Token almacenado en localStorage:", localStorage.getItem("accessToken"));
+
+            if (!token) {
+                setErrors("No autorizado: token no encontrado.");
+                
+                return;
+            }
+        event.preventDefault();
+        const formErrors = validate();
+        if (Object.keys(formErrors).length === 0) {
+            try {
+                const response = await fetch(`${process.env.REACT_APP_API_URL_ASSIGN}/api/asignar`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${token}` ,
+                    },
+                    body: JSON.stringify({
+                        codigo_ticket: codigoTicket,
+                        codigo_trabajador: codigoTrabajador
+                    }),
+                });
+                if (!response.ok) {
+                    throw new Error('Error al asignar el ticket');
+                }
+                const result = await response.json();
+                console.log('Resultado:', result);
+                setSuccessMessage(`Ticket asignado correctamente. Código de solicitud: ${result.codigo_solicitud}`);
+                setCodigoTicket('');
+                setCodigoTrabajador('');
+                setErrors({});
+            } catch (error) {
+                console.error('Error asignando tu ticket:', error);
+                setErrors({ submit: 'Error asignando tu ticket' });
+            }
+        } else {
+            setErrors(formErrors);
+        }
+    };
+
+    
+    return (
+        <div className="div-contenedor-formularioasigsoli">
+        <form className="form-asignacionsoli" onSubmit={handleSubmit}>
+
+            <div>
+            <div><label htmlFor="codigo_ticket" className='form-titulos-AS'>Código de Ticket:</label></div>
+            
+            <div><select id="codigo_ticket" name="codigo_ticket" className='form-box-AS' value={codigoTicket} onChange={(e) => setCodigoTicket(e.target.value)} required>
+                <option value="">Seleccione un ticket</option>
+                {tickets.map(ticket => (
+                    <option key={ticket.codigo_ticket} value={ticket.codigo_ticket}>
+                        {ticket.codigo_ticket}
+                    </option>
+                ))}
+            </select></div>
+            {errors.codigoTicket && <p className='form-alertaerror-AS'>{errors.codigoTicket}</p>}
+            
+            </div>
+
+
+            <div>
+            <div><label htmlFor="codigo_trabajador" className='form-titulos-AS'>Técnico:</label></div>
+            
+            <div><select id="codigo_trabajador" name="codigo_trabajador" className='form-box-AS' value={codigoTrabajador} onChange={(e) => setCodigoTrabajador(e.target.value)} required>
+                <option value="">Seleccione un técnico</option>
+                {tecnicos.map(tecnico => (
+                    <option key={tecnico.codigo_trabajador} value={tecnico.codigo_trabajador}>
+                        {tecnico.codigo_trabajador} {tecnico.nombre_tecnico} {tecnico.apellido_tecnico}
+                    </option>
+                ))}
+            </select></div>
+            {errors.codigoTrabajador && <p className='form-alertaerror-AS'>{errors.codigoTrabajador}</p>}
+            
+            </div>
+
+
+
+           <div className='form-contenedor-button-AS'>
+            <button type="submit" className='form-button-AS'>Asignar Ticket</button></div>
+            {errors.submit && <p className='form-alertaerror-AS'>{errors.submit}</p>}
+            {successMessage && <p className='form-success-AS'>{successMessage}</p>}
+        </form>
+        </div>
+    );
+};
+
+export default AsignacionForm;

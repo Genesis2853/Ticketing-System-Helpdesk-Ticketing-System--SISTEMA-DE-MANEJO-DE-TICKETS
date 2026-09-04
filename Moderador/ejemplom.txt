@@ -1,0 +1,224 @@
+import React, { useState, useEffect } from 'react';
+
+const ALL_PERMISSIONS = [
+  { id: 'view_reports', label: 'Ver reportes' },
+  { id: 'edit_content', label: 'Editar contenido' },
+  { id: 'manage_tickets', label: 'Gestionar tickets' },
+  { id: 'access_forum', label: 'Acceder al foro' },
+  { id: 'ban_users', label: 'Bloquear usuarios' },
+];
+
+function App() {
+  const [token, setToken] = useState(null);
+  const [role, setRole] = useState(null);
+  const [permissions, setPermissions] = useState([]);
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [newUser, setNewUser] = useState({
+    username: '',
+    password: '',
+    role: 'moderator',
+    permissions: [],
+  });
+  const [message, setMessage] = useState('');
+
+  // Login handler
+  async function handleLogin(e) {
+    e.preventDefault();
+    setMessage('');
+    try {
+      const res = await fetch('http://localhost:4000/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setToken(data.token);
+        setRole(data.role);
+        setPermissions(data.permissions || []);
+        setMessage('Login exitoso');
+      } else {
+        setMessage(data.message || 'Error en login');
+      }
+    } catch (error) {
+      setMessage('Error en conexión');
+    }
+  }
+
+  // Logout
+  function logout() {
+    setToken(null);
+    setRole(null);
+    setPermissions([]);
+    setUsername('');
+    setPassword('');
+    setMessage('');
+    setNewUser({
+      username: '',
+      password: '',
+      role: 'moderator',
+      permissions: [],
+    });
+  }
+
+  // Crear nuevo usuario (solo admin)
+  async function handleCreateUser(e) {
+    e.preventDefault();
+    setMessage('');
+    try {
+      const res = await fetch('http://localhost:4000/api/users', {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json', 
+          'Authorization': 'Bearer ' + token 
+        },
+        body: JSON.stringify(newUser),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setMessage('Usuario creado con ID ' + data.userId);
+        setNewUser({
+          username: '',
+          password: '',
+          role: 'moderator',
+          permissions: [],
+        });
+      } else {
+        setMessage(data.message || 'Error al crear usuario');
+      }
+    } catch (error) {
+      setMessage('Error en conexión');
+    }
+  }
+
+  // Manejo checkbox permisos en formulario crear moderador
+  function togglePermission(perm) {
+    setNewUser(prev => {
+      let newPerms = [...prev.permissions];
+      if (newPerms.includes(perm)) {
+        newPerms = newPerms.filter(p => p !== perm);
+      } else {
+        newPerms.push(perm);
+      }
+      return { ...prev, permissions: newPerms };
+    });
+  }
+
+  // Navegación condicional para moderador
+  function ModeradorPanel() {
+    return (
+      <div>
+        <h2>Panel Moderador: {username}</h2>
+        <nav>
+          <ul>
+            {permissions.includes('view_reports') && <li><button onClick={() => alert('Mostrando reportes...')}>Ver Reportes</button></li>}
+            {permissions.includes('edit_content') && <li><button onClick={() => alert('Editar contenido...')}>Editar Contenido</button></li>}
+            {permissions.includes('manage_tickets') && <li><button onClick={() => alert('Gestionar tickets...')}>Gestionar Tickets</button></li>}
+            {permissions.includes('access_forum') && <li><button onClick={() => alert('Acceder foro...')}>Acceder Foro</button></li>}
+            {permissions.includes('ban_users') && <li><button onClick={() => alert('Bloquear usuario...')}>Bloquear Usuario</button></li>}
+          </ul>
+        </nav>
+        <button onClick={logout}>Cerrar sesión</button>
+      </div>
+    );
+  }
+
+  // Panel Admin con formulario para crear usuario moderador con permisos
+  function AdminPanel() {
+    return (
+      <div>
+        <h2>Panel Administrador: {username}</h2>
+        <button onClick={logout}>Cerrar sesión</button>
+        <hr />
+        <h3>Crear usuario moderador</h3>
+        <form onSubmit={handleCreateUser}>
+          <div>
+            <label>Usuario: </label>
+            <input
+              value={newUser.username}
+              onChange={e => setNewUser({...newUser, username: e.target.value})}
+              required
+            />
+          </div>
+          <div>
+            <label>Contraseña: </label>
+            <input
+              type="password"
+              value={newUser.password}
+              onChange={e => setNewUser({...newUser, password: e.target.value})}
+              required
+            />
+          </div>
+          <div>
+            <label>Rol: </label>
+            <select
+              value={newUser.role}
+              onChange={e => setNewUser({...newUser, role: e.target.value})}
+            >
+              <option value="moderator">Moderador</option>
+              <option value="technician">Tecnico</option>
+              <option value="admin">Administrador</option>
+            </select>
+          </div>
+          {newUser.role === 'moderator' && (
+            <fieldset>
+              <legend>Permisos del Moderador</legend>
+              {ALL_PERMISSIONS.map(perm => (
+                <div key={perm.id}>
+                  <label>
+                    <input
+                      type="checkbox"
+                      checked={newUser.permissions.includes(perm.id)}
+                      onChange={() => togglePermission(perm.id)}
+                    />
+                    {perm.label}
+                  </label>
+                </div>
+              ))}
+            </fieldset>
+          )}
+          <button type="submit">Crear Usuario</button>
+        </form>
+      </div>
+    );
+  }
+
+  if (!token) {
+    // Pantalla login
+    return (
+      <div style={{ maxWidth: 400, margin: 'auto', padding: 16 }}>
+        <h2>Login</h2>
+        <form onSubmit={handleLogin}>
+          <div>
+            <label>Usuario: </label>
+            <input value={username} onChange={e => setUsername(e.target.value)} required />
+          </div>
+          <div>
+            <label>Contraseña: </label>
+            <input type="password" value={password} onChange={e => setPassword(e.target.value)} required />
+          </div>
+          <button type="submit">Entrar</button>
+        </form>
+        {message && <p>{message}</p>}
+      </div>
+    );
+  }
+
+  // Mostrar panel según rol
+  if (role === 'admin') {
+    return <AdminPanel />;
+  }
+  if (role === 'moderator') {
+    return <ModeradorPanel />;
+  }
+  return (
+    <div>
+      <h2>Panel de {role}</h2>
+      <button onClick={logout}>Cerrar sesión</button>
+      <p>No hay funcionalidades específicas definidas para este rol en el ejemplo.</p>
+    </div>
+  );
+}
+
+export default App;

@@ -1,0 +1,398 @@
+.div-contenedor-boton-redireccion{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    
+}
+
+.div-boton-redireccion{
+    position: relative;
+    display: inline;
+    width: 20px;
+}
+
+.div-form-crearticket{
+    display: inline;
+}
+
+.ver-datosC-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Ajusta el tamaño mínimo de las tarjetas */
+    gap: 15px; /* Espacio entre las tarjetas */
+    padding: 10px; /* Espacio interno del contenedor */
+    border: 1px solid #e5e7eb; /* Borde del contenedor */
+    border-radius: 8px; /* Bordes redondeados */
+    background: #f9f9f9; /* Color de fondo del contenedor */
+}
+
+.ver-datosC-card {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    padding: 15px;
+    transition: transform 0.2s;
+}
+
+.encabezado-titulo{
+  border-bottom: 2px solid #ecf0f1;
+  display: flex;
+  flex-direction: row;
+  gap: 52%;
+  margin-bottom: 40px;
+  justify-content: center;
+  align-items: center;
+}
+
+.encabezado-titulo-tecnico{
+  border-bottom: 2px solid #ecf0f1;
+  display: flex;
+  flex-direction: row;
+  gap: 52%;
+  margin-bottom: 40px;
+  justify-content: center;
+  align-items: center;
+}
+
+.encabezado-titulo-ticket{
+    gap: 53%;
+}
+
+.titulo-principal-ticket{
+    min-width: 300px;
+}
+
+.search-input{
+    height: 40px;
+    min-width: 150px;
+}
+
+.boton-historialtickets{
+    padding: 12px 14px;
+  margin: 4px;
+  border-radius: 4px;
+  border: 1px solid transparent;
+  cursor: pointer;
+      background: #b10e0e;
+    color: #fff;
+}
+
+.conteiner-botones-encabezado{
+    display: flex;
+    flex-direction: row;
+    gap: 59.5%;
+}
+
+.botones-reportes{
+    align-content: right;
+    align-items: right;
+    justify-content: right;
+    justify-items: right;
+    margin-bottom: 10px;
+}
+
+.ver-boton-volver {
+    background-color: #1976d2;
+    color: white;
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    width: auto;
+    min-width: 80px;
+    align-self: initial;
+}
+
+.boton-fotnawesome{
+    margin-right: 5px;
+    font-weight: bold;
+}
+
+.toggle-trash-btn,
+.btn-delete,
+.btn-restore,
+.btn-pdf,
+.btn-link {
+  padding: 8px 14px;
+  margin: 4px;
+  border-radius: 4px;
+  border: 1px solid transparent;
+  cursor: pointer;
+}
+.btn-delete { background: #ef5350; color: #fff; }
+.btn-restore { background: #43a047; color: #fff; }
+.toggle-trash-btn { background: #1976d2; color: #fff; 
+padding: 10px 14px;
+width: 130px;
+
+}
+
+
+.btn-pdf-contenedor{
+  display: flex;
+  flex-direction: row;
+  max-height: 60px;
+  width: 400px;
+}
+
+.btn-vista-previa{
+  max-height: 40px;
+  margin-top: 5px;
+}
+
+.btn-pdf { background: #c62828; color: #fff; 
+padding: 10px; 
+border-radius: 4px;
+margin-left: 16px;
+text-decoration: none;
+font-size: 14px;
+}
+.btn-link {   
+color: white;
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    width: auto;
+    min-width: 80px;
+    align-self: initial;
+    background-color: #1976d2;
+}
+
+
+@media (max-width: 480px) {
+  .encabezado-titulo{
+    gap:30%;
+  }
+
+  .encabezado-titulo-tecnico{
+    gap: 20%;
+  }
+}
+
+.encabezado-titulo-tecnico {
+  display: flex;
+  flex-direction: column; /* stack en pantallas pequeñas */
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1rem;
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .encabezado-titulo-tecnico {
+    flex-direction: row; /* horizontal en pantallas medianas+ */
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+.encabezado-titulo-tecnico-title {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+
+
+
+
+.filtros-avanzados {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 1rem;
+}
+
+.filtros-avanzados input,
+.filtros-avanzados select {
+  padding: 6px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  min-width: 160px;
+}
+
+.btn-limpiar-filtros {
+  background: #f44336;
+  color: white;
+  border: none;
+  padding: 8px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+
+.filtros-avanzados-container {
+  position: absolute;
+  top: 110%; /* justo debajo del botón que activa los filtros */
+  right: 0;
+  z-index: 1000;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.15);
+  padding: 1rem;
+  border-radius: 0.5rem;
+  width: 320px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  transition: opacity 0.3s ease;
+}
+
+/* Inputs y selects */
+.input-filtro {
+  width: 100%;
+  padding: 0.5rem;
+  font-size: 0.95rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+/* Contenedor relativo */
+.contenedor-filtros-avanzados {
+  position: relative;
+  display: inline-block;
+  margin-top: 0.5rem;
+}
+
+/* Contenedor de fechas */
+.filtro-fechas {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+/* Etiquetas */
+.label-fecha {
+  font-weight: 500;
+  font-size: 0.85rem;
+  margin-top: 0.25rem;
+}
+
+/* Botón limpiar */
+.btn-limpiar-filtros {
+  margin-top: 0.5rem;
+  padding: 0.5rem;
+  font-size: 0.9rem;
+  background-color: #f44336;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-limpiar-filtros:hover {
+  background-color: #d32f2f;
+}
+/* Botón de toggle */
+.btn-toggle-filtros {
+  background-color: #1976d2;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 0.5rem;
+}
+.btn-toggle-filtros:hover {
+  background-color: #1565c0;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+  .filtros-avanzados-container {
+    width: 95vw;
+    left: 2.5vw;
+    right: auto;
+    top: 100%;
+  }
+
+  .encabezado-titulo{
+    gap: 0px !important;
+  }
+
+  .titulo-principal-ticket {
+    min-width: 0px;
+  }
+
+  .conteiner-botones-encabezado {
+    gap: 0%;
+  }
+  
+
+  .toggle-trash-btn {
+    max-width: 80px;
+    font-size: 15px;
+  }
+
+  .btn-pdf-contenedor{
+
+    font-size: 15px;
+  }
+
+  .btn-pdf {
+max-width: 120px;
+text-align: center;
+
+  }
+.btn-vista-previa {
+      max-height: 50px;
+    margin-top: 5px;
+    font-size: 15px;
+}
+
+.at{
+  width: 100px;
+}
+
+    .search-input {
+      width: 210px !important;
+    }
+
+
+.botones-reportes-t{
+  display: flex;
+  flex-direction: row;
+  gap: 0px !important;
+}
+
+.boton-historialtickets{
+    padding: 8px 9px;
+  margin: 4px;
+  border-radius: 4px;
+  border: 1px solid transparent;
+  cursor: pointer;
+      background: #b10e0e;
+    color: #fff;
+    font-size: 15px;
+}
+
+}
+
+/* Animación opcional */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-0.25rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+.botones-reportes-t{
+  display: flex;
+  flex-direction: row;
+  gap: 700px;
+}
+
+
+.pd{
+  width: 300px !important;
+}

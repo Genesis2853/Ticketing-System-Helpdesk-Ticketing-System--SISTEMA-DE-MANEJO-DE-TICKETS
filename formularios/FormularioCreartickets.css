@@ -1,0 +1,92 @@
+
+*{
+  font-family: Inter, sans-serif;
+}
+
+/* Variables de diseño */
+:root {
+  --color-primary: #000000;
+  --color-secondary: #ff0000;
+  --color-light: #ffffff;
+  --color-dark: #141313;
+  --color-gray: #f4f4f4;
+  --color-error: #d9534f;
+  --border-radius: 8px;
+  --box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  --transition: all 0.3s ease;
+}
+
+/* Contenedor principal - FLEX ROW */
+.div-contenedor-formulariocrearticket {
+  display: flex;
+  flex-direction: row;        /* Fila en desktop */
+  flex-wrap: wrap;            /* Permite envolver */
+  justify-content: center;    /* Centrado horizontal */
+  align-items: flex-start;    /* Alineado arriba */
+  gap: 20px;                  /* Espacio entre formulario y botón */
+  min-height: 100vh;
+  background-color: var(--color-gray);
+  padding: 20px;
+}
+
+/* Formulario */
+.form-crearticket {
+  background: var(--color-light);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  padding: 2rem;
+  width: 600px;               /* Ancho fijo */
+  max-width: 100%;
+}
+
+/* Botón "Ver Tickets" - POSICIONADO AL LADO */
+.form-footer-buttons {
+  position: relative;
+  top: 10px;                 /* Ajuste vertical para alinearse con el formulario */
+  right: 0;
+}
+
+/* Responsive: Móviles */
+@media (max-width: 768px) {
+  .div-contenedor-formulariocrearticket {
+    flex-direction: column;  /* Columna en móviles */
+  }
+  
+  .form-footer-buttons {
+    position: static;       /* Elimina posición absoluta */
+    top: auto;
+    width: 100%;
+    margin-top: 1rem;       /* Espacio entre formulario y botón */
+    display: flex;
+    justify-content: center;
+  }
+  
+  .boton-redireccion-VT {
+    width: 100%;
+  }
+
+
+
+  .div-contenedor-formulariocrearticket {
+        justify-content: center !important;
+    justify-items: center !important;
+    align-items: center !important;
+  }
+
+}
+
+
+.boton-redireccion-tk {
+  padding: 1px 1px;
+  font-size: 16px;
+  background-color: var(--color-primary);
+  color: var(--color-light);
+  border: none;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.boton-redireccion-VT{
+  font-size: 16px;
+}
