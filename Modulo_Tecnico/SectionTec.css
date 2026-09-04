@@ -1,0 +1,147 @@
+
+*{
+  font-family: Inter, sans-serif;
+}
+
+.contenedor-solicitudes {
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.resumen-dia {
+    margin-bottom: 20px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.lista-solicitudes {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.solicitud {
+    padding: 15px;
+    background-color: #f1f1f1;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.solicitud:hover {
+    background-color: #e0e0e0; /* Color de fondo al pasar el mouse */
+}
+
+.solicitud h3 {
+    margin: 0 0 10px 0;
+    color: #333; /* Color del título */
+}
+
+.solicitud p {
+    margin: 5px 0;
+    color: #555; /* Color del texto */
+}
+
+.btn-resolver {
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #ff4d4d; /* Rojo */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-resolver:hover {
+    background-color: #e63939; /* Rojo más oscuro */
+}
+
+.alerta-critica {
+    padding: 10px;
+    background-color: #ffcccc; /* Fondo rojo claro */
+    border: 1px solid #ff4d4d; /* Borde rojo */
+    border-radius: 5px;
+    margin-top: 20px;
+}
+
+/* Estilo para el contenedor de métricas */
+.metrics-grid {
+  display: grid;
+  gap: 16px;                          /* separación entre tarjetas  */
+  grid-template-columns: repeat(
+    auto-fit,                         /* tantas columnas como quepan */
+    minmax(140px, 1fr)                /* ancho mínimo 140 px       */
+  );
+}
+
+.metrics-grid{
+    flex-direction: row;
+}
+
+/* Estilo para cada tarjeta de métrica */
+.metric-card {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px #0002;
+  text-align: center;
+  padding: 12px 8px;
+}
+
+.metric-card:hover {
+    transform: scale(1.05); /* Efecto de aumento al pasar el mouse */
+}
+
+/* Estilo para las solicitudes */
+.requests-section {
+    margin-bottom: 20px;
+}
+
+.request-card {
+    background-color: #ffffff; /* Color de fondo */
+    border: 1px solid #ddd; /* Color del borde */
+    border-radius: 5px; /* Bordes redondeados */
+    padding: 15px; /* Espaciado interno */
+    margin-bottom: 15px; /* Espacio entre solicitudes */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra */
+    transition: background-color 0.3s; /* Transición para efecto hover */
+}
+
+.request-card:hover {
+    background-color: #f9f9f9; /* Color de fondo al pasar el mouse */
+}
+
+/* Estilo para los detalles de la solicitud */
+.request-detail {
+    margin: 5px 0;
+    color: #555; /* Color del texto */
+}
+
+.detail-label {
+    font-weight: bold; /* Negrita para las etiquetas */
+}
+
+/* Estilo para la alerta de solicitudes pendientes */
+.pending-alert {
+    padding: 10px;
+    background-color: #ffeb3b; /* Fondo amarillo */
+    border: 1px solid #fbc02d; /* Borde amarillo */
+    border-radius: 5px;
+    margin-top: 20px;
+    text-align: center; /* Centrar texto */
+}
+
+.nombreusuario-text {
+  color: #8a1313; /* Letra clara */
+  font-size: 1.2rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  margin: 0;
+  user-select: none;
+  margin-bottom: 45px;
+}

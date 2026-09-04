@@ -1,0 +1,237 @@
+
+*{
+  font-family: Inter, sans-serif;
+}
+/* LoginUsuario.css - Versión Modular y Responsiva */
+
+/* Variables de diseño */
+:root {
+  --color-primary: #333333;
+  --color-secondary: #CC0000;
+  --color-light: #ffffff;
+  --color-dark: #666666;
+  --color-gray: #F5F5F5;
+  --color-error: #d9534f;
+  --border-radius: 8px;
+  --box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  --transition: all 0.3s ease;
+}
+
+/* Reset y estilos base */
+.login-container {
+  font-family: 'Arial', sans-serif;
+  background-color: var(--color-gray);
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+    display: flex;
+    flex-direction: column; /* Alinea los elementos en columna */
+  align-items: center;
+  gap: 0px;
+    position: relative;
+}
+
+/* Módulo principal del formulario */
+.login-module {
+  background: var(--color-light);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  width: 90%;
+  max-width: 450px;
+  overflow: hidden;
+  transition: var(--transition);
+}
+
+/* Header del módulo */
+.login-header {
+  background: var(--color-primary);
+  color: var(--color-light);
+  padding: 1.5rem;
+  text-align: center;
+  font-size: clamp(1.25rem, 2vw, 1.5rem);
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  justify-content: center;
+  justify-items: center;
+
+}
+
+.header-logo{
+  max-width: 150px;
+}
+
+/* Contenedor del formulario */
+.login-form {
+  padding: 2rem;
+}
+
+/* Grupos de formulario */
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: var(--color-dark);
+}
+
+.form-input {
+  width: 100%;
+  padding: 0.8rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+  transition: var(--transition);
+}
+
+.form-input:focus {
+  border-color: var(--color-primary);
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Botón principal */
+.login-button {
+  width: 100%;
+  padding: 0.8rem;
+  background-color: var(--color-secondary);
+  color: var(--color-light);
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.login-button:hover {
+  background-color: #750303;
+}
+
+/* Mensajes */
+.message {
+  margin-top: 1rem;
+  padding: 0.5rem;
+  border-radius: 4px;
+  text-align: center;
+  font-weight: 500;
+}
+
+.error-message {
+  color: var(--color-error);
+  background-color: rgba(217, 83, 79, 0.1);
+}
+
+.success-message {
+  color: #28a745;
+  background-color: rgba(40, 167, 69, 0.1);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .login-module {
+    width: 85%;
+  }
+  
+  .login-form {
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .login-module {
+    width: 95%;
+    border-radius: 0;
+  }
+  
+  .login-header {
+    padding: 1.2rem;
+  }
+  
+  .login-form {
+    padding: 1.2rem;
+  }
+  
+  .form-input,
+  .login-button {
+    padding: 0.7rem;
+  }
+}
+
+
+
+.dropdown {
+    position: relative; /* Necesario para posicionar el menú */
+}
+
+.dropdown-button {
+    background: none; /* Sin fondo */
+    border: none; /* Sin borde */
+    cursor: pointer; /* Cambia el cursor al pasar el mouse */
+    font-size: 1.5em; /* Tamaño del icono */
+    color: #fafafa; /* Color del icono */
+}
+
+.dropdown-menu {
+    position: absolute; /* Posiciona el menú en relación al botón */
+    top: 100%; /* Coloca el menú justo debajo del botón */
+    right: 0; /* Alinea el menú a la derecha */
+    background: white; /* Fondo blanco */
+    border: 1px solid #ddd; /* Borde gris claro */
+    border-radius: 4px; /* Bordes redondeados */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra sutil */
+    list-style: none; /* Sin viñetas */
+    padding: 0; /* Sin padding */
+    margin: 0; /* Sin margen */
+    z-index: 1000; /* Asegura que el menú esté por encima de otros elementos */
+}
+
+.dropdown-item {
+    padding: 10px 15px; /* Espaciado interno */
+    cursor: pointer; /* Cambia el cursor al pasar el mouse */
+    color: #000000;
+}
+
+.dropdown-item:hover {
+    background: #f0f0f0; /* Color de fondo al pasar el mouse */
+}
+
+
+#contrasena::-webkit-password-reveal-button {
+  display: none !important;
+  -webkit-appearance: none !important;
+}
+
+#contrasena::-moz-password-reveal-button {
+  display: none !important;
+  -moz-appearance: none !important;
+}
+/* For Chrome, Edge, Safari */
+input[type="password"]::-webkit-password-reveal-button {
+  opacity: 0;
+  pointer-events: none;
+  display: none !important;
+  -webkit-appearance: none !important;
+  width: 0;
+  height: 0;
+}
+
+/* For Firefox */
+input[type="password"]::-moz-password-reveal-button {
+  opacity: 0;
+  pointer-events: none;
+  display: none !important;
+  -moz-appearance: none !important;
+  width: 0;
+  height: 0;
+}
+
+
+
+

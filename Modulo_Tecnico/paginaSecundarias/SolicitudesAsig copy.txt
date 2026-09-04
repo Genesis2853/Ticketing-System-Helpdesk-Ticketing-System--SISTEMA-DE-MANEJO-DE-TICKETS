@@ -1,0 +1,129 @@
+import React, { useState, useEffect, useContext } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import { useSnackbar } from 'notistack'; // Importar useSnackbar
+import { AuthContext } from '../../Modulo_Usuario/autorizacion-proteccion/Autenticarcontexto'; // Importar el contexto de autenticación
+
+const SolicitudAsig = () => {
+    const [solicitudAsig, setSolicitudAsig] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [searchTerm, setSearchTerm] = useState(''); // Estado para el término de búsqueda
+
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    const mensaje = queryParams.get('mensaje');
+
+    const { enqueueSnackbar } = useSnackbar(); // Inicializar useSnackbar
+    const { user } = useContext(AuthContext); // Obtener el usuario del contexto
+
+    useEffect(() => {
+        const controller = new AbortController(); // Crear un AbortController
+        const signal = controller.signal; // Obtener la señal
+
+        const fetchSolicitudAsig = async () => {
+            try {
+                const response = await fetch(`${process.env.REACT_APP_API_URL_SOLIASIGTEC}/api/tecnico/solicitudAsigTec`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${user.token}`, // Incluir el token en los headers
+                    },
+                    signal
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`Error: ${response.status} ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                data.sort((a, b) => new Date(b.fecha_creacion) - new Date(a.fecha_creacion));
+                setSolicitudAsig(data);
+            } catch (error) {
+                if (error.name === 'AbortError') {
+                    console.log('Solicitud abortada');
+                } else {
+                    console.error('Error fetching solicitudes:', error);
+                    setError(error.message);
+                    enqueueSnackbar(`Error al cargar las solicitudes: ${error.message}`, { variant: 'error' }); // Notificación de error
+                }
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchSolicitudAsig();
+
+        return () => {
+            controller.abort(); // Limpiar la solicitud al desmontar
+        };
+    }, [enqueueSnackbar, user]); // Agregar user como dependencia
+
+    const handleSearchChange = (e) => {
+        setSearchTerm(e.target.value);
+    };
+
+    const filteredSolicitudes = solicitudAsig.filter(solicitud =>
+        (solicitud.codigo_solicitud?.toLowerCase() ?? '').includes(searchTerm.toLowerCase()) ||
+        (solicitud.codigo_trabajador?.toLowerCase() ?? '').includes(searchTerm.toLowerCase()) ||
+        (solicitud.id_cliente?.toLowerCase() ?? '').includes(searchTerm.toLowerCase()) ||
+        (solicitud.codigo_ticket?.toLowerCase() ?? '').includes(searchTerm.toLowerCase()) ||
+        (solicitud.estado_solicitud?.toLowerCase() ?? '').includes(searchTerm.toLowerCase()) ||
+        (solicitud.prioridad_solicitud?.toLowerCase() ?? '').includes(searchTerm.toLowerCase())
+    );
+
+    useEffect(() => {
+        if (mensaje) {
+            enqueueSnackbar(mensaje, { variant: 'success' }); // Mostrar el mensaje como notificación
+        }
+    }, [mensaje, enqueueSnackbar]); // Ejecutar cuando el mensaje cambie
+
+    if (loading) {
+        return <div>Cargando solicitudes...</div>;
+    }
+
+    if (error) {
+        return <div>Error al cargar las solicitudes: {error}</div>;
+    }
+    
+
+    return (
+        <main className="main-Tec">
+            {mensaje && <div>{mensaje}</div>}
+
+            <div className="estado-solicitudAsigTec-container">
+                <div className='div-contenedor-tituloybuscar'>
+                    <h2>Solicitudes Asignadas</h2>
+                    <input
+                        type="text"
+                        placeholder="Buscar..."
+                        value={searchTerm}
+                        onChange={handleSearchChange}
+                        className="search-input"
+                    />
+                </div>
+
+                {solicitudAsig.length === 0 ? (
+                    <div className="estado-solicitudAsigTec-mensajevacio">
+                        <p>No tiene Solicitudes asignadas.</p>
+                    </div>
+                ) : (
+                    <div className="estado-solicitudAsigTec-grid">
+                        {filteredSolicitudes.map(solicitud => (
+                            <div key={solicitud.codigo_solicitud} className="estado-solicitudAsigTec-card">
+                                <h3>Servicio ID: <Link to={`/solicitudAsigTec/${solicitud.codigo_solicitud}`}>{solicitud.codigo_solicitud}</Link></h3>
+                                <p>Técnico encargado: {solicitud.codigo_trabajador}</p>
+                                <p>Cliente: {solicitud.id_cliente}</p>
+                                <p>ID Solicitud: {solicitud.codigo_ticket}</p>
+                                <p>Estado: {solicitud.estado_solicitud}</p>
+                                <p>Prioridad: {solicitud.prioridad_solicitud}</p>
+                            </div>
+                        ))}
+                    </div>
+
+)}
+
+            </div>
+        </main>
+    );
+};
+
+export default SolicitudAsig;
